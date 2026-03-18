@@ -347,14 +347,50 @@
   /* Entregas */
   .entrega-card {
     background: var(--bg-input); border: 1.5px solid var(--border); border-radius: var(--radius);
-    padding: 16px; margin-bottom: 12px;
+    padding: 0; margin-bottom: 12px; overflow: hidden;
+    transition: border-color 0.2s;
   }
-  .entrega-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .entrega-card.entrega-completa { border-color: var(--accent-green); }
+  .entrega-card.entrega-parcial { border-color: #fcd34d; }
+  .entrega-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 16px; cursor: pointer; user-select: none;
+    background: var(--bg-card); border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .entrega-header:hover { background: var(--gdf-blue-bg); }
+  .entrega-header-left { display: flex; align-items: center; gap: 10px; }
   .entrega-badge {
     font-size: 12px; font-weight: 700; color: var(--gdf-blue);
     background: var(--gdf-blue-light); padding: 3px 12px; border-radius: 20px;
     border: 1px solid #93C5FD;
   }
+  .entrega-badge-ok {
+    font-size: 12px; font-weight: 700; color: var(--accent-green-dark);
+    background: var(--accent-green-light); padding: 3px 12px; border-radius: 20px;
+    border: 1px solid #a7f3d0;
+  }
+  .entrega-preview {
+    font-size: 12px; color: var(--text-muted); max-width: 260px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .entrega-toggle {
+    font-size: 14px; color: var(--text-dim); transition: transform 0.2s; margin-left: 4px;
+  }
+  .entrega-toggle.open { transform: rotate(180deg); }
+  .entrega-body { padding: 16px; display: none; }
+  .entrega-body.open { display: block; }
+  .entrega-actions {
+    display: flex; gap: 6px; align-items: center; flex-shrink: 0;
+  }
+  .entrega-action-btn {
+    background: none; border: 1px solid var(--border); border-radius: 6px;
+    padding: 3px 8px; font-size: 13px; cursor: pointer; color: var(--text-muted);
+    font-family: var(--font); transition: all 0.2s; line-height: 1;
+  }
+  .entrega-action-btn:hover { background: var(--bg-deep); color: var(--text-secondary); border-color: var(--border-strong); }
+  .entrega-action-btn.remove { color: var(--accent-red); border-color: #fecaca; }
+  .entrega-action-btn.remove:hover { background: var(--accent-red-light); }
   .entrega-remove {
     background: var(--accent-red-light); border: 1px solid #fecaca; border-radius: 6px;
     color: var(--accent-red); font-size: 11px; font-weight: 600; cursor: pointer;
@@ -362,10 +398,28 @@
   }
   .entrega-remove:hover { background: #fee2e2; }
   .entrega-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .entrega-field-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .entrega-field-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; display: block; }
+  .entrega-field-hint { font-size: 11px; color: var(--text-dim); margin-bottom: 4px; font-style: italic; }
+  .entrega-progress {
+    display: flex; align-items: center; gap: 8px; padding: 0 16px 12px;
+    font-size: 11px; color: var(--text-muted);
+  }
+  .entrega-progress-bar {
+    flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden;
+  }
+  .entrega-progress-fill {
+    height: 100%; border-radius: 2px; transition: width 0.3s;
+  }
+
+  .entregas-summary {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; background: var(--gdf-blue-bg); border: 1px solid #93C5FD;
+    border-radius: var(--radius-sm); margin-bottom: 14px; font-size: 13px;
+  }
+  .entregas-summary strong { color: var(--gdf-blue); }
 
   .btn-add-entrega {
-    width: 100%; padding: 10px; border-radius: 10px; border: 1.5px dashed var(--border-strong);
+    width: 100%; padding: 12px; border-radius: 10px; border: 1.5px dashed var(--border-strong);
     background: transparent; color: var(--text-muted); font-size: 13px; font-weight: 600;
     cursor: pointer; font-family: var(--font); transition: all 0.2s;
   }
@@ -540,51 +594,91 @@
     .phase-stepper-info { flex-direction: column; gap: 4px; text-align: center; }
   }
 
+  /* Guia de Preenchimento - floating button + slide panel */
+  .guia-fab {
+    position: fixed; bottom: 20px; left: 20px; z-index: 200;
+    background: var(--gdf-blue); color: #fff;
+    border: none; border-radius: 50px; padding: 12px 20px;
+    font-family: var(--font); font-size: 13px; font-weight: 700;
+    cursor: pointer; box-shadow: 0 4px 16px rgba(21,101,192,0.35);
+    transition: all 0.2s; display: flex; align-items: center; gap: 8px;
+  }
+  .guia-fab:hover { background: var(--gdf-blue-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(21,101,192,0.45); }
+  .guia-fab .guia-fab-icon { font-size: 18px; }
 
-  /* ===== ESTILOS DO PROCESSO SEI ===== */
-  .processo-sei-box {
-    margin-top: 16px;
-    padding: 18px;
-    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-    border-left: 4px solid var(--gdf-blue);
-    border-radius: var(--radius);
-    display: none;
+  .guia-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 300;
+    opacity: 0; visibility: hidden; transition: opacity 0.3s;
   }
-  .processo-sei-box.visible {
-    display: block;
-    animation: fadeInSei 0.3s ease-in-out;
+  .guia-overlay.open { opacity: 1; visibility: visible; }
+
+  .guia-panel {
+    position: fixed; top: 0; right: -520px; width: 500px; max-width: 92vw;
+    height: 100vh; background: var(--bg-card); z-index: 301;
+    box-shadow: -4px 0 24px rgba(0,0,0,0.15);
+    transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+    display: flex; flex-direction: column; overflow: hidden;
   }
-  @keyframes fadeInSei {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+  .guia-panel.open { right: 0; }
+
+  .guia-panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+    background: var(--gdf-blue-bg); flex-shrink: 0;
   }
-  .processo-sei-label {
-    font-size: 13px;
-    color: #555;
-    margin-bottom: 4px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+  .guia-panel-header h3 { font-size: 16px; font-weight: 800; color: var(--gdf-blue); margin: 0; }
+  .guia-panel-close {
+    background: none; border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px 12px; font-size: 13px; cursor: pointer; color: var(--text-secondary);
+    font-family: var(--font);
   }
-  .processo-sei-number {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--gdf-blue);
-    font-family: 'Courier New', Consolas, monospace;
-    letter-spacing: 0.5px;
-    padding: 6px 0;
+  .guia-panel-close:hover { background: var(--bg-deep); }
+
+  .guia-panel-body {
+    flex: 1; overflow-y: auto; padding: 20px;
+    font-size: 13px; line-height: 1.7; color: var(--text-primary);
   }
-  .processo-sei-info {
-    margin-top: 8px;
+  .guia-panel-body h4 {
+    font-size: 14px; font-weight: 800; color: var(--gdf-blue);
+    margin-top: 20px; margin-bottom: 8px; padding-bottom: 4px;
+    border-bottom: 2px solid var(--gdf-blue-light);
+  }
+  .guia-panel-body h4:first-child { margin-top: 0; }
+  .guia-panel-body p { margin-bottom: 8px; }
+  .guia-panel-body ul { margin: 0 0 12px 18px; }
+  .guia-panel-body li { margin-bottom: 4px; }
+  .guia-panel-body .guia-campo {
+    background: var(--bg-input); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 10px;
+    border-left: 3px solid var(--gdf-blue);
+  }
+  .guia-panel-body .guia-campo strong { color: var(--gdf-blue); }
+  .guia-panel-body .guia-campo .guia-ex {
+    font-size: 12px; color: var(--text-muted); font-style: italic; margin-top: 4px;
+  }
+  .guia-panel-body .guia-dica-box {
+    background: var(--accent-yellow-light); border: 1px solid #fcd34d;
+    border-radius: var(--radius-sm); padding: 10px 14px; margin: 12px 0;
     font-size: 12px;
-    color: #666;
-    line-height: 1.5;
-    padding: 10px;
-    background: rgba(255,255,255,0.7);
-    border-radius: 6px;
   }
 
+  @media print { .guia-fab, .guia-overlay, .guia-panel { display: none !important; } }
+  @media (max-width: 600px) {
+    .guia-fab { padding: 10px 14px; font-size: 12px; bottom: 14px; left: 14px; }
+    .guia-fab span.guia-fab-text { display: none; }
+  }
+
+  /* Inline validation error messages */
+  .campo-erro-inline {
+    color: var(--accent-red);
+    font-size: 12px;
+    margin-top: 4px;
+    padding: 6px 10px;
+    background: var(--accent-red-light);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--accent-red);
+    line-height: 1.4;
+  }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
@@ -594,11 +688,156 @@
 <div class="container" id="app"></div>
 <div class="autosave-indicator" id="autosave-indicator">Salvo automaticamente</div>
 
+<!-- Guia de Preenchimento - Bot\u00e3o flutuante e painel lateral -->
+<button class="guia-fab no-print" id="guia-fab" onclick="toggleGuia()">
+  <span class="guia-fab-icon">&#128214;</span>
+  <span class="guia-fab-text">Guia de Preenchimento</span>
+</button>
+<div class="guia-overlay" id="guia-overlay" onclick="toggleGuia()"></div>
+<div class="guia-panel" id="guia-panel">
+  <div class="guia-panel-header">
+    <h3>&#128214; Guia de Preenchimento</h3>
+    <button class="guia-panel-close" onclick="toggleGuia()">Fechar &times;</button>
+  </div>
+  <div class="guia-panel-body">
+    <p><strong>Guia elaborado pela SEGEST</strong> para orienta&ccedil;&atilde;o no preenchimento do Plano de A&ccedil;&atilde;o do Comit&ecirc; Interno de Governan&ccedil;a (CIG) das Administra&ccedil;&otilde;es Regionais do DF.</p>
+
+    <div class="guia-dica-box">
+      &#128161; <strong>Dica geral:</strong> Preencha cada campo com informa&ccedil;&otilde;es espec&iacute;ficas da sua RA. Evite respostas gen&eacute;ricas. Use os exemplos do formul&aacute;rio como inspira&ccedil;&atilde;o, n&atilde;o como c&oacute;pia.
+    </div>
+
+    <h4>1. Identifica&ccedil;&atilde;o</h4>
+    <div class="guia-campo">
+      <strong>Nome do Respons&aacute;vel:</strong> Nome completo do servidor que est&aacute; preenchendo.
+    </div>
+    <div class="guia-campo">
+      <strong>E-mail Institucional:</strong> Obrigat&oacute;rio usar e-mail do &oacute;rg&atilde;o (ex: nome@df.gov.br). E-mails pessoais (@gmail, @hotmail etc.) n&atilde;o s&atilde;o aceitos para garantir rastreabilidade institucional.
+    </div>
+    <div class="guia-campo">
+      <strong>Regi&atilde;o Administrativa:</strong> Selecione sua RA na lista. Campo obrigat&oacute;rio &mdash; essencial para o registro e acompanhamento do plano.
+    </div>
+    <div class="guia-campo">
+      <strong>Pr&aacute;tica de Governan&ccedil;a:</strong> Selecione a pr&aacute;tica principal que o projeto implementa ou fortalece, conforme a Resolu&ccedil;&atilde;o CGOV N&ordm; 04/2024.
+    </div>
+
+    <h4>2. Nome e Objetivo</h4>
+    <div class="guia-campo">
+      <strong>Nome do Projeto:</strong> Escolha um nome claro e direto. Inclua a sigla da RA.
+      <div class="guia-ex">Ex: &ldquo;Implanta&ccedil;&atilde;o do CIG da RA-IX Ceil&acirc;ndia&rdquo;</div>
+    </div>
+    <div class="guia-campo">
+      <strong>Objetivo:</strong> Descreva o resultado final desejado. Use verbos como: estruturar, implantar, reduzir, melhorar.
+      <div class="guia-ex">Ex: &ldquo;Estruturar o CIG como inst&acirc;ncia deliberativa para qualificar decis&otilde;es da RA.&rdquo;</div>
+    </div>
+
+    <h4>3. Descri&ccedil;&atilde;o e Produto</h4>
+    <div class="guia-campo">
+      <strong>Descri&ccedil;&atilde;o:</strong> Diferente do objetivo (o que quer alcan&ccedil;ar), aqui descreva <em>o que ser&aacute; feito na pr&aacute;tica</em>: escopo, abrang&ecirc;ncia e diretrizes vinculadas.
+    </div>
+    <div class="guia-campo">
+      <strong>Produto Principal:</strong> O resultado concreto &mdash; algo que se possa apontar e dizer: &ldquo;isto foi entregue&rdquo;.
+      <div class="guia-ex">Ex: &ldquo;CIG formalmente institu&iacute;do, com regimento aprovado e reuni&otilde;es em funcionamento.&rdquo;</div>
+    </div>
+
+    <h4>4. Caracter&iacute;sticas</h4>
+    <div class="guia-campo">
+      <strong>Caracter&iacute;sticas do Produto:</strong> Atributos de qualidade. Pense: &ldquo;para funcionar bem, ele precisa ser/ter...&rdquo;
+      <div class="guia-ex">Ex: &ldquo;Reuni&otilde;es mensais com ata no SEI &bull; Composi&ccedil;&atilde;o multissetorial &bull; Pauta estruturada&rdquo;</div>
+    </div>
+
+    <h4>5. Justificativa e Indicadores</h4>
+    <div class="guia-campo">
+      <strong>Justificativa:</strong> Responda: qual problema resolve? Que risco evita? Por que agora? Traga dados se poss&iacute;vel.
+    </div>
+    <div class="guia-campo">
+      <strong>Indicador de Resultado:</strong> Deve conter tr&ecirc;s partes:
+      <ul>
+        <li><strong>Nome:</strong> o que ser&aacute; medido</li>
+        <li><strong>F&oacute;rmula:</strong> como calcular (use &divide; &times; ou descritivo)</li>
+        <li><strong>Meta:</strong> o valor esperado (n&uacute;mero ou percentual)</li>
+      </ul>
+      <div class="guia-ex">Ex: &ldquo;Taxa de reuni&otilde;es realizadas = n&ordm; realizadas &divide; n&ordm; programadas &times; 100. Meta: 100%&rdquo;</div>
+      <div class="guia-dica-box" style="margin-bottom:0">
+        &#9888;&#65039; <strong>Evite</strong> respostas vagas como &ldquo;&Iacute;ndice&rdquo;, &ldquo;Num&eacute;rico &mdash; maior melhor&rdquo; ou apenas &ldquo;Percentual&rdquo;. Essas respostas ser&atilde;o rejeitadas pela valida&ccedil;&atilde;o.
+      </div>
+    </div>
+
+    <h4>6. Partes Interessadas</h4>
+    <div class="guia-campo">
+      <strong>Patroc&iacute;nio e Gest&atilde;o:</strong> Quem apoia e decide (ex: Administrador(a) Regional).
+    </div>
+    <div class="guia-campo">
+      <strong>Equipe Executora:</strong> Quem faz o trabalho (ex: membros do CIG, assessoria jur&iacute;dica).
+    </div>
+    <div class="guia-campo">
+      <strong>P&uacute;blico-alvo:</strong> Quem se beneficia &mdash; diretos e indiretos.
+    </div>
+
+    <h4>7. Entregas Intermedi&aacute;rias</h4>
+    <div class="guia-campo">
+      <strong>Cada entrega deve ter:</strong>
+      <ul>
+        <li><strong>O que ser&aacute; entregue:</strong> resultado parcial concreto</li>
+        <li><strong>Atividades:</strong> passos necess&aacute;rios para chegar l&aacute;</li>
+        <li><strong>Prazo:</strong> estimativa realista</li>
+        <li><strong>Investimento:</strong> custo estimado ou &ldquo;Sem custo direto&rdquo;</li>
+      </ul>
+      <div class="guia-ex">Voc&ecirc; pode cadastrar m&uacute;ltiplas entregas usando o bot&atilde;o &ldquo;+ Adicionar mais uma entrega&rdquo;.</div>
+    </div>
+
+    <h4>8. Premissas, Barreiras e Riscos</h4>
+    <div class="guia-dica-box">
+      &#9888;&#65039; <strong>Aten&ccedil;&atilde;o:</strong> Este &eacute; o campo com mais erros conceituais. Leia com cuidado a diferen&ccedil;a entre os tr&ecirc;s conceitos.
+    </div>
+    <div class="guia-campo">
+      <strong>Premissas</strong> = condi&ccedil;&otilde;es <em>externas</em> que voc&ecirc; assume como verdadeiras para o projeto funcionar.
+      <div class="guia-ex">Ex: &ldquo;Os servidores ter&atilde;o tempo dedicado&rdquo;, &ldquo;O SEI estar&aacute; dispon&iacute;vel&rdquo;</div>
+      <div class="guia-dica-box" style="margin-bottom:0">
+        &#10060; <strong>N&atilde;o confunda com:</strong><br>
+        &bull; Atividades do projeto (&ldquo;Realizar capacita&ccedil;&atilde;o&rdquo;) &rarr; isso &eacute; <em>entrega</em><br>
+        &bull; Problemas atuais (&ldquo;Falta de pessoal&rdquo;) &rarr; isso &eacute; <em>barreira</em><br>
+        &bull; Eventos futuros incertos (&ldquo;Corte or&ccedil;ament&aacute;rio&rdquo;) &rarr; isso &eacute; <em>risco</em>
+      </div>
+    </div>
+    <div class="guia-campo">
+      <strong>Barreiras</strong> = obst&aacute;culos <em>conhecidos e atuais</em> que j&aacute; atrapalham.
+      <div class="guia-ex">Ex: &ldquo;Ac&uacute;mulo de fun&ccedil;&otilde;es dos servidores&rdquo;, &ldquo;Resist&ecirc;ncia cultural a mudan&ccedil;as&rdquo;</div>
+    </div>
+    <div class="guia-campo">
+      <strong>Riscos</strong> = eventos <em>incertos e futuros</em> que podem impactar negativamente.
+      <div class="guia-ex">Ex: &ldquo;Troca de Administrador(a) com descontinuidade&rdquo;, &ldquo;Corte or&ccedil;ament&aacute;rio inesperado&rdquo;</div>
+    </div>
+
+    <h4>D&uacute;vidas frequentes</h4>
+    <div class="guia-campo">
+      <strong>Posso voltar e editar?</strong> Sim! Seus dados s&atilde;o salvos automaticamente. Voc&ecirc; pode navegar livremente entre as etapas.
+    </div>
+    <div class="guia-campo">
+      <strong>Posso salvar e continuar depois?</strong> Sim. O formul&aacute;rio salva no navegador. Ao voltar, clique em &ldquo;Continuar de onde parou&rdquo;.
+    </div>
+    <div class="guia-campo">
+      <strong>Como exportar?</strong> Na tela de revis&atilde;o, use &ldquo;Baixar PDF&rdquo; ou &ldquo;Imprimir&rdquo;. Voc&ecirc; tamb&eacute;m pode exportar como JSON para backup.
+    </div>
+
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);font-size:11px;color:var(--text-muted);text-align:center;">
+      Guia de Preenchimento &mdash; SEGOV/SEGEST<br>
+      Modelo de Governan&ccedil;a P&uacute;blica do DF &mdash; Resolu&ccedil;&atilde;o CGOV N&ordm; 04/2024
+    </div>
+  </div>
+</div>
+
 <script>
 /* ===================================================
    CONFIGURACAO - URL DO GOOGLE APPS SCRIPT
    =================================================== */
 var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzvLX37nFf9wZrSga5WzuXcG56ZLSgc1p7akVW4_52kZAUD-TjF69CsCEPbd_t-X05QEw/exec';
+
+/* ===================================================
+   CONFIGURACAO - E-MAIL DE NOTIFICACAO
+   Recebe um aviso a cada plano enviado para
+   acompanhamento e devolutiva em tempo real.
+   =================================================== */
+var NOTIFICATION_EMAIL = 'adacto.oliveira@buriti.df.gov.br';
 
 /* ===================================================
    REGIOES ADMINISTRATIVAS DO DF
@@ -642,45 +881,44 @@ var REGIOES_DF = [
 ];
 
 /* ===================================================
-   MAPEAMENTO DE PROCESSOS SEI POR RA
-   (Bloco Interno SEI 4953057 - CIG/PEI)
+   PROCESSOS SEI POR RA (CIG/PEI)
    =================================================== */
 var PROCESSOS_SEI = {
   "RA-I Plano Piloto": "04018-00002996/2025-80",
   "RA-II Gama": "04018-00002426/2025-90",
   "RA-III Taguatinga": "04018-00002468/2025-21",
-  "RA-IV Brazlândia": "04018-00002977/2025-53",
+  "RA-IV Brazl\u00e2ndia": "04018-00002977/2025-53",
   "RA-V Sobradinho": "04018-00002975/2025-64",
   "RA-VI Planaltina": "04018-00002664/2025-03",
-  "RA-VII Paranoá": "04018-00002562/2025-80",
-  "RA-VIII Núcleo Bandeirante": "04018-00003008/2025-10",
-  "RA-IX Ceilândia": "04018-00003005/2025-86",
-  "RA-X Guará": "04018-00002565/2025-13",
+  "RA-VII Parano\u00e1": "04018-00002562/2025-80",
+  "RA-VIII N\u00facleo Bandeirante": "04018-00003008/2025-10",
+  "RA-IX Ceil\u00e2ndia": "04018-00003005/2025-86",
+  "RA-X Guar\u00e1": "04018-00002565/2025-13",
   "RA-XI Cruzeiro": "04018-00002567/2025-11",
   "RA-XII Samambaia": "04018-00002637/2025-22",
   "RA-XIII Santa Maria": "04018-00002427/2025-34",
-  "RA-XIV São Sebastião": "04018-00002662/2025-14",
+  "RA-XIV S\u00e3o Sebasti\u00e3o": "04018-00002662/2025-14",
   "RA-XV Recanto das Emas": "04018-00002638/2025-77",
   "RA-XVI Lago Sul": "04018-00002990/2025-11",
   "RA-XVII Riacho Fundo": "04018-00002639/2025-11",
   "RA-XVIII Lago Norte": "04018-00002973/2025-75",
-  "RA-XIX Candangolândia": "04018-00003007/2025-75",
-  "RA-XX Águas Claras": "04018-00002471/2025-44",
+  "RA-XIX Candangol\u00e2ndia": "04018-00003007/2025-75",
+  "RA-XX \u00c1guas Claras": "04018-00002471/2025-44",
   "RA-XXI Riacho Fundo II": "04018-00002640/2025-46",
   "RA-XXII Sudoeste/Octogonal": "04018-00002991/2025-57",
-  "RA-XXIII Varjão": "04018-00002994/2025-91",
+  "RA-XXIII Varj\u00e3o": "04018-00002994/2025-91",
   "RA-XXIV Park Way": "04018-00002998/2025-79",
   "RA-XXV SCIA/Estrutural": "04018-00002566/2025-68",
   "RA-XXVI Sobradinho II": "04018-00002976/2025-17",
-  "RA-XXVII Jardim Botânico": "04018-00002661/2025-61",
-  "RA-XXVIII Itapoã": "04018-00002564/2025-79",
+  "RA-XXVII Jardim Bot\u00e2nico": "04018-00002661/2025-61",
+  "RA-XXVIII Itapo\u00e3": "04018-00002564/2025-79",
   "RA-XXIX SIA": "04018-00003003/2025-97",
   "RA-XXX Vicente Pires": "04018-00002470/2025-08",
   "RA-XXXI Fercal": "04018-00002665/2025-40",
-  "RA-XXXII Sol Nascente e Pôr do Sol": "04018-00003004/2025-31",
+  "RA-XXXII Sol Nascente e P\u00f4r do Sol": "04018-00003004/2025-31",
   "RA-XXXIII Arniqueira": "04018-00002472/2025-99",
   "RA-XXXIV Arapoanga": "04018-00002663/2025-51",
-  "RA-XXXV Água Quente": "04018-00002974/2025-10"
+  "RA-XXXV \u00c1gua Quente": "04018-00002974/2025-10"
 };
 
 /* ===================================================
@@ -729,7 +967,7 @@ var FIELD_DEFS = {
   responsavel_email: {
     field: "responsavel_email", label: "E-mail Institucional",
     question: "Qual \u00e9 o seu e-mail institucional?",
-    dica: "E-mail para contato sobre este plano de a\u00e7\u00e3o.",
+    dica: "Obrigat\u00f3rio: use seu e-mail institucional (ex: nome@df.gov.br). E-mails pessoais como @gmail.com ou @hotmail.com n\u00e3o s\u00e3o aceitos.",
     placeholder: "seu.email@df.gov.br",
     icon: "\uD83D\uDCE7", color: "#1565C0", inputType: "email",
     exemplos: []
@@ -737,7 +975,7 @@ var FIELD_DEFS = {
   ra: {
     field: "ra", label: "Regi\u00e3o Administrativa",
     question: "Qual \u00e9 a sua Regi\u00e3o Administrativa?",
-    dica: "Selecione sua RA na lista abaixo.",
+    dica: "Obrigat\u00f3rio: selecione sua RA na lista abaixo. Este campo \u00e9 essencial para o registro do plano.",
     placeholder: "Selecione sua Regi\u00e3o Administrativa...",
     icon: "\uD83D\uDCCD", color: "#1565C0", inputType: "select",
     opcoes: REGIOES_DF, exemplos: []
@@ -824,21 +1062,21 @@ var FIELD_DEFS = {
   indicador: {
     field: "indicador", label: "Indicador de Resultado",
     question: "Como voc\u00ea vai medir o sucesso?",
-    dica: "Pense em n\u00fameros concretos: percentuais, quantidades, prazos. Se o projeto der certo, que n\u00famero muda?",
-    ajuda: "Indicadores s\u00e3o n\u00fameros que mostram se o projeto est\u00e1 funcionando. Pense em algo que voc\u00ea possa contar ou medir. Exemplo: 'n\u00famero de reuni\u00f5es realizadas' ou 'tempo m\u00e9dio de atendimento'.",
-    placeholder: "Indicadores de sucesso...",
+    dica: "Escreva a f\u00f3rmula de c\u00e1lculo e a meta. Exemplo: percentual de servidores capacitados \u00f7 total \u00d7 100. Meta: 80%. Respostas como '\u00cdndice' ou 'Num\u00e9rico' n\u00e3o ser\u00e3o aceitas.",
+    ajuda: "Um bom indicador tem tr\u00eas partes:\n\n1. Nome: o que ser\u00e1 medido (ex: 'Taxa de reuni\u00f5es realizadas').\n2. F\u00f3rmula: como calcular (ex: 'n\u00ba de reuni\u00f5es realizadas \u00f7 n\u00ba de reuni\u00f5es programadas \u00d7 100').\n3. Meta: o valor esperado (ex: 'Meta: 100%').\n\nEvite respostas vagas como '\u00cdndice', 'Num\u00e9rico \u2014 maior melhor' ou apenas 'Percentual'. Inclua sempre um n\u00famero ou f\u00f3rmula concreta.",
+    placeholder: "Ex: Taxa de reuni\u00f5es realizadas = n\u00ba realizadas \u00f7 n\u00ba programadas \u00d7 100. Meta: 100%",
     icon: "\uD83D\uDCCA", color: "#059669",
     exemplos: [
-      { titulo: "Governan\u00e7a", texto: "% de reuni\u00f5es realizadas vs. programadas (meta: 100%).\nN\u00ba de riscos identificados e tratados.\n\u00cdndice de conformidade no checklist da CGDF." },
-      { titulo: "Atendimento", texto: "Tempo m\u00e9dio de espera (meta: < 15 min).\n\u00cdndice de satisfa\u00e7\u00e3o do cidad\u00e3o (meta: > 80%).\nN\u00ba de atendimentos/dia." }
+      { titulo: "Governan\u00e7a", texto: "% de reuni\u00f5es realizadas vs. programadas = n\u00ba de reuni\u00f5es realizadas \u00f7 n\u00ba de reuni\u00f5es programadas \u00d7 100 (meta: 100%).\nN\u00ba de riscos identificados e tratados (meta: \u2265 10 riscos).\n\u00cdndice de conformidade no checklist da CGDF (meta: \u2265 90%)." },
+      { titulo: "Atendimento", texto: "Tempo m\u00e9dio de espera = soma dos tempos de espera \u00f7 n\u00ba de atendimentos (meta: < 15 min).\n\u00cdndice de satisfa\u00e7\u00e3o = avalia\u00e7\u00f5es positivas \u00f7 total de avalia\u00e7\u00f5es \u00d7 100 (meta: > 80%).\nN\u00ba de atendimentos/dia (meta: \u2265 50)." }
     ]
   },
   premissas: {
     field: "premissas", label: "Premissas",
     question: "O que precisa dar certo para o projeto funcionar?",
-    dica: "S\u00e3o condi\u00e7\u00f5es que voc\u00ea assume como verdadeiras. Se alguma falhar, o projeto fica comprometido.",
-    ajuda: "Premissas s\u00e3o coisas que voc\u00ea assume como certas para o projeto funcionar. Exemplo: 'os servidores ter\u00e3o tempo dedicado', 'o SEI estar\u00e1 dispon\u00edvel'. Se alguma premissa falhar, o projeto pode ser prejudicado.",
-    placeholder: "Fatores cr\u00edticos de sucesso...",
+    dica: "Premissas s\u00e3o condi\u00e7\u00f5es externas que voc\u00ea assume como verdadeiras. Se alguma falhar, o projeto fica comprometido.",
+    ajuda: "Aten\u00e7\u00e3o: premissas, barreiras e riscos s\u00e3o conceitos diferentes!\n\n\u2705 PREMISSAS = condi\u00e7\u00f5es que voc\u00ea ASSUME como verdadeiras, mas que est\u00e3o fora do seu controle. Ex: 'Os servidores ter\u00e3o tempo dedicado', 'O SEI estar\u00e1 dispon\u00edvel'.\n\n\u274c N\u00c3O s\u00e3o premissas:\n\u2022 Atividades do projeto (ex: 'Realizar capacita\u00e7\u00e3o') \u2014 isso \u00e9 entrega.\n\u2022 Problemas atuais (ex: 'Falta de pessoal') \u2014 isso \u00e9 barreira.\n\u2022 Eventos futuros incertos (ex: 'Pode haver corte or\u00e7ament\u00e1rio') \u2014 isso \u00e9 risco.\n\nDica: comece com 'Que...' ou 'O/A... estar\u00e1/continuar\u00e1...' para testar se \u00e9 uma premissa verdadeira.",
+    placeholder: "Ex: Apoio cont\u00ednuo do(a) Administrador(a) Regional. Servidores com disponibilidade de tempo...",
     icon: "\uD83C\uDFC5", color: "#b45309",
     exemplos: [
       { titulo: "T\u00edpicas", texto: "Apoio do(a) Administrador(a) Regional.\nServidores capacitados com disponibilidade de tempo.\nAcesso ao SEI funcionando.\nSuporte t\u00e9cnico da SEGOV conforme comprometido." }
@@ -930,8 +1168,8 @@ var STEPS = [
   {
     id: "riscos-premissas", type: "group", label: "Premissas, Barreiras e Riscos",
     icon: "\u26A0\uFE0F", question: "Identifique premissas, barreiras e riscos",
-    dica: "Pense nas condi\u00e7\u00f5es necess\u00e1rias, obst\u00e1culos existentes e o que pode dar errado.",
-    contexto: "\u00daltimo bloco! Identifique o que pode influenciar o sucesso do projeto.",
+    dica: "Aten\u00e7\u00e3o: cada campo pede um tipo diferente de informa\u00e7\u00e3o. Leia as orienta\u00e7\u00f5es de cada um.",
+    contexto: "\u00daltimo bloco! Premissas = condi\u00e7\u00f5es que voc\u00ea assume como verdadeiras. Barreiras = obst\u00e1culos que j\u00e1 existem hoje. Riscos = eventos incertos que podem acontecer no futuro.",
     fields: ["premissas", "barreiras", "riscos"]
   },
   { id: "review", type: "review" }
@@ -1008,10 +1246,41 @@ function getFirstStepOfPhase(phaseIdx) {
 /* ===================================================
    CAMPOS OBRIGATORIOS
    =================================================== */
-var REQUIRED_FIELDS = ['responsavel_nome', 'ra', 'pratica', 'projeto', 'objetivo', 'descricao', 'produto', 'caracteristicas', 'justificativa', 'indicador', 'partes', 'entregas', 'premissas', 'barreiras', 'riscos'];
+var REQUIRED_FIELDS = ['responsavel_nome', 'responsavel_email', 'ra', 'pratica', 'projeto', 'objetivo', 'descricao', 'produto', 'caracteristicas', 'justificativa', 'indicador', 'partes', 'entregas', 'premissas', 'barreiras', 'riscos'];
 
 function isRequired(fieldOrId) {
   return REQUIRED_FIELDS.indexOf(fieldOrId) >= 0;
+}
+
+/* Bloqueio de dom\u00ednios n\u00e3o-institucionais para e-mail */
+var DOMINIOS_BLOQUEADOS = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com', 'yahoo.com.br', 'live.com', 'icloud.com', 'protonmail.com', 'aol.com', 'uol.com.br', 'bol.com.br', 'terra.com.br', 'globo.com', 'ig.com.br', 'zipmail.com.br'];
+
+function validarEmailInstitucional(email) {
+  if (!email || !email.trim()) return { valido: false, erro: 'E-mail \u00e9 obrigat\u00f3rio.' };
+  var parts = email.trim().toLowerCase().split('@');
+  if (parts.length !== 2 || !parts[1]) return { valido: false, erro: 'E-mail inv\u00e1lido.' };
+  var dominio = parts[1];
+  for (var i = 0; i < DOMINIOS_BLOQUEADOS.length; i++) {
+    if (dominio === DOMINIOS_BLOQUEADOS[i]) {
+      return { valido: false, erro: 'Use um e-mail institucional. E-mails @' + dominio + ' n\u00e3o s\u00e3o aceitos.' };
+    }
+  }
+  return { valido: true, erro: '' };
+}
+
+/* Valida\u00e7\u00e3o do campo Indicador: exige f\u00f3rmula ou meta num\u00e9rica */
+function validarIndicador(texto) {
+  if (!texto || !texto.trim()) return { valido: false, erro: 'Indicador \u00e9 obrigat\u00f3rio.' };
+  var t = texto.trim().toLowerCase();
+  // Verifica se cont\u00e9m n\u00fameros, percentuais, f\u00f3rmulas ou palavras-chave de metas
+  var temNumero = /\d/.test(t);
+  var temPercentual = /%|percent|porcentual/.test(t);
+  var temFormula = /[\u00f7\u00d7\/\*\+\-\=]/.test(t) || /divis\u00e3o|multiplicado|dividido|vezes|soma|menos|igual/.test(t);
+  var temMeta = /meta[:\s]|alvo[:\s]|objetivo[:\s]|m\u00ednimo|m\u00e1ximo|m\u00ednima|m\u00e1xima|pelo menos|at\u00e9|acima de|abaixo de|superior a|inferior a|maior|menor|n\u00ba|n\u00famero de|quantidade|total de|taxa|raz\u00e3o|\u00edndice de/.test(t);
+  if (temNumero || temPercentual || temFormula || temMeta) {
+    return { valido: true, erro: '' };
+  }
+  return { valido: false, erro: 'O indicador deve conter uma f\u00f3rmula de c\u00e1lculo ou meta num\u00e9rica. Exemplo: "% de servidores capacitados \u00f7 total \u00d7 100. Meta: 80%".' };
 }
 
 /* ===================================================
@@ -1051,7 +1320,7 @@ var data = {
   indicador: "", patrocinio: "", equipe: "", publico: "",
   premissas: "", barreiras: "", riscos: "",
   entregas: [
-    { entrega: "", atividades: "", prazo: "", investimento: "Sem custo direto" }
+    { entrega: "", atividades: "", prazo: "", investimento: "Sem custo direto", responsavel: "" }
   ]
 };
 
@@ -1065,6 +1334,12 @@ function loadFromStorage() {
       var parsed = JSON.parse(saved);
       delete parsed.exportDate;
       Object.keys(parsed).forEach(function(k) { data[k] = parsed[k]; });
+      // Migra\u00e7\u00e3o: adicionar campo responsavel em entregas antigas
+      if (data.entregas && data.entregas.length) {
+        data.entregas.forEach(function(ent) {
+          if (typeof ent.responsavel === 'undefined') ent.responsavel = '';
+        });
+      }
     }
     var savedStep = localStorage.getItem(STORAGE_STEP_KEY);
     if (savedStep) {
@@ -1126,7 +1401,7 @@ function getProgress() {
     data.patrocinio, data.equipe, data.publico,
     data.premissas, data.barreiras, data.riscos];
   var ef = [];
-  data.entregas.forEach(function(e) { ef.push(e.entrega, e.atividades, e.prazo, e.investimento); });
+  data.entregas.forEach(function(e) { ef.push(e.entrega, e.atividades, e.prazo, e.investimento, e.responsavel || ''); });
   var all = fields.concat(ef);
   var filled = all.filter(function(f) { return f && f.trim(); }).length;
   return Math.round((filled / all.length) * 100);
@@ -1135,6 +1410,7 @@ function getProgress() {
 function getRequiredEmpty() {
   var required = [
     { field: 'responsavel_nome', label: 'Nome do Respons\u00e1vel' },
+    { field: 'responsavel_email', label: 'E-mail Institucional' },
     { field: 'ra', label: 'Regi\u00e3o Administrativa' },
     { field: 'pratica', label: 'Pr\u00e1tica de Governan\u00e7a' },
     { field: 'projeto', label: 'Nome do Projeto' },
@@ -1144,6 +1420,23 @@ function getRequiredEmpty() {
   required.forEach(function(r) {
     if (!data[r.field] || !data[r.field].trim()) empty.push(r.label);
   });
+
+  // Valida\u00e7\u00e3o de dom\u00ednio do e-mail institucional
+  if (data.responsavel_email && data.responsavel_email.trim()) {
+    var emailResult = validarEmailInstitucional(data.responsavel_email);
+    if (!emailResult.valido && empty.indexOf('E-mail Institucional') < 0) {
+      empty.push('E-mail Institucional (' + emailResult.erro + ')');
+    }
+  }
+
+  // Valida\u00e7\u00e3o de conte\u00fado do Indicador
+  if (data.indicador && data.indicador.trim()) {
+    var indicadorResult = validarIndicador(data.indicador);
+    if (!indicadorResult.valido) {
+      empty.push('Indicador (' + indicadorResult.erro + ')');
+    }
+  }
+
   return empty;
 }
 
@@ -1192,7 +1485,7 @@ function saveCurrentInputs() {
   // Entregas
   if (step.type === 'entregas') {
     data.entregas.forEach(function(_, i) {
-      ['entrega', 'atividades', 'prazo', 'investimento'].forEach(function(k) {
+      ['entrega', 'atividades', 'prazo', 'investimento', 'responsavel'].forEach(function(k) {
         var el = document.getElementById('ent-' + i + '-' + k);
         if (el) data.entregas[i][k] = el.value;
       });
@@ -1254,10 +1547,83 @@ function handleExampleClick(e) {
   }
 }
 
+/* Estado de expans\u00e3o das entregas (por \u00edndice) */
+var entregasExpandidas = {};
+
+function getEntregaPreenchimento(ent) {
+  var campos = [ent.entrega, ent.atividades, ent.prazo, ent.investimento, ent.responsavel || ''];
+  var preenchidos = campos.filter(function(c) { return c && c.trim() && c.trim() !== 'Sem custo direto'; }).length;
+  return Math.round((preenchidos / campos.length) * 100);
+}
+
 function addEntrega() {
   saveCurrentInputs();
-  data.entregas.push({ entrega: '', atividades: '', prazo: '', investimento: 'Sem custo direto' });
+  var newIdx = data.entregas.length;
+  data.entregas.push({ entrega: '', atividades: '', prazo: '', investimento: 'Sem custo direto', responsavel: '' });
+  entregasExpandidas[newIdx] = true;
   saveToStorage();
+  render();
+  // Scroll para a nova entrega
+  setTimeout(function() {
+    var el = document.getElementById('entrega-card-' + newIdx);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
+}
+
+function duplicateEntrega(idx) {
+  saveCurrentInputs();
+  var original = data.entregas[idx];
+  var copia = {
+    entrega: original.entrega,
+    atividades: original.atividades,
+    prazo: original.prazo,
+    investimento: original.investimento,
+    responsavel: original.responsavel || ''
+  };
+  var newIdx = idx + 1;
+  data.entregas.splice(newIdx, 0, copia);
+  // Reindexar expans\u00f5es
+  var novasExp = {};
+  Object.keys(entregasExpandidas).forEach(function(k) {
+    var ki = parseInt(k, 10);
+    novasExp[ki >= newIdx ? ki + 1 : ki] = entregasExpandidas[k];
+  });
+  novasExp[newIdx] = true;
+  entregasExpandidas = novasExp;
+  saveToStorage();
+  render();
+  setTimeout(function() {
+    var el = document.getElementById('entrega-card-' + newIdx);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
+}
+
+function moveEntrega(idx, direction) {
+  var newIdx = idx + direction;
+  if (newIdx < 0 || newIdx >= data.entregas.length) return;
+  saveCurrentInputs();
+  var item = data.entregas.splice(idx, 1)[0];
+  data.entregas.splice(newIdx, 0, item);
+  // Trocar estado de expans\u00e3o
+  var tmpExp = entregasExpandidas[idx];
+  entregasExpandidas[idx] = entregasExpandidas[newIdx];
+  entregasExpandidas[newIdx] = tmpExp;
+  saveToStorage();
+  render();
+}
+
+function toggleEntrega(idx) {
+  entregasExpandidas[idx] = !entregasExpandidas[idx];
+  render();
+}
+
+function expandirTodasEntregas() {
+  for (var i = 0; i < data.entregas.length; i++) entregasExpandidas[i] = true;
+  render();
+}
+
+function recolherTodasEntregas() {
+  entregasExpandidas = {};
   render();
 }
 
@@ -1270,6 +1636,15 @@ function removeEntrega(idx) {
   }
   saveCurrentInputs();
   data.entregas.splice(idx, 1);
+  delete entregasExpandidas[idx];
+  // Reindexar expans\u00f5es
+  var novasExp = {};
+  Object.keys(entregasExpandidas).forEach(function(k) {
+    var ki = parseInt(k, 10);
+    if (ki > idx) novasExp[ki - 1] = entregasExpandidas[k];
+    else novasExp[ki] = entregasExpandidas[k];
+  });
+  entregasExpandidas = novasExp;
   saveToStorage();
   render();
 }
@@ -1286,9 +1661,10 @@ function clearAllData() {
     indicador: "", patrocinio: "", equipe: "", publico: "",
     premissas: "", barreiras: "", riscos: "",
     entregas: [
-      { entrega: "", atividades: "", prazo: "", investimento: "Sem custo direto" }
+      { entrega: "", atividades: "", prazo: "", investimento: "Sem custo direto", responsavel: "" }
     ]
   };
+  entregasExpandidas = {};
   currentStep = 0;
   showSuccess = false;
   render();
@@ -1304,6 +1680,55 @@ function toggleCanvasInfo() {
   } else {
     el.style.display = 'none';
     if (btn) btn.textContent = 'O que \u00e9 o Plano de A\u00e7\u00e3o do CIG?';
+  }
+}
+
+function toggleGuia() {
+  var panel = document.getElementById('guia-panel');
+  var overlay = document.getElementById('guia-overlay');
+  if (!panel || !overlay) return;
+  var isOpen = panel.classList.contains('open');
+  if (isOpen) {
+    panel.classList.remove('open');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  } else {
+    panel.classList.add('open');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+/* ===================================================
+   ACESSO ADMIN - GERAR PDFs DAS RAs
+   =================================================== */
+var ADMIN_KEY = 'segest2025';
+
+function verificarAdmin() {
+  var senha = prompt('Digite a senha de administrador:');
+  if (senha === ADMIN_KEY) {
+    var btn = document.getElementById('btn-pdf-todos');
+    if (btn) {
+      btn.style.display = '';
+      alert('Acesso liberado! O bot\u00e3o "Gerar PDFs de Todas as RAs" est\u00e1 dispon\u00edvel.');
+    }
+  } else if (senha !== null) {
+    alert('Senha incorreta.');
+  }
+}
+
+/* Atualizar exibi\u00e7\u00e3o do Processo SEI */
+function atualizarProcessoSEI(raValue) {
+  var container = document.getElementById('processo-sei-container');
+  var numberEl = document.getElementById('processo-sei-number');
+  if (!container || !numberEl) return;
+  var processoSEI = raValue && PROCESSOS_SEI[raValue] ? PROCESSOS_SEI[raValue] : '';
+  if (processoSEI) {
+    numberEl.textContent = processoSEI;
+    container.classList.add('visible');
+  } else {
+    numberEl.textContent = '';
+    container.classList.remove('visible');
   }
 }
 
@@ -1345,7 +1770,8 @@ function submitToSEGOV() {
   var payload = Object.assign({}, data, {
     submittedAt: new Date().toISOString(),
     userAgent: navigator.userAgent,
-    processo_sei: data.ra && PROCESSOS_SEI[data.ra] ? PROCESSOS_SEI[data.ra] : ''
+    processo_sei: data.ra && PROCESSOS_SEI[data.ra] ? PROCESSOS_SEI[data.ra] : '',
+    notificarEmail: NOTIFICATION_EMAIL
   });
 
   fetch(GOOGLE_SCRIPT_URL, {
@@ -1382,7 +1808,10 @@ function attachInputListeners() {
   document.querySelectorAll('#app textarea, #app input[type="text"], #app input[type="email"], #app select').forEach(function(el) {
     el.addEventListener('input', function() {
       clearTimeout(inputDebounce);
-      inputDebounce = setTimeout(scheduleAutosave, 800);
+      inputDebounce = setTimeout(function() {
+        scheduleAutosave();
+        validarCampoEmTempoReal(el);
+      }, 800);
     });
     if (el.tagName === 'SELECT') {
       el.addEventListener('change', function() {
@@ -1391,45 +1820,40 @@ function attachInputListeners() {
         if (el.id === 'field-ra') {
           atualizarProcessoSEI(el.value);
         }
+        validarCampoEmTempoReal(el);
       });
     }
+    // Valida\u00e7\u00e3o ao sair do campo
+    el.addEventListener('blur', function() {
+      validarCampoEmTempoReal(el);
+    });
   });
 }
 
+/* Valida\u00e7\u00e3o em tempo real com feedback inline */
+function validarCampoEmTempoReal(el) {
+  var fieldId = (el.id || '').replace('field-', '');
+  var existingMsg = el.parentElement ? el.parentElement.querySelector('.campo-erro-inline') : null;
+  if (existingMsg) existingMsg.remove();
 
-/* ===================================================
-   ACESSO ADMIN - GERAR PDFs DAS RAs
-   =================================================== */
-var ADMIN_KEY = 'segest2025';
-
-function verificarAdmin() {
-  var senha = prompt('Digite a senha de administrador:');
-  if (senha === ADMIN_KEY) {
-    var btn = document.getElementById('btn-pdf-todos');
-    if (btn) {
-      btn.style.display = '';
-      alert('Acesso liberado! O botão "Gerar PDFs de Todas as RAs" está disponível.');
-    }
-  } else if (senha !== null) {
-    alert('Senha incorreta.');
+  var erro = '';
+  if (fieldId === 'responsavel_email' && el.value.trim()) {
+    var r = validarEmailInstitucional(el.value);
+    if (!r.valido) erro = r.erro;
   }
-}
+  if (fieldId === 'indicador' && el.value.trim()) {
+    var r2 = validarIndicador(el.value);
+    if (!r2.valido) erro = r2.erro;
+  }
 
-/* Atualizar exibição do Processo SEI */
-function atualizarProcessoSEI(raValue) {
-  var container = document.getElementById('processo-sei-container');
-  var numberEl = document.getElementById('processo-sei-number');
-
-  if (!container || !numberEl) return;
-
-  var processoSEI = raValue && PROCESSOS_SEI[raValue] ? PROCESSOS_SEI[raValue] : '';
-
-  if (processoSEI) {
-    numberEl.textContent = processoSEI;
-    container.classList.add('visible');
+  if (erro) {
+    el.style.borderColor = 'var(--accent-red)';
+    var msgEl = document.createElement('div');
+    msgEl.className = 'campo-erro-inline';
+    msgEl.textContent = erro;
+    el.parentElement.insertBefore(msgEl, el.nextSibling);
   } else {
-    numberEl.textContent = '';
-    container.classList.remove('visible');
+    el.style.borderColor = '';
   }
 }
 
@@ -1502,7 +1926,7 @@ function renderSingleFieldInput(def, isInsideGroup) {
       inputHTML += '<option value="' + esc(op) + '"' + (data[def.field] === op ? ' selected' : '') + '>' + esc(op) + '</option>';
     });
     inputHTML += '</select>';
-    // Adicionar container do Processo SEI para o campo RA
+    // Processo SEI para o campo RA
     if (def.field === 'ra') {
       var processoSEI = data.ra && PROCESSOS_SEI[data.ra] ? PROCESSOS_SEI[data.ra] : '';
       var visibleClass = processoSEI ? ' visible' : '';
@@ -1513,7 +1937,7 @@ function renderSingleFieldInput(def, isInsideGroup) {
         '</div>' +
         '<div id="processo-sei-number" class="processo-sei-number">' + processoSEI + '</div>' +
         '<div class="processo-sei-info">' +
-          '<strong>Importante:</strong> Este é o processo SEI onde devem ser inseridos todos os documentos relacionados ao CIG e PEI desta RA.' +
+          '<strong>Importante:</strong> Este \u00e9 o processo SEI onde devem ser inseridos todos os documentos relacionados ao CIG e PEI desta RA.' +
         '</div>' +
       '</div>';
     }
@@ -1620,9 +2044,30 @@ function renderEntregas(step) {
     '</div>';
   });
 
+  // Resumo das entregas
+  var totalEntregas = data.entregas.length;
+  var completasCount = 0;
+  data.entregas.forEach(function(ent) {
+    if (getEntregaPreenchimento(ent) === 100) completasCount++;
+  });
+  var summaryHTML = '<div class="entregas-summary">' +
+    '<span><strong>' + totalEntregas + '</strong> entrega' + (totalEntregas > 1 ? 's' : '') + ' cadastrada' + (totalEntregas > 1 ? 's' : '') +
+    (completasCount > 0 ? ' &mdash; <span style="color:var(--accent-green-dark)">' + completasCount + ' completa' + (completasCount > 1 ? 's' : '') + '</span>' : '') +
+    '</span>' +
+    (totalEntregas > 1 ? '<span style="display:flex;gap:6px"><button class="entrega-action-btn" onclick="expandirTodasEntregas()" title="Expandir todas">Expandir</button>' +
+    '<button class="entrega-action-btn" onclick="recolherTodasEntregas()" title="Recolher todas">Recolher</button></span>' : '') +
+  '</div>';
+
   var entregasHTML = '';
   data.entregas.forEach(function(ent, i) {
-    // Build prazo select with current value handling
+    var isOpen = entregasExpandidas[i] || (totalEntregas === 1);
+    var pct = getEntregaPreenchimento(ent);
+    var statusClass = pct === 100 ? 'entrega-completa' : (pct > 0 ? 'entrega-parcial' : '');
+    var badgeClass = pct === 100 ? 'entrega-badge-ok' : 'entrega-badge';
+    var badgeText = pct === 100 ? '\u2713 Entrega ' + (i + 1) : 'Entrega ' + (i + 1);
+    var previewText = ent.entrega.trim() ? ent.entrega.trim().substring(0, 50) + (ent.entrega.trim().length > 50 ? '...' : '') : '(n\u00e3o preenchida)';
+
+    // Build prazo select
     var prazoIsCustom = ent.prazo && PRAZOS_OPCOES.indexOf(ent.prazo) < 0 && ent.prazo.trim() !== '';
     var prazoSelectHTML = '<select class="small-select" id="ent-' + i + '-prazo">' +
       '<option value="">Selecione o prazo...</option>';
@@ -1634,27 +2079,54 @@ function renderEntregas(step) {
     }
     prazoSelectHTML += '</select>';
 
-    entregasHTML += '<div class="entrega-card">' +
-      '<div class="entrega-header">' +
-        '<span class="entrega-badge">Entrega ' + (i + 1) + '</span>' +
-        (data.entregas.length > 1 ? '<button class="entrega-remove" data-idx="' + i + '">Remover</button>' : '') +
+    // Progress bar color
+    var progressColor = pct === 100 ? 'var(--accent-green)' : (pct > 0 ? '#fcd34d' : 'var(--border)');
+
+    entregasHTML += '<div class="entrega-card ' + statusClass + '" id="entrega-card-' + i + '">' +
+      '<div class="entrega-header" onclick="toggleEntrega(' + i + ')">' +
+        '<div class="entrega-header-left">' +
+          '<span class="' + badgeClass + '">' + badgeText + '</span>' +
+          (!isOpen ? '<span class="entrega-preview">' + esc(previewText) + '</span>' : '') +
+        '</div>' +
+        '<div class="entrega-actions">' +
+          (i > 0 ? '<button class="entrega-action-btn" onclick="event.stopPropagation();moveEntrega(' + i + ',-1)" title="Mover para cima">\u2191</button>' : '') +
+          (i < totalEntregas - 1 ? '<button class="entrega-action-btn" onclick="event.stopPropagation();moveEntrega(' + i + ',1)" title="Mover para baixo">\u2193</button>' : '') +
+          '<button class="entrega-action-btn" onclick="event.stopPropagation();duplicateEntrega(' + i + ')" title="Duplicar entrega">\u2398</button>' +
+          (totalEntregas > 1 ? '<button class="entrega-action-btn remove" onclick="event.stopPropagation();removeEntrega(' + i + ')" title="Remover entrega">\u2715</button>' : '') +
+          '<span class="entrega-toggle ' + (isOpen ? 'open' : '') + '">\u25BC</span>' +
+        '</div>' +
       '</div>' +
-      '<div class="entrega-grid">' +
-        '<div>' +
-          '<label class="entrega-field-label" for="ent-' + i + '-entrega">O que ser\u00e1 entregue?</label>' +
-          '<textarea class="small-textarea" id="ent-' + i + '-entrega" rows="2">' + esc(ent.entrega) + '</textarea>' +
-        '</div>' +
-        '<div>' +
-          '<label class="entrega-field-label" for="ent-' + i + '-atividades">Atividades necess\u00e1rias</label>' +
-          '<textarea class="small-textarea" id="ent-' + i + '-atividades" rows="3">' + esc(ent.atividades) + '</textarea>' +
-        '</div>' +
-        '<div>' +
-          '<label class="entrega-field-label" for="ent-' + i + '-prazo">Prazo estimado</label>' +
-          prazoSelectHTML +
-        '</div>' +
-        '<div>' +
-          '<label class="entrega-field-label" for="ent-' + i + '-investimento">Investimento (se houver)</label>' +
-          '<textarea class="small-textarea" id="ent-' + i + '-investimento" rows="1">' + esc(ent.investimento) + '</textarea>' +
+      '<div class="entrega-progress">' +
+        '<div class="entrega-progress-bar"><div class="entrega-progress-fill" style="width:' + pct + '%;background:' + progressColor + '"></div></div>' +
+        '<span>' + pct + '%</span>' +
+      '</div>' +
+      '<div class="entrega-body ' + (isOpen ? 'open' : '') + '">' +
+        '<div class="entrega-grid">' +
+          '<div>' +
+            '<label class="entrega-field-label" for="ent-' + i + '-entrega">O que ser\u00e1 entregue?</label>' +
+            '<div class="entrega-field-hint">Resultado parcial concreto desta etapa</div>' +
+            '<textarea class="small-textarea" id="ent-' + i + '-entrega" rows="2" placeholder="Ex: Ato normativo do CIG publicado no DODF">' + esc(ent.entrega) + '</textarea>' +
+          '</div>' +
+          '<div>' +
+            '<label class="entrega-field-label" for="ent-' + i + '-responsavel">Respons\u00e1vel pela entrega</label>' +
+            '<div class="entrega-field-hint">Quem vai garantir que esta entrega aconteça</div>' +
+            '<input type="text" class="small-textarea" id="ent-' + i + '-responsavel" value="' + esc(ent.responsavel || '') + '" placeholder="Ex: Chefe de Gabinete" style="padding:8px 12px">' +
+          '</div>' +
+          '<div style="grid-column:1/-1">' +
+            '<label class="entrega-field-label" for="ent-' + i + '-atividades">Atividades necess\u00e1rias</label>' +
+            '<div class="entrega-field-hint">Passos sequenciais para chegar ao resultado. Use \u2192 para separar etapas.</div>' +
+            '<textarea class="small-textarea" id="ent-' + i + '-atividades" rows="3" placeholder="Ex: Minutar portaria \u2192 Assessoria jur\u00eddica \u2192 Assinatura \u2192 Publica\u00e7\u00e3o no DODF">' + esc(ent.atividades) + '</textarea>' +
+          '</div>' +
+          '<div>' +
+            '<label class="entrega-field-label" for="ent-' + i + '-prazo">Prazo estimado</label>' +
+            '<div class="entrega-field-hint">Tempo estimado para conclus\u00e3o</div>' +
+            prazoSelectHTML +
+          '</div>' +
+          '<div>' +
+            '<label class="entrega-field-label" for="ent-' + i + '-investimento">Investimento (se houver)</label>' +
+            '<div class="entrega-field-hint">Custo estimado ou recursos necess\u00e1rios</div>' +
+            '<textarea class="small-textarea" id="ent-' + i + '-investimento" rows="1" placeholder="Sem custo direto">' + esc(ent.investimento) + '</textarea>' +
+          '</div>' +
         '</div>' +
       '</div>' +
     '</div>';
@@ -1669,6 +2141,7 @@ function renderEntregas(step) {
       '<div class="examples-label">\uD83D\uDCA1 Exemplo de entregas (Projeto CIG)</div>' +
       exHTML +
     '</div>' +
+    summaryHTML +
     entregasHTML +
     '<button class="btn-add-entrega" onclick="addEntrega()">+ Adicionar mais uma entrega</button>';
 }
@@ -1681,6 +2154,9 @@ function renderSuccessScreen() {
     (data.pratica ? '<p class="sub">Pr\u00e1tica: ' + esc(data.pratica) + '</p>' : '') +
     '<p class="sub">Projeto: ' + esc(data.projeto || '(sem nome)') + '</p>' +
     '<div class="success-badge">\u2713 Enviado em ' + new Date().toLocaleDateString('pt-BR') + ' \u00e0s ' + new Date().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}) + '</div>' +
+    '<div style="margin-top:16px;padding:12px 16px;background:#eff6ff;border:1px solid #93C5FD;border-radius:10px;font-size:13px;color:#1e40af;text-align:center">' +
+      '\uD83D\uDCE7 Uma notifica\u00e7\u00e3o foi enviada para a equipe SEGEST para acompanhamento e devolutiva.' +
+    '</div>' +
     '<div class="success-actions" style="margin-top:24px">' +
       '<button class="btn-nav btn-nav-prev" onclick="showSuccess=false;render()">Voltar para revis\u00e3o</button>' +
       '<button class="btn-nav btn-nav-prev" onclick="clearAllData()">Iniciar novo plano</button>' +
@@ -1694,7 +2170,7 @@ function renderReview() {
   function getVal(item) {
     if (item.field) return data[item.field];
     if (item.type === 'partes') return [data.patrocinio, data.equipe, data.publico].filter(Boolean).join('\n');
-    if (item.type === 'entregas') return data.entregas.map(function(e, i) { return (i+1) + '. ' + e.entrega; }).filter(function(e) { return e.length > 3; }).join('\n');
+    if (item.type === 'entregas') return data.entregas.map(function(e, i) { return (i+1) + '. ' + e.entrega + (e.responsavel ? ' (' + e.responsavel + ')' : ''); }).filter(function(e) { return e.length > 3; }).join('\n');
     return '';
   }
 
@@ -1736,6 +2212,9 @@ function renderReview() {
   } else {
     submitHTML = '<div class="submit-section">' +
       '<p>Revisou tudo? Quando estiver pronto, envie o Plano de A\u00e7\u00e3o diretamente para a equipe SEGOV/SEGEST.<br><span style="font-size:11px;color:var(--text-muted)">Apenas os campos com * s\u00e3o obrigat\u00f3rios. Os demais podem ser preenchidos depois.</span></p>' +
+      '<div style="padding:10px 14px;background:#eff6ff;border:1px solid #93C5FD;border-radius:8px;font-size:12px;color:#1e40af;margin-bottom:12px">' +
+        '\uD83D\uDCE7 Ao enviar, a equipe SEGEST ser\u00e1 notificada automaticamente por e-mail para acompanhamento e devolutiva.' +
+      '</div>' +
       '<button class="btn-submit" onclick="submitToSEGOV()"' + (submitting ? ' disabled' : '') + '>' +
         (submitting ? '<span class="spinner"></span>Enviando para SEGOV...' : '\uD83D\uDCE8 Enviar Plano de A\u00e7\u00e3o para SEGOV') +
       '</button>' +
@@ -1838,7 +2317,7 @@ function render() {
     if (isLast) {
        navHTML += '<button class="btn-nav btn-nav-print" onclick="window.print()">\uD83D\uDDA8\uFE0F Imprimir</button>';
       navHTML += '<button class="btn-nav" onclick="gerarPDFIndividual()" style="background:#1565C0;color:#fff">\uD83D\uDCC4 Baixar PDF deste Plano</button>';
-      navHTML += '<button class="btn-nav" onclick="abrirPainelPDF()" id="btn-pdf-todos" style="display:none;background:#059669;color:#fff">\uD83D\uDCCA Gerar PDFs por RA</button>';
+      navHTML += '<button class="btn-nav" onclick="gerarPDFTodos()" id="btn-pdf-todos" style="display:none;background:#059669;color:#fff">\uD83D\uDCCA PDF de Todos os Registros</button>';
     } else {
       navHTML += '<button class="btn-nav btn-nav-next" onclick="next()">Pr\u00f3ximo \u2192</button>';
     }
@@ -1854,7 +2333,7 @@ function render() {
           '<h1>Plano de A\u00e7\u00e3o do CIG</h1>' +
         '</div>' +
       '</div>' +
-      '<button onclick="verificarAdmin()" title="Acesso administrativo" style="background:none;border:1px solid #e2e8f0;border-radius:6px;padding:4px 8px;cursor:pointer;font-size:12px;opacity:0.5">🔑</button>' +
+      '<button onclick="verificarAdmin()" title="Acesso administrativo" style="background:none;border:1px solid #e2e8f0;border-radius:6px;padding:4px 8px;cursor:pointer;font-size:12px;opacity:0.5">\uD83D\uDD11</button>' +
     '</div>' +
     renderPhaseStepper(pct) +
     motivHTML +
@@ -1867,7 +2346,7 @@ function render() {
       'Secretaria de Governo \u2022 Controladoria-Geral do DF<br>' +
       'Modelo de Governan\u00e7a P\u00fablica do DF \u2014 Resolu\u00e7\u00e3o CGOV N\u00ba 04/2024' +
       '<br><span style="opacity:0.45;font-size:10px;margin-top:6px;display:inline-block">Desenvolvido por Adacto Artur Dornas de Oliveira</span>' +
-      '<br><span style="opacity:0.6;font-size:10px;margin-top:4px;display:inline-block;background:#e3f2fd;padding:2px 8px;border-radius:10px;color:#1565C0">v1.2 • 05/02/2026</span>' +
+      '<br><span style="opacity:0.6;font-size:10px;margin-top:4px;display:inline-block;background:#e3f2fd;padding:2px 8px;border-radius:10px;color:#1565C0">v2.0 \u2022 18/03/2026</span>' +
     '</div>';
 
   // Attach event listeners
@@ -1962,11 +2441,11 @@ function gerarPDFIndividual() {
         doc.text("Entregas", margin, y);
         y += 8;
         var entregasData = data.entregas.map(function(ent, i) {
-          return [String(i + 1), ent.entrega || "", ent.atividades || "", ent.prazo || "", ent.investimento || ""];
+          return [String(i + 1), ent.entrega || "", ent.atividades || "", ent.responsavel || "", ent.prazo || "", ent.investimento || ""];
         });
         doc.autoTable({
           startY: y,
-          head: [["#", "Entrega", "Atividades", "Prazo", "Investimento"]],
+          head: [["#", "Entrega", "Atividades", "Responsavel", "Prazo", "Investimento"]],
           body: entregasData,
           margin: { left: margin, right: margin },
           styles: { fontSize: 8 },
@@ -1976,172 +2455,72 @@ function gerarPDFIndividual() {
       doc.save("plano-de-acao-" + (data.projeto || "canvas") + ".pdf");
     }
 
-    function abrirPainelPDF() {
-      var overlay = document.getElementById("painel-pdf-overlay");
-      if (overlay) { overlay.style.display = "flex"; return; }
-      overlay = document.createElement("div");
-      overlay.id = "painel-pdf-overlay";
-      overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999";
-      var box = document.createElement("div");
-      box.style.cssText = "background:#fff;border-radius:12px;padding:24px;max-width:420px;width:90%;max-height:80vh;overflow-y:auto";
-      var html = '<h3 style="margin:0 0 16px">Gerar PDF por RA</h3>';
-      html += '<select id="filtro-ra" style="width:100%;padding:10px;font-size:14px;border:1px solid #ccc;border-radius:6px;margin-bottom:12px">';
-      html += '<option value="__todas__">Todas as RAs (um PDF por RA)</option>';
-      REGIOES_DF.forEach(function(ra) { html += '<option value="' + ra + '">' + ra + '</option>'; });
-      html += '</select>';
-      html += '<div id="pdf-status" style="margin-bottom:12px;font-size:13px;color:#475569"></div>';
-      html += '<div style="display:flex;gap:8px">';
-      html += '<button onclick="gerarPDFPorRA()" style="flex:1;padding:10px;background:#059669;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:14px">Gerar PDF</button>';
-      html += '<button onclick="document.getElementById(\'painel-pdf-overlay\').style.display=\'none\'" style="flex:1;padding:10px;background:#e2e8f0;color:#1e293b;border:none;border-radius:6px;cursor:pointer;font-size:14px">Fechar</button>';
-      html += '</div>';
-      box.innerHTML = html;
-      overlay.appendChild(box);
-      overlay.addEventListener("click", function(e) { if (e.target === overlay) overlay.style.display = "none"; });
-      document.body.appendChild(overlay);
-    }
-
-    function gerarPDFPorRA() {
-      var select = document.getElementById("filtro-ra");
-      var status = document.getElementById("pdf-status");
-      var raEscolhida = select.value;
-      status.textContent = "Buscando dados...";
+    function gerarPDFTodos() {
+      var btn = document.getElementById("btn-pdf-todos");
+      if (btn) btn.textContent = "Carregando...";
       fetch(GOOGLE_SCRIPT_URL)
         .then(function(r) { return r.json(); })
         .then(function(result) {
           if (result.status !== "ok") {
-            status.textContent = "Erro: " + (result.message || "");
+            alert("Erro ao buscar dados: " + (result.message || ""));
             return;
           }
-          if (raEscolhida === "__todas__") {
-            var raMap = {};
-            result.registros.forEach(function(reg) {
-              var ra = reg["Regiao Administrativa"] || "Sem RA";
-              if (!raMap[ra]) raMap[ra] = [];
-              raMap[ra].push(reg);
-            });
-            var ras = Object.keys(raMap);
-            if (ras.length === 0) { status.textContent = "Nenhum registro encontrado."; return; }
-            status.textContent = "Gerando " + ras.length + " PDFs...";
-            var count = 0;
-            ras.forEach(function(ra) {
-              gerarPDFDeRegistros(raMap[ra], ra);
-              count++;
-              status.textContent = "Gerado " + count + " de " + ras.length + " PDFs";
-            });
-            status.textContent = ras.length + " PDFs gerados com sucesso!";
-          } else {
-            var filtrados = result.registros.filter(function(reg) {
-              return (reg["Regiao Administrativa"] || "") === raEscolhida;
-            });
-            if (filtrados.length === 0) {
-              status.textContent = "Nenhum registro encontrado para " + raEscolhida;
-              return;
-            }
-            gerarPDFDeRegistros(filtrados, raEscolhida);
-            status.textContent = "PDF gerado com " + filtrados.length + " registro(s)!";
-          }
-        })
-        .catch(function(err) { status.textContent = "Erro: " + err; });
-    }
-
-    function gerarPDFDeRegistros(registros, tituloRA) {
-      var doc = new jspdf.jsPDF();
-      var pageWidth = doc.internal.pageSize.getWidth();
-      var margin = 15;
-      var campos = [
-        { key: "Nome", label: "Responsavel" },
-        { key: "Email", label: "Email" },
-        { key: "Regiao Administrativa", label: "Regiao Administrativa" },
-        { key: "Pratica de Governanca", label: "Pratica de Governanca" },
-        { key: "Projeto", label: "Projeto" },
-        { key: "Objetivo", label: "Objetivo" },
-        { key: "Descricao", label: "Descricao" },
-        { key: "Produto", label: "Produto Principal" },
-        { key: "Caracteristicas", label: "Caracteristicas" },
-        { key: "Justificativa", label: "Justificativa" },
-        { key: "Indicador", label: "Indicador" },
-        { key: "Patrocinio", label: "Patrocinio" },
-        { key: "Equipe", label: "Equipe" },
-        { key: "Publico-alvo", label: "Publico-alvo" },
-        { key: "Premissas", label: "Premissas" },
-        { key: "Barreiras", label: "Barreiras" },
-        { key: "Riscos", label: "Riscos" }
-      ];
-      registros.forEach(function(reg, idx) {
-        if (idx > 0) doc.addPage();
-        var y = 20;
-        // Cabeçalho centralizado (igual ao PDF individual)
-        doc.setFontSize(16);
-        doc.setFont("helvetica", "bold");
-        doc.text("Plano de Acao do CIG", pageWidth / 2, y, { align: "center" });
-        y += 8;
-        doc.setFontSize(12);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(21, 101, 192);
-        doc.text(tituloRA, pageWidth / 2, y, { align: "center" });
-        doc.setTextColor(0, 0, 0);
-        y += 8;
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "normal");
-        var dataEnvio = reg["Data/Hora"] || new Date().toLocaleString("pt-BR");
-        doc.text("Data: " + dataEnvio, pageWidth / 2, y, { align: "center" });
-        y += 5;
-        doc.setFontSize(9);
-        doc.setTextColor(100, 100, 100);
-        doc.text("Registro " + (idx + 1) + " de " + registros.length, pageWidth / 2, y, { align: "center" });
-        doc.setTextColor(0, 0, 0);
-        y += 10;
-        // Linha divisória
-        doc.setDrawColor(21, 101, 192);
-        doc.setLineWidth(0.5);
-        doc.line(margin, y, pageWidth - margin, y);
-        y += 10;
-        // Campos com formatação igual ao PDF individual
-        campos.forEach(function(campo) {
-          if (y > 270) { doc.addPage(); y = 20; }
+          var doc = new jspdf.jsPDF("landscape");
+          var margin = 10;
+          doc.setFontSize(14);
           doc.setFont("helvetica", "bold");
-          doc.setFontSize(10);
-          doc.text(campo.label + ":", margin, y);
-          y += 6;
-          doc.setFont("helvetica", "normal");
+          doc.text("Relatorio Geral - Planos de Acao do CIG", margin, 15);
           doc.setFontSize(9);
-          var val = String(reg[campo.key] || "(vazio)");
-          var lines = doc.splitTextToSize(val, pageWidth - margin * 2);
-          doc.text(lines, margin, y);
-          y += lines.length * 5 + 6;
-        });
-        // Entregas em tabela
-        var entregasRaw = String(reg["Entregas"] || "");
-        if (entregasRaw && entregasRaw !== "(vazio)") {
-          if (y > 240) { doc.addPage(); y = 20; }
-          doc.setFont("helvetica", "bold");
-          doc.setFontSize(11);
-          doc.text("Entregas", margin, y);
-          y += 8;
-          var entregasList = entregasRaw.split("\n");
-          var tabelaEntregas = [];
-          entregasList.forEach(function(linha) {
-            var numMatch = linha.match(/Entrega\s*(\d+):\s*(.*?)\s*\|\s*Atividades:\s*(.*?)\s*\|\s*Prazo:\s*(.*?)\s*\|\s*Investimento:\s*(.*)/);
-            if (numMatch) {
-              tabelaEntregas.push([numMatch[1], numMatch[2], numMatch[3], numMatch[4], numMatch[5]]);
-            } else {
-              tabelaEntregas.push(["", linha, "", "", ""]);
-            }
+          doc.setFont("helvetica", "normal");
+          doc.text("Gerado em: " + new Date().toLocaleString("pt-BR") + " | Total: " + result.total + " registros", margin, 22);
+          var headers = [["Data", "Nome", "Email", "RA", "Pratica", "Projeto", "Objetivo"]];
+          var rows = result.registros.map(function(r) {
+            return [
+              r["Data/Hora"] || "",
+              r["Nome"] || "",
+              r["Email"] || "",
+              (r["Regiao Administrativa"] || "").substring(0, 25),
+              (r["Pratica de Governanca"] || "").substring(0, 30),
+              (r["Projeto"] || "").substring(0, 30),
+              (r["Objetivo"] || "").substring(0, 40)
+            ];
           });
-          if (tabelaEntregas.length > 0) {
-            doc.autoTable({
-              startY: y,
-              head: [["#", "Entrega", "Atividades", "Prazo", "Investimento"]],
-              body: tabelaEntregas,
-              margin: { left: margin, right: margin },
-              styles: { fontSize: 8 },
-              headStyles: { fillColor: [26, 115, 232] }
+          doc.autoTable({
+            startY: 28,
+            head: headers,
+            body: rows,
+            margin: { left: margin, right: margin },
+            styles: { fontSize: 7, cellPadding: 2 },
+            headStyles: { fillColor: [26, 115, 232] },
+            alternateRowStyles: { fillColor: [248, 249, 250] }
+          });
+          result.registros.forEach(function(reg) {
+            doc.addPage("portrait");
+            var y = 20;
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text("Plano de Acao: " + (reg["Projeto"] || ""), margin, y);
+            y += 10;
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "normal");
+            Object.keys(reg).forEach(function(key) {
+              if (y > 270) { doc.addPage(); y = 20; }
+              doc.setFont("helvetica", "bold");
+              doc.text(key + ":", margin, y);
+              y += 5;
+              doc.setFont("helvetica", "normal");
+              var val = String(reg[key] || "(vazio)");
+              var lines = doc.splitTextToSize(val, 180);
+              doc.text(lines, margin, y);
+              y += lines.length * 4.5 + 5;
             });
-          }
-        }
-      });
-      var nomeArquivo = tituloRA.replace(/[^a-zA-Z0-9]/g, "-").replace(/-+/g, "-");
-      doc.save("plano-acao-" + nomeArquivo + ".pdf");
+          });
+          doc.save("relatorio-geral-planos-de-acao.pdf");
+        })
+        .catch(function(err) { alert("Erro: " + err); })
+        .finally(function() {
+          if (btn) btn.textContent = "\uD83D\uDCCA PDF de Todos os Registros";
+        });
     }
 
   render();
