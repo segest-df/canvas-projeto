@@ -539,6 +539,18 @@
     .phase-stepper-mobile { display: block; }
     .phase-stepper-info { flex-direction: column; gap: 4px; text-align: center; }
   }
+
+  /* Inline validation error messages */
+  .campo-erro-inline {
+    color: var(--accent-red);
+    font-size: 12px;
+    margin-top: 4px;
+    padding: 6px 10px;
+    background: var(--accent-red-light);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--accent-red);
+    line-height: 1.4;
+  }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
@@ -641,7 +653,7 @@ var FIELD_DEFS = {
   responsavel_email: {
     field: "responsavel_email", label: "E-mail Institucional",
     question: "Qual \u00e9 o seu e-mail institucional?",
-    dica: "E-mail para contato sobre este plano de a\u00e7\u00e3o.",
+    dica: "Obrigat\u00f3rio: use seu e-mail institucional (ex: nome@df.gov.br). E-mails pessoais como @gmail.com ou @hotmail.com n\u00e3o s\u00e3o aceitos.",
     placeholder: "seu.email@df.gov.br",
     icon: "\uD83D\uDCE7", color: "#1565C0", inputType: "email",
     exemplos: []
@@ -649,7 +661,7 @@ var FIELD_DEFS = {
   ra: {
     field: "ra", label: "Regi\u00e3o Administrativa",
     question: "Qual \u00e9 a sua Regi\u00e3o Administrativa?",
-    dica: "Selecione sua RA na lista abaixo.",
+    dica: "Obrigat\u00f3rio: selecione sua RA na lista abaixo. Este campo \u00e9 essencial para o registro do plano.",
     placeholder: "Selecione sua Regi\u00e3o Administrativa...",
     icon: "\uD83D\uDCCD", color: "#1565C0", inputType: "select",
     opcoes: REGIOES_DF, exemplos: []
@@ -736,21 +748,21 @@ var FIELD_DEFS = {
   indicador: {
     field: "indicador", label: "Indicador de Resultado",
     question: "Como voc\u00ea vai medir o sucesso?",
-    dica: "Pense em n\u00fameros concretos: percentuais, quantidades, prazos. Se o projeto der certo, que n\u00famero muda?",
-    ajuda: "Indicadores s\u00e3o n\u00fameros que mostram se o projeto est\u00e1 funcionando. Pense em algo que voc\u00ea possa contar ou medir. Exemplo: 'n\u00famero de reuni\u00f5es realizadas' ou 'tempo m\u00e9dio de atendimento'.",
-    placeholder: "Indicadores de sucesso...",
+    dica: "Escreva a f\u00f3rmula de c\u00e1lculo e a meta. Exemplo: percentual de servidores capacitados \u00f7 total \u00d7 100. Meta: 80%. Respostas como '\u00cdndice' ou 'Num\u00e9rico' n\u00e3o ser\u00e3o aceitas.",
+    ajuda: "Um bom indicador tem tr\u00eas partes:\n\n1. Nome: o que ser\u00e1 medido (ex: 'Taxa de reuni\u00f5es realizadas').\n2. F\u00f3rmula: como calcular (ex: 'n\u00ba de reuni\u00f5es realizadas \u00f7 n\u00ba de reuni\u00f5es programadas \u00d7 100').\n3. Meta: o valor esperado (ex: 'Meta: 100%').\n\nEvite respostas vagas como '\u00cdndice', 'Num\u00e9rico \u2014 maior melhor' ou apenas 'Percentual'. Inclua sempre um n\u00famero ou f\u00f3rmula concreta.",
+    placeholder: "Ex: Taxa de reuni\u00f5es realizadas = n\u00ba realizadas \u00f7 n\u00ba programadas \u00d7 100. Meta: 100%",
     icon: "\uD83D\uDCCA", color: "#059669",
     exemplos: [
-      { titulo: "Governan\u00e7a", texto: "% de reuni\u00f5es realizadas vs. programadas (meta: 100%).\nN\u00ba de riscos identificados e tratados.\n\u00cdndice de conformidade no checklist da CGDF." },
-      { titulo: "Atendimento", texto: "Tempo m\u00e9dio de espera (meta: < 15 min).\n\u00cdndice de satisfa\u00e7\u00e3o do cidad\u00e3o (meta: > 80%).\nN\u00ba de atendimentos/dia." }
+      { titulo: "Governan\u00e7a", texto: "% de reuni\u00f5es realizadas vs. programadas = n\u00ba de reuni\u00f5es realizadas \u00f7 n\u00ba de reuni\u00f5es programadas \u00d7 100 (meta: 100%).\nN\u00ba de riscos identificados e tratados (meta: \u2265 10 riscos).\n\u00cdndice de conformidade no checklist da CGDF (meta: \u2265 90%)." },
+      { titulo: "Atendimento", texto: "Tempo m\u00e9dio de espera = soma dos tempos de espera \u00f7 n\u00ba de atendimentos (meta: < 15 min).\n\u00cdndice de satisfa\u00e7\u00e3o = avalia\u00e7\u00f5es positivas \u00f7 total de avalia\u00e7\u00f5es \u00d7 100 (meta: > 80%).\nN\u00ba de atendimentos/dia (meta: \u2265 50)." }
     ]
   },
   premissas: {
     field: "premissas", label: "Premissas",
     question: "O que precisa dar certo para o projeto funcionar?",
-    dica: "S\u00e3o condi\u00e7\u00f5es que voc\u00ea assume como verdadeiras. Se alguma falhar, o projeto fica comprometido.",
-    ajuda: "Premissas s\u00e3o coisas que voc\u00ea assume como certas para o projeto funcionar. Exemplo: 'os servidores ter\u00e3o tempo dedicado', 'o SEI estar\u00e1 dispon\u00edvel'. Se alguma premissa falhar, o projeto pode ser prejudicado.",
-    placeholder: "Fatores cr\u00edticos de sucesso...",
+    dica: "Premissas s\u00e3o condi\u00e7\u00f5es externas que voc\u00ea assume como verdadeiras. Se alguma falhar, o projeto fica comprometido.",
+    ajuda: "Aten\u00e7\u00e3o: premissas, barreiras e riscos s\u00e3o conceitos diferentes!\n\n\u2705 PREMISSAS = condi\u00e7\u00f5es que voc\u00ea ASSUME como verdadeiras, mas que est\u00e3o fora do seu controle. Ex: 'Os servidores ter\u00e3o tempo dedicado', 'O SEI estar\u00e1 dispon\u00edvel'.\n\n\u274c N\u00c3O s\u00e3o premissas:\n\u2022 Atividades do projeto (ex: 'Realizar capacita\u00e7\u00e3o') \u2014 isso \u00e9 entrega.\n\u2022 Problemas atuais (ex: 'Falta de pessoal') \u2014 isso \u00e9 barreira.\n\u2022 Eventos futuros incertos (ex: 'Pode haver corte or\u00e7ament\u00e1rio') \u2014 isso \u00e9 risco.\n\nDica: comece com 'Que...' ou 'O/A... estar\u00e1/continuar\u00e1...' para testar se \u00e9 uma premissa verdadeira.",
+    placeholder: "Ex: Apoio cont\u00ednuo do(a) Administrador(a) Regional. Servidores com disponibilidade de tempo...",
     icon: "\uD83C\uDFC5", color: "#b45309",
     exemplos: [
       { titulo: "T\u00edpicas", texto: "Apoio do(a) Administrador(a) Regional.\nServidores capacitados com disponibilidade de tempo.\nAcesso ao SEI funcionando.\nSuporte t\u00e9cnico da SEGOV conforme comprometido." }
@@ -842,8 +854,8 @@ var STEPS = [
   {
     id: "riscos-premissas", type: "group", label: "Premissas, Barreiras e Riscos",
     icon: "\u26A0\uFE0F", question: "Identifique premissas, barreiras e riscos",
-    dica: "Pense nas condi\u00e7\u00f5es necess\u00e1rias, obst\u00e1culos existentes e o que pode dar errado.",
-    contexto: "\u00daltimo bloco! Identifique o que pode influenciar o sucesso do projeto.",
+    dica: "Aten\u00e7\u00e3o: cada campo pede um tipo diferente de informa\u00e7\u00e3o. Leia as orienta\u00e7\u00f5es de cada um.",
+    contexto: "\u00daltimo bloco! Premissas = condi\u00e7\u00f5es que voc\u00ea assume como verdadeiras. Barreiras = obst\u00e1culos que j\u00e1 existem hoje. Riscos = eventos incertos que podem acontecer no futuro.",
     fields: ["premissas", "barreiras", "riscos"]
   },
   { id: "review", type: "review" }
@@ -920,10 +932,41 @@ function getFirstStepOfPhase(phaseIdx) {
 /* ===================================================
    CAMPOS OBRIGATORIOS
    =================================================== */
-var REQUIRED_FIELDS = ['responsavel_nome', 'ra', 'pratica', 'projeto', 'objetivo', 'descricao', 'produto', 'caracteristicas', 'justificativa', 'indicador', 'partes', 'entregas', 'premissas', 'barreiras', 'riscos'];
+var REQUIRED_FIELDS = ['responsavel_nome', 'responsavel_email', 'ra', 'pratica', 'projeto', 'objetivo', 'descricao', 'produto', 'caracteristicas', 'justificativa', 'indicador', 'partes', 'entregas', 'premissas', 'barreiras', 'riscos'];
 
 function isRequired(fieldOrId) {
   return REQUIRED_FIELDS.indexOf(fieldOrId) >= 0;
+}
+
+/* Bloqueio de dom\u00ednios n\u00e3o-institucionais para e-mail */
+var DOMINIOS_BLOQUEADOS = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com', 'yahoo.com.br', 'live.com', 'icloud.com', 'protonmail.com', 'aol.com', 'uol.com.br', 'bol.com.br', 'terra.com.br', 'globo.com', 'ig.com.br', 'zipmail.com.br'];
+
+function validarEmailInstitucional(email) {
+  if (!email || !email.trim()) return { valido: false, erro: 'E-mail \u00e9 obrigat\u00f3rio.' };
+  var parts = email.trim().toLowerCase().split('@');
+  if (parts.length !== 2 || !parts[1]) return { valido: false, erro: 'E-mail inv\u00e1lido.' };
+  var dominio = parts[1];
+  for (var i = 0; i < DOMINIOS_BLOQUEADOS.length; i++) {
+    if (dominio === DOMINIOS_BLOQUEADOS[i]) {
+      return { valido: false, erro: 'Use um e-mail institucional. E-mails @' + dominio + ' n\u00e3o s\u00e3o aceitos.' };
+    }
+  }
+  return { valido: true, erro: '' };
+}
+
+/* Valida\u00e7\u00e3o do campo Indicador: exige f\u00f3rmula ou meta num\u00e9rica */
+function validarIndicador(texto) {
+  if (!texto || !texto.trim()) return { valido: false, erro: 'Indicador \u00e9 obrigat\u00f3rio.' };
+  var t = texto.trim().toLowerCase();
+  // Verifica se cont\u00e9m n\u00fameros, percentuais, f\u00f3rmulas ou palavras-chave de metas
+  var temNumero = /\d/.test(t);
+  var temPercentual = /%|percent|porcentual/.test(t);
+  var temFormula = /[\u00f7\u00d7\/\*\+\-\=]/.test(t) || /divis\u00e3o|multiplicado|dividido|vezes|soma|menos|igual/.test(t);
+  var temMeta = /meta[:\s]|alvo[:\s]|objetivo[:\s]|m\u00ednimo|m\u00e1ximo|m\u00ednima|m\u00e1xima|pelo menos|at\u00e9|acima de|abaixo de|superior a|inferior a|maior|menor|n\u00ba|n\u00famero de|quantidade|total de|taxa|raz\u00e3o|\u00edndice de/.test(t);
+  if (temNumero || temPercentual || temFormula || temMeta) {
+    return { valido: true, erro: '' };
+  }
+  return { valido: false, erro: 'O indicador deve conter uma f\u00f3rmula de c\u00e1lculo ou meta num\u00e9rica. Exemplo: "% de servidores capacitados \u00f7 total \u00d7 100. Meta: 80%".' };
 }
 
 /* ===================================================
@@ -1047,6 +1090,7 @@ function getProgress() {
 function getRequiredEmpty() {
   var required = [
     { field: 'responsavel_nome', label: 'Nome do Respons\u00e1vel' },
+    { field: 'responsavel_email', label: 'E-mail Institucional' },
     { field: 'ra', label: 'Regi\u00e3o Administrativa' },
     { field: 'pratica', label: 'Pr\u00e1tica de Governan\u00e7a' },
     { field: 'projeto', label: 'Nome do Projeto' },
@@ -1056,6 +1100,23 @@ function getRequiredEmpty() {
   required.forEach(function(r) {
     if (!data[r.field] || !data[r.field].trim()) empty.push(r.label);
   });
+
+  // Valida\u00e7\u00e3o de dom\u00ednio do e-mail institucional
+  if (data.responsavel_email && data.responsavel_email.trim()) {
+    var emailResult = validarEmailInstitucional(data.responsavel_email);
+    if (!emailResult.valido && empty.indexOf('E-mail Institucional') < 0) {
+      empty.push('E-mail Institucional (' + emailResult.erro + ')');
+    }
+  }
+
+  // Valida\u00e7\u00e3o de conte\u00fado do Indicador
+  if (data.indicador && data.indicador.trim()) {
+    var indicadorResult = validarIndicador(data.indicador);
+    if (!indicadorResult.valido) {
+      empty.push('Indicador (' + indicadorResult.erro + ')');
+    }
+  }
+
   return empty;
 }
 
@@ -1293,14 +1354,49 @@ function attachInputListeners() {
   document.querySelectorAll('#app textarea, #app input[type="text"], #app input[type="email"], #app select').forEach(function(el) {
     el.addEventListener('input', function() {
       clearTimeout(inputDebounce);
-      inputDebounce = setTimeout(scheduleAutosave, 800);
+      inputDebounce = setTimeout(function() {
+        scheduleAutosave();
+        validarCampoEmTempoReal(el);
+      }, 800);
     });
     if (el.tagName === 'SELECT') {
       el.addEventListener('change', function() {
         scheduleAutosave();
+        validarCampoEmTempoReal(el);
       });
     }
+    // Valida\u00e7\u00e3o ao sair do campo
+    el.addEventListener('blur', function() {
+      validarCampoEmTempoReal(el);
+    });
   });
+}
+
+/* Valida\u00e7\u00e3o em tempo real com feedback inline */
+function validarCampoEmTempoReal(el) {
+  var fieldId = (el.id || '').replace('field-', '');
+  var existingMsg = el.parentElement ? el.parentElement.querySelector('.campo-erro-inline') : null;
+  if (existingMsg) existingMsg.remove();
+
+  var erro = '';
+  if (fieldId === 'responsavel_email' && el.value.trim()) {
+    var r = validarEmailInstitucional(el.value);
+    if (!r.valido) erro = r.erro;
+  }
+  if (fieldId === 'indicador' && el.value.trim()) {
+    var r2 = validarIndicador(el.value);
+    if (!r2.valido) erro = r2.erro;
+  }
+
+  if (erro) {
+    el.style.borderColor = 'var(--accent-red)';
+    var msgEl = document.createElement('div');
+    msgEl.className = 'campo-erro-inline';
+    msgEl.textContent = erro;
+    el.parentElement.insertBefore(msgEl, el.nextSibling);
+  } else {
+    el.style.borderColor = '';
+  }
 }
 
 /* ===================================================
