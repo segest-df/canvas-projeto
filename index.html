@@ -347,14 +347,50 @@
   /* Entregas */
   .entrega-card {
     background: var(--bg-input); border: 1.5px solid var(--border); border-radius: var(--radius);
-    padding: 16px; margin-bottom: 12px;
+    padding: 0; margin-bottom: 12px; overflow: hidden;
+    transition: border-color 0.2s;
   }
-  .entrega-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .entrega-card.entrega-completa { border-color: var(--accent-green); }
+  .entrega-card.entrega-parcial { border-color: #fcd34d; }
+  .entrega-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 16px; cursor: pointer; user-select: none;
+    background: var(--bg-card); border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .entrega-header:hover { background: var(--gdf-blue-bg); }
+  .entrega-header-left { display: flex; align-items: center; gap: 10px; }
   .entrega-badge {
     font-size: 12px; font-weight: 700; color: var(--gdf-blue);
     background: var(--gdf-blue-light); padding: 3px 12px; border-radius: 20px;
     border: 1px solid #93C5FD;
   }
+  .entrega-badge-ok {
+    font-size: 12px; font-weight: 700; color: var(--accent-green-dark);
+    background: var(--accent-green-light); padding: 3px 12px; border-radius: 20px;
+    border: 1px solid #a7f3d0;
+  }
+  .entrega-preview {
+    font-size: 12px; color: var(--text-muted); max-width: 260px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .entrega-toggle {
+    font-size: 14px; color: var(--text-dim); transition: transform 0.2s; margin-left: 4px;
+  }
+  .entrega-toggle.open { transform: rotate(180deg); }
+  .entrega-body { padding: 16px; display: none; }
+  .entrega-body.open { display: block; }
+  .entrega-actions {
+    display: flex; gap: 6px; align-items: center; flex-shrink: 0;
+  }
+  .entrega-action-btn {
+    background: none; border: 1px solid var(--border); border-radius: 6px;
+    padding: 3px 8px; font-size: 13px; cursor: pointer; color: var(--text-muted);
+    font-family: var(--font); transition: all 0.2s; line-height: 1;
+  }
+  .entrega-action-btn:hover { background: var(--bg-deep); color: var(--text-secondary); border-color: var(--border-strong); }
+  .entrega-action-btn.remove { color: var(--accent-red); border-color: #fecaca; }
+  .entrega-action-btn.remove:hover { background: var(--accent-red-light); }
   .entrega-remove {
     background: var(--accent-red-light); border: 1px solid #fecaca; border-radius: 6px;
     color: var(--accent-red); font-size: 11px; font-weight: 600; cursor: pointer;
@@ -362,10 +398,28 @@
   }
   .entrega-remove:hover { background: #fee2e2; }
   .entrega-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .entrega-field-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .entrega-field-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; display: block; }
+  .entrega-field-hint { font-size: 11px; color: var(--text-dim); margin-bottom: 4px; font-style: italic; }
+  .entrega-progress {
+    display: flex; align-items: center; gap: 8px; padding: 0 16px 12px;
+    font-size: 11px; color: var(--text-muted);
+  }
+  .entrega-progress-bar {
+    flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden;
+  }
+  .entrega-progress-fill {
+    height: 100%; border-radius: 2px; transition: width 0.3s;
+  }
+
+  .entregas-summary {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; background: var(--gdf-blue-bg); border: 1px solid #93C5FD;
+    border-radius: var(--radius-sm); margin-bottom: 14px; font-size: 13px;
+  }
+  .entregas-summary strong { color: var(--gdf-blue); }
 
   .btn-add-entrega {
-    width: 100%; padding: 10px; border-radius: 10px; border: 1.5px dashed var(--border-strong);
+    width: 100%; padding: 12px; border-radius: 10px; border: 1.5px dashed var(--border-strong);
     background: transparent; color: var(--text-muted); font-size: 13px; font-weight: 600;
     cursor: pointer; font-family: var(--font); transition: all 0.2s;
   }
@@ -1218,7 +1272,7 @@ var data = {
   indicador: "", patrocinio: "", equipe: "", publico: "",
   premissas: "", barreiras: "", riscos: "",
   entregas: [
-    { entrega: "", atividades: "", prazo: "", investimento: "Sem custo direto" }
+    { entrega: "", atividades: "", prazo: "", investimento: "Sem custo direto", responsavel: "" }
   ]
 };
 
@@ -1232,6 +1286,12 @@ function loadFromStorage() {
       var parsed = JSON.parse(saved);
       delete parsed.exportDate;
       Object.keys(parsed).forEach(function(k) { data[k] = parsed[k]; });
+      // Migra\u00e7\u00e3o: adicionar campo responsavel em entregas antigas
+      if (data.entregas && data.entregas.length) {
+        data.entregas.forEach(function(ent) {
+          if (typeof ent.responsavel === 'undefined') ent.responsavel = '';
+        });
+      }
     }
     var savedStep = localStorage.getItem(STORAGE_STEP_KEY);
     if (savedStep) {
@@ -1293,7 +1353,7 @@ function getProgress() {
     data.patrocinio, data.equipe, data.publico,
     data.premissas, data.barreiras, data.riscos];
   var ef = [];
-  data.entregas.forEach(function(e) { ef.push(e.entrega, e.atividades, e.prazo, e.investimento); });
+  data.entregas.forEach(function(e) { ef.push(e.entrega, e.atividades, e.prazo, e.investimento, e.responsavel || ''); });
   var all = fields.concat(ef);
   var filled = all.filter(function(f) { return f && f.trim(); }).length;
   return Math.round((filled / all.length) * 100);
@@ -1377,7 +1437,7 @@ function saveCurrentInputs() {
   // Entregas
   if (step.type === 'entregas') {
     data.entregas.forEach(function(_, i) {
-      ['entrega', 'atividades', 'prazo', 'investimento'].forEach(function(k) {
+      ['entrega', 'atividades', 'prazo', 'investimento', 'responsavel'].forEach(function(k) {
         var el = document.getElementById('ent-' + i + '-' + k);
         if (el) data.entregas[i][k] = el.value;
       });
@@ -1439,10 +1499,83 @@ function handleExampleClick(e) {
   }
 }
 
+/* Estado de expans\u00e3o das entregas (por \u00edndice) */
+var entregasExpandidas = {};
+
+function getEntregaPreenchimento(ent) {
+  var campos = [ent.entrega, ent.atividades, ent.prazo, ent.investimento, ent.responsavel || ''];
+  var preenchidos = campos.filter(function(c) { return c && c.trim() && c.trim() !== 'Sem custo direto'; }).length;
+  return Math.round((preenchidos / campos.length) * 100);
+}
+
 function addEntrega() {
   saveCurrentInputs();
-  data.entregas.push({ entrega: '', atividades: '', prazo: '', investimento: 'Sem custo direto' });
+  var newIdx = data.entregas.length;
+  data.entregas.push({ entrega: '', atividades: '', prazo: '', investimento: 'Sem custo direto', responsavel: '' });
+  entregasExpandidas[newIdx] = true;
   saveToStorage();
+  render();
+  // Scroll para a nova entrega
+  setTimeout(function() {
+    var el = document.getElementById('entrega-card-' + newIdx);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
+}
+
+function duplicateEntrega(idx) {
+  saveCurrentInputs();
+  var original = data.entregas[idx];
+  var copia = {
+    entrega: original.entrega,
+    atividades: original.atividades,
+    prazo: original.prazo,
+    investimento: original.investimento,
+    responsavel: original.responsavel || ''
+  };
+  var newIdx = idx + 1;
+  data.entregas.splice(newIdx, 0, copia);
+  // Reindexar expans\u00f5es
+  var novasExp = {};
+  Object.keys(entregasExpandidas).forEach(function(k) {
+    var ki = parseInt(k, 10);
+    novasExp[ki >= newIdx ? ki + 1 : ki] = entregasExpandidas[k];
+  });
+  novasExp[newIdx] = true;
+  entregasExpandidas = novasExp;
+  saveToStorage();
+  render();
+  setTimeout(function() {
+    var el = document.getElementById('entrega-card-' + newIdx);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
+}
+
+function moveEntrega(idx, direction) {
+  var newIdx = idx + direction;
+  if (newIdx < 0 || newIdx >= data.entregas.length) return;
+  saveCurrentInputs();
+  var item = data.entregas.splice(idx, 1)[0];
+  data.entregas.splice(newIdx, 0, item);
+  // Trocar estado de expans\u00e3o
+  var tmpExp = entregasExpandidas[idx];
+  entregasExpandidas[idx] = entregasExpandidas[newIdx];
+  entregasExpandidas[newIdx] = tmpExp;
+  saveToStorage();
+  render();
+}
+
+function toggleEntrega(idx) {
+  entregasExpandidas[idx] = !entregasExpandidas[idx];
+  render();
+}
+
+function expandirTodasEntregas() {
+  for (var i = 0; i < data.entregas.length; i++) entregasExpandidas[i] = true;
+  render();
+}
+
+function recolherTodasEntregas() {
+  entregasExpandidas = {};
   render();
 }
 
@@ -1455,6 +1588,15 @@ function removeEntrega(idx) {
   }
   saveCurrentInputs();
   data.entregas.splice(idx, 1);
+  delete entregasExpandidas[idx];
+  // Reindexar expans\u00f5es
+  var novasExp = {};
+  Object.keys(entregasExpandidas).forEach(function(k) {
+    var ki = parseInt(k, 10);
+    if (ki > idx) novasExp[ki - 1] = entregasExpandidas[k];
+    else novasExp[ki] = entregasExpandidas[k];
+  });
+  entregasExpandidas = novasExp;
   saveToStorage();
   render();
 }
@@ -1471,9 +1613,10 @@ function clearAllData() {
     indicador: "", patrocinio: "", equipe: "", publico: "",
     premissas: "", barreiras: "", riscos: "",
     entregas: [
-      { entrega: "", atividades: "", prazo: "", investimento: "Sem custo direto" }
+      { entrega: "", atividades: "", prazo: "", investimento: "Sem custo direto", responsavel: "" }
     ]
   };
+  entregasExpandidas = {};
   currentStep = 0;
   showSuccess = false;
   render();
@@ -1799,9 +1942,30 @@ function renderEntregas(step) {
     '</div>';
   });
 
+  // Resumo das entregas
+  var totalEntregas = data.entregas.length;
+  var completasCount = 0;
+  data.entregas.forEach(function(ent) {
+    if (getEntregaPreenchimento(ent) === 100) completasCount++;
+  });
+  var summaryHTML = '<div class="entregas-summary">' +
+    '<span><strong>' + totalEntregas + '</strong> entrega' + (totalEntregas > 1 ? 's' : '') + ' cadastrada' + (totalEntregas > 1 ? 's' : '') +
+    (completasCount > 0 ? ' &mdash; <span style="color:var(--accent-green-dark)">' + completasCount + ' completa' + (completasCount > 1 ? 's' : '') + '</span>' : '') +
+    '</span>' +
+    (totalEntregas > 1 ? '<span style="display:flex;gap:6px"><button class="entrega-action-btn" onclick="expandirTodasEntregas()" title="Expandir todas">Expandir</button>' +
+    '<button class="entrega-action-btn" onclick="recolherTodasEntregas()" title="Recolher todas">Recolher</button></span>' : '') +
+  '</div>';
+
   var entregasHTML = '';
   data.entregas.forEach(function(ent, i) {
-    // Build prazo select with current value handling
+    var isOpen = entregasExpandidas[i] || (totalEntregas === 1);
+    var pct = getEntregaPreenchimento(ent);
+    var statusClass = pct === 100 ? 'entrega-completa' : (pct > 0 ? 'entrega-parcial' : '');
+    var badgeClass = pct === 100 ? 'entrega-badge-ok' : 'entrega-badge';
+    var badgeText = pct === 100 ? '\u2713 Entrega ' + (i + 1) : 'Entrega ' + (i + 1);
+    var previewText = ent.entrega.trim() ? ent.entrega.trim().substring(0, 50) + (ent.entrega.trim().length > 50 ? '...' : '') : '(n\u00e3o preenchida)';
+
+    // Build prazo select
     var prazoIsCustom = ent.prazo && PRAZOS_OPCOES.indexOf(ent.prazo) < 0 && ent.prazo.trim() !== '';
     var prazoSelectHTML = '<select class="small-select" id="ent-' + i + '-prazo">' +
       '<option value="">Selecione o prazo...</option>';
@@ -1813,27 +1977,54 @@ function renderEntregas(step) {
     }
     prazoSelectHTML += '</select>';
 
-    entregasHTML += '<div class="entrega-card">' +
-      '<div class="entrega-header">' +
-        '<span class="entrega-badge">Entrega ' + (i + 1) + '</span>' +
-        (data.entregas.length > 1 ? '<button class="entrega-remove" data-idx="' + i + '">Remover</button>' : '') +
+    // Progress bar color
+    var progressColor = pct === 100 ? 'var(--accent-green)' : (pct > 0 ? '#fcd34d' : 'var(--border)');
+
+    entregasHTML += '<div class="entrega-card ' + statusClass + '" id="entrega-card-' + i + '">' +
+      '<div class="entrega-header" onclick="toggleEntrega(' + i + ')">' +
+        '<div class="entrega-header-left">' +
+          '<span class="' + badgeClass + '">' + badgeText + '</span>' +
+          (!isOpen ? '<span class="entrega-preview">' + esc(previewText) + '</span>' : '') +
+        '</div>' +
+        '<div class="entrega-actions">' +
+          (i > 0 ? '<button class="entrega-action-btn" onclick="event.stopPropagation();moveEntrega(' + i + ',-1)" title="Mover para cima">\u2191</button>' : '') +
+          (i < totalEntregas - 1 ? '<button class="entrega-action-btn" onclick="event.stopPropagation();moveEntrega(' + i + ',1)" title="Mover para baixo">\u2193</button>' : '') +
+          '<button class="entrega-action-btn" onclick="event.stopPropagation();duplicateEntrega(' + i + ')" title="Duplicar entrega">\u2398</button>' +
+          (totalEntregas > 1 ? '<button class="entrega-action-btn remove" onclick="event.stopPropagation();removeEntrega(' + i + ')" title="Remover entrega">\u2715</button>' : '') +
+          '<span class="entrega-toggle ' + (isOpen ? 'open' : '') + '">\u25BC</span>' +
+        '</div>' +
       '</div>' +
-      '<div class="entrega-grid">' +
-        '<div>' +
-          '<label class="entrega-field-label" for="ent-' + i + '-entrega">O que ser\u00e1 entregue?</label>' +
-          '<textarea class="small-textarea" id="ent-' + i + '-entrega" rows="2">' + esc(ent.entrega) + '</textarea>' +
-        '</div>' +
-        '<div>' +
-          '<label class="entrega-field-label" for="ent-' + i + '-atividades">Atividades necess\u00e1rias</label>' +
-          '<textarea class="small-textarea" id="ent-' + i + '-atividades" rows="3">' + esc(ent.atividades) + '</textarea>' +
-        '</div>' +
-        '<div>' +
-          '<label class="entrega-field-label" for="ent-' + i + '-prazo">Prazo estimado</label>' +
-          prazoSelectHTML +
-        '</div>' +
-        '<div>' +
-          '<label class="entrega-field-label" for="ent-' + i + '-investimento">Investimento (se houver)</label>' +
-          '<textarea class="small-textarea" id="ent-' + i + '-investimento" rows="1">' + esc(ent.investimento) + '</textarea>' +
+      '<div class="entrega-progress">' +
+        '<div class="entrega-progress-bar"><div class="entrega-progress-fill" style="width:' + pct + '%;background:' + progressColor + '"></div></div>' +
+        '<span>' + pct + '%</span>' +
+      '</div>' +
+      '<div class="entrega-body ' + (isOpen ? 'open' : '') + '">' +
+        '<div class="entrega-grid">' +
+          '<div>' +
+            '<label class="entrega-field-label" for="ent-' + i + '-entrega">O que ser\u00e1 entregue?</label>' +
+            '<div class="entrega-field-hint">Resultado parcial concreto desta etapa</div>' +
+            '<textarea class="small-textarea" id="ent-' + i + '-entrega" rows="2" placeholder="Ex: Ato normativo do CIG publicado no DODF">' + esc(ent.entrega) + '</textarea>' +
+          '</div>' +
+          '<div>' +
+            '<label class="entrega-field-label" for="ent-' + i + '-responsavel">Respons\u00e1vel pela entrega</label>' +
+            '<div class="entrega-field-hint">Quem vai garantir que esta entrega aconteça</div>' +
+            '<input type="text" class="small-textarea" id="ent-' + i + '-responsavel" value="' + esc(ent.responsavel || '') + '" placeholder="Ex: Chefe de Gabinete" style="padding:8px 12px">' +
+          '</div>' +
+          '<div style="grid-column:1/-1">' +
+            '<label class="entrega-field-label" for="ent-' + i + '-atividades">Atividades necess\u00e1rias</label>' +
+            '<div class="entrega-field-hint">Passos sequenciais para chegar ao resultado. Use \u2192 para separar etapas.</div>' +
+            '<textarea class="small-textarea" id="ent-' + i + '-atividades" rows="3" placeholder="Ex: Minutar portaria \u2192 Assessoria jur\u00eddica \u2192 Assinatura \u2192 Publica\u00e7\u00e3o no DODF">' + esc(ent.atividades) + '</textarea>' +
+          '</div>' +
+          '<div>' +
+            '<label class="entrega-field-label" for="ent-' + i + '-prazo">Prazo estimado</label>' +
+            '<div class="entrega-field-hint">Tempo estimado para conclus\u00e3o</div>' +
+            prazoSelectHTML +
+          '</div>' +
+          '<div>' +
+            '<label class="entrega-field-label" for="ent-' + i + '-investimento">Investimento (se houver)</label>' +
+            '<div class="entrega-field-hint">Custo estimado ou recursos necess\u00e1rios</div>' +
+            '<textarea class="small-textarea" id="ent-' + i + '-investimento" rows="1" placeholder="Sem custo direto">' + esc(ent.investimento) + '</textarea>' +
+          '</div>' +
         '</div>' +
       '</div>' +
     '</div>';
@@ -1848,6 +2039,7 @@ function renderEntregas(step) {
       '<div class="examples-label">\uD83D\uDCA1 Exemplo de entregas (Projeto CIG)</div>' +
       exHTML +
     '</div>' +
+    summaryHTML +
     entregasHTML +
     '<button class="btn-add-entrega" onclick="addEntrega()">+ Adicionar mais uma entrega</button>';
 }
@@ -1873,7 +2065,7 @@ function renderReview() {
   function getVal(item) {
     if (item.field) return data[item.field];
     if (item.type === 'partes') return [data.patrocinio, data.equipe, data.publico].filter(Boolean).join('\n');
-    if (item.type === 'entregas') return data.entregas.map(function(e, i) { return (i+1) + '. ' + e.entrega; }).filter(function(e) { return e.length > 3; }).join('\n');
+    if (item.type === 'entregas') return data.entregas.map(function(e, i) { return (i+1) + '. ' + e.entrega + (e.responsavel ? ' (' + e.responsavel + ')' : ''); }).filter(function(e) { return e.length > 3; }).join('\n');
     return '';
   }
 
@@ -2139,11 +2331,11 @@ function gerarPDFIndividual() {
         doc.text("Entregas", margin, y);
         y += 8;
         var entregasData = data.entregas.map(function(ent, i) {
-          return [String(i + 1), ent.entrega || "", ent.atividades || "", ent.prazo || "", ent.investimento || ""];
+          return [String(i + 1), ent.entrega || "", ent.atividades || "", ent.responsavel || "", ent.prazo || "", ent.investimento || ""];
         });
         doc.autoTable({
           startY: y,
-          head: [["#", "Entrega", "Atividades", "Prazo", "Investimento"]],
+          head: [["#", "Entrega", "Atividades", "Responsavel", "Prazo", "Investimento"]],
           body: entregasData,
           margin: { left: margin, right: margin },
           styles: { fontSize: 8 },
