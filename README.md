@@ -37,6 +37,52 @@ Inclua o link no ofício enviado pelo SEI:
 - ✅ Funciona em qualquer navegador (Chrome, Edge, Firefox)
 - ✅ Responsivo (funciona em celular e tablet)
 
+## 🤖 Agente Diário — Resumo de IA (The Rundown AI)
+
+Script Google Apps Script que automatiza a leitura da newsletter **The Rundown AI**, traduz e resume o conteúdo em português brasileiro usando a API do Claude (Anthropic), e salva os resumos formatados no Google Docs.
+
+### Como funciona
+
+1. **Busca automática** — Todo dia, busca o e-mail mais recente de `news@daily.therundown.ai` no Gmail
+2. **Tradução e resumo** — Envia o conteúdo para a API Claude (modelo Haiku) com um prompt estruturado
+3. **Salva no Google Docs** — Cria documentos semanais organizados na pasta "Rundown AI - Resumos" do Drive, com formatação nativa (títulos, bullets, negrito)
+
+### Seções do resumo
+
+Cada resumo é organizado nas seguintes seções:
+
+- **DESTAQUES DO DIA** — Principais notícias
+- **FERRAMENTAS & PRODUTOS NOVOS** — Lançamentos com links e recomendação
+- **NÚMEROS & DADOS RELEVANTES** — Estatísticas e métricas
+- **CONTEXTO & ANÁLISE** — Análise editorial
+- **RECOMENDAÇÃO DO DIA** — Destaque para experimentar
+
+### Configuração
+
+1. Abra o Google Apps Script (script.google.com)
+2. Copie o conteúdo de `google-apps-script-resumo-ia.js`
+3. Configure sua chave de API no campo `CONFIG.ANTHROPIC_API_KEY`
+4. Execute `configurarGatilho()` uma vez para ativar a execução diária
+5. Conceda as permissões solicitadas (Gmail, Drive, Docs, UrlFetch)
+
+### Backfill (processar e-mails antigos)
+
+Para processar newsletters anteriores em lotes:
+
+```
+iniciarBackfill()       // Inicia o processamento
+continuarBackfill()     // Processa o próximo lote (10 e-mails)
+verProgressoBackfill()  // Mostra o progresso atual
+resetarBackfill()       // Reinicia o processo do zero
+```
+
+### Requisitos
+
+- Conta Google com Gmail (assinante da newsletter The Rundown AI)
+- Chave de API da Anthropic (console.anthropic.com)
+
+> **Importante:** Nunca compartilhe sua chave de API. Armazene-a nas propriedades do script para maior segurança.
+
 ## 📄 Licença
 
 Adaptado da Rede Conexão Inovação Pública — CC BY-NC-SA 4.0
