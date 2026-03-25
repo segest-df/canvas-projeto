@@ -1701,10 +1701,26 @@ function submitToSEGOV() {
   submitting = true;
   render();
 
-  var payload = Object.assign({}, data, {
+  // === Gestão do número do plano (salvar e restaurar para revisões) ===
+      var anoPlan = new Date().getFullYear();
+      var numeroPlanSalvo = localStorage.getItem('cig_plano_numero') || '';
+      if (!numeroPlanSalvo || numeroPlanSalvo.indexOf('CIG-' + anoPlan) !== 0) {
+        var randPlan = Math.floor(Math.random() * 9000) + 1000;
+        numeroPlanSalvo = 'CIG-' + anoPlan + '-' + randPlan;
+      }
+      // Salvar rascunho dos dados do formulário para futuras revisões
+      try {
+        localStorage.setItem('cig_plano_numero', numeroPlanSalvo);
+        localStorage.setItem('cig_dados_plano', JSON.stringify(data));
+        localStorage.setItem('cig_plano_ra', data.ra || '');
+      } catch(lsErr) {}
+      // ===================================================================
+
+      var payload = Object.assign({}, data, {
     submittedAt: new Date().toISOString(),
     userAgent: navigator.userAgent,
-    notificarEmail: NOTIFICATION_EMAIL
+    notificarEmail: NOTIFICATION_EMAIL,
+        numero_plano: (localStorage.getItem('cig_plano_numero') || '')
   });
 
   fetch(GOOGLE_SCRIPT_URL, {
@@ -1717,6 +1733,15 @@ function submitToSEGOV() {
     body: JSON.stringify(payload)
   })
   .then(function() {
+          // === Confirmar envio e registrar número do plano ===
+          try {
+            localStorage.setItem('cig_plano_enviado', 'true');
+            localStorage.setItem('cig_plano_numero', numeroPlanSalvo);
+            // Atualizar badge do número do plano na tela de sucesso
+            var elNum = document.getElementById('plano-numero-sucesso');
+            if (elNum) elNum.textContent = numeroPlanSalvo;
+          } catch(e2) {}
+          // ====================================================
     submitting = false;
     showSuccess = true;
     markAsSent();
@@ -2064,6 +2089,11 @@ function renderSuccessScreen() {
   return '<div class="success-screen">' +
     '<div class="success-icon">\uD83C\uDF89</div>' +
     '<h2>Plano de A\u00e7\u00e3o enviado com sucesso!</h2>' +
+    '<div style="background:#e8f4fd;border:2px solid #1a3a5c;border-radius:8px;padding:14px 20px;margin:16px 0;text-align:center;">' +
+    '<p style="margin:0 0 4px;font-size:12px;color:#555;">Número do seu Plano de Ação</p>' +
+    '<p id="plano-numero-sucesso" style="margin:0;font-size:24px;font-weight:bold;color:#1a3a5c;letter-spacing:2px;">' + (localStorage.getItem('cig_plano_numero') || '---') + '</p>' +
+    '<p style="margin:8px 0 0;font-size:11px;color:#777;">⚠️ Guarde este número para enviar revisões do plano</p>' +
+    '</div>' +
     '<p>O Plano de A\u00e7\u00e3o da <strong>' + esc(data.ra || 'sua RA') + '</strong> foi recebido pela SEGOV/SEGEST.</p>' +
     (data.pratica ? '<p class="sub">Pr\u00e1tica: ' + esc(data.pratica) + '</p>' : '') +
     '<p class="sub">Projeto: ' + esc(data.projeto || '(sem nome)') + '</p>' +
@@ -2435,6 +2465,31 @@ function gerarPDFIndividual() {
           if (btn) btn.textContent = "\uD83D\uDCCA PDF de Todos os Registros";
         });
     }
+
+  // === Restauração de rascunho do localStorage ===
+  try {
+    var dadosSalvos = localStorage.getItem('cig_dados_plano');
+    var numSalvo = localStorage.getItem('cig_plano_numero');
+    if (dadosSalvos && numSalvo) {
+      var dadosObj = JSON.parse(dadosSalvos);
+      // Injetar dados no objeto global data se existir
+      if (typeof data !== 'undefined') {
+        Object.assign(data, dadosObj);
+      }
+      // Mostrar banner de revisão após breve delay (para o DOM estar pronto)
+      setTimeout(function() {
+        var banner = document.createElement('div');
+        banner.id = 'cig-banner-revisao';
+        banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#1a3a5c;color:#fff;padding:10px 16px;z-index:9999;display:flex;align-items:center;justify-content:space-between;font-family:Arial,sans-serif;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,0.3);';
+        banner.innerHTML = '<span>🔄 <strong>Revisão do plano ' + numSalvo + '</strong> — Preencha os campos com as alterações e envie novamente.</span>' +
+          '<button onclick="localStorage.removeItem(\'cig_dados_plano\');localStorage.removeItem(\'cig_plano_numero\');document.getElementById(\'cig-banner-revisao\').remove();" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);color:#fff;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:12px;">Novo plano</button>';
+        document.body.prepend(banner);
+        // Ajustar padding do body para não esconder conteúdo
+        document.body.style.paddingTop = '42px';
+      }, 500);
+    }
+  } catch(restoreErr) {}
+  // ================================================
 
   render();
 </script>
