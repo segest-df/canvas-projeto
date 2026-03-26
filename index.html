@@ -930,7 +930,7 @@ var FIELD_DEFS = {
     placeholder: "seu.email@df.gov.br",
     icon: "\uD83D\uDCE7", color: "#1565C0", inputType: "email",
     exemplos: []
-  }
+  },
   cargo: {
     field: "cargo", label: "Cargo/Função",
     question: "Qual é o seu cargo ou função?",
@@ -938,7 +938,7 @@ var FIELD_DEFS = {
     placeholder: "Ex: Chefe da Unidade de Governança...",
     icon: "🎯", color: "#1565C0", inputType: "input",
     exemplos: []
-  },,
+  },
   ra: {
     field: "ra", label: "Regi\u00e3o Administrativa",
     question: "Qual \u00e9 a sua Regi\u00e3o Administrativa?",
@@ -1159,6 +1159,7 @@ var PHASES = [
 var REVIEW_ITEMS = [
   { id: "responsavel_nome", field: "responsavel_nome", label: "Nome do Respons\u00e1vel", icon: "\uD83D\uDC64", phase: "Identifica\u00e7\u00e3o" },
   { id: "responsavel_email", field: "responsavel_email", label: "E-mail Institucional", icon: "\uD83D\uDCE7", phase: "Identifica\u00e7\u00e3o" },
+  { id: "cargo", field: "cargo", label: "Cargo/Fun\u00e7\u00e3o", icon: "\uD83C\uDFAF", phase: "Identifica\u00e7\u00e3o" },
   { id: "ra", field: "ra", label: "Regi\u00e3o Administrativa", icon: "\uD83D\uDCCD", phase: "Identifica\u00e7\u00e3o" },
   { id: "pratica", field: "pratica", label: "Pr\u00e1tica de Governan\u00e7a", icon: "\uD83C\uDFDB\uFE0F", phase: "Identifica\u00e7\u00e3o" },
   { id: "projeto", field: "projeto", label: "Nome do Projeto", icon: "\uD83C\uDFAF", phase: "Identifica\u00e7\u00e3o" },
@@ -1281,7 +1282,7 @@ var submitting = false;
 var showSuccess = false;
 
 var data = {
-  responsavel_nome: "", responsavel_email: "",
+  responsavel_nome: "", responsavel_email: "", cargo: "",
   ra: "", pratica: "", projeto: "", objetivo: "", descricao: "",
   produto: "", caracteristicas: "", justificativa: "",
   indicador: "", patrocinio: "", equipe: "", publico: "",
@@ -1363,7 +1364,7 @@ function scheduleAutosave() {
 function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
 function getProgress() {
-  var fields = [data.responsavel_nome, data.responsavel_email, data.ra, data.pratica, data.projeto, data.objetivo, data.descricao, data.produto,
+  var fields = [data.responsavel_nome, data.responsavel_email, data.cargo, data.ra, data.pratica, data.projeto, data.objetivo, data.descricao, data.produto,
     data.caracteristicas, data.justificativa, data.indicador,
     data.patrocinio, data.equipe, data.publico,
     data.premissas, data.barreiras, data.riscos];
@@ -1378,6 +1379,7 @@ function getRequiredEmpty() {
   var required = [
     { field: 'responsavel_nome', label: 'Nome do Respons\u00e1vel' },
     { field: 'responsavel_email', label: 'E-mail Institucional' },
+    { field: 'cargo', label: 'Cargo/Fun\u00e7\u00e3o' },
     { field: 'ra', label: 'Regi\u00e3o Administrativa' },
     { field: 'pratica', label: 'Pr\u00e1tica de Governan\u00e7a' },
     { field: 'projeto', label: 'Nome do Projeto' },
@@ -1622,7 +1624,7 @@ function clearAllData() {
   localStorage.removeItem(STORAGE_STEP_KEY);
   localStorage.removeItem(STORAGE_SENT_KEY);
   data = {
-    responsavel_nome: "", responsavel_email: "",
+    responsavel_nome: "", responsavel_email: "", cargo: "",
     ra: "", pratica: "", projeto: "", objetivo: "", descricao: "",
     produto: "", caracteristicas: "", justificativa: "",
     indicador: "", patrocinio: "", equipe: "", publico: "",
@@ -2348,7 +2350,7 @@ function gerarPDFIndividual() {
       var campos = [
         { label: "Responsável", value: data.responsavel_nome },
         { label: "E-mail Institucional", value: data.responsavel_email },
-        { label: "Cargo/Função", value: data.cargo },
+        { label: "Cargo/Função", value: data.cargo || "" },
         { label: "Região Administrativa", value: data.ra },
         { label: "Prática de Governança", value: data.pratica },
         { label: "Projeto", value: data.projeto },
