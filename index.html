@@ -1322,7 +1322,7 @@ var submitting = false;
 var showSuccess = false;
 
 var data = {
-  responsavel_nome: "", responsavel_email: "",
+  responsavel_nome: "", responsavel_email: "", cargo: "",
   ra: "", pratica: "", projeto: "", objetivo: "", descricao: "",
   produto: "", caracteristicas: "", justificativa: "",
   indicador: "", patrocinio: "", equipe: "", publico: "",
@@ -1663,7 +1663,7 @@ function clearAllData() {
   localStorage.removeItem(STORAGE_STEP_KEY);
   localStorage.removeItem(STORAGE_SENT_KEY);
   data = {
-    responsavel_nome: "", responsavel_email: "",
+    responsavel_nome: "", responsavel_email: "", cargo: "",
     ra: "", pratica: "", projeto: "", objetivo: "", descricao: "",
     produto: "", caracteristicas: "", justificativa: "",
     indicador: "", patrocinio: "", equipe: "", publico: "",
@@ -2404,9 +2404,32 @@ function gerarPDFIndividual() {
       var doc = new jspdf.jsPDF();
       var pageWidth = doc.internal.pageSize.getWidth();
       var margin = 15;
-      var y = 20;
+      var y = 12;
+
+      // --- Cabecalho institucional GDF ---
+      var logoEl = document.querySelector('.gdf-badge img') || document.querySelector('.welcome-logo-badge img');
+      if (logoEl && logoEl.src) {
+        try { doc.addImage(logoEl.src, 'PNG', margin, y, 22, 22); } catch(e) {}
+      }
+      doc.setFontSize(8);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(80, 80, 80);
+      doc.text("Governo do Distrito Federal", margin + 26, y + 5);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9);
+      doc.setTextColor(0, 0, 0);
+      doc.text("Secretaria de Estado de Governanca e Modernizacao", margin + 26, y + 11);
+      doc.text("Comite Intersetorial de Governanca - CIG/DF", margin + 26, y + 17);
+      y += 26;
+      doc.setDrawColor(26, 115, 232);
+      doc.setLineWidth(0.7);
+      doc.line(margin, y, pageWidth - margin, y);
+      y += 8;
+      // --- Fim do cabecalho ---
+
       doc.setFontSize(16);
       doc.setFont("helvetica", "bold");
+      doc.setTextColor(0, 0, 0);
       doc.text("Plano de Acao do CIG", pageWidth / 2, y, { align: "center" });
       y += 10;
       doc.setFontSize(10);
