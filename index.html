@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plano de Ação do CIG — SEGOV/SEGEST</title>
-<meta name="description" content="Ferramenta guiada para elaboração do Plano de Ação do CIG das Administrações Regionais do DF">
+<title>Plano de AÃ§Ã£o do CIG â SEGOV/SEGEST</title>
+<meta name="description" content="Ferramenta guiada para elaboraÃ§Ã£o do Plano de AÃ§Ã£o do CIG das AdministraÃ§Ãµes Regionais do DF">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 <style>
@@ -973,11 +973,11 @@ var FIELD_DEFS = {
     exemplos: []
   },
   cargo: {
-    field: "cargo", label: "Cargo/Função",
-    question: "Qual é o seu cargo ou função?",
-    dica: "Informe o cargo ou função que você exerce na Administração Regional.",
-    placeholder: "Ex: Chefe da Unidade de Governança...",
-    icon: "🏢", color: "#1565C0", inputType: "input",
+    field: "cargo", label: "Cargo/FunÃ§Ã£o",
+    question: "Qual Ã© o seu cargo ou funÃ§Ã£o?",
+    dica: "Informe o cargo ou funÃ§Ã£o que vocÃª exerce na AdministraÃ§Ã£o Regional.",
+    placeholder: "Ex: Chefe da Unidade de GovernanÃ§a...",
+    icon: "ð¢", color: "#1565C0", inputType: "input",
     exemplos: []
   },
   ra: {
@@ -2119,7 +2119,7 @@ function renderEntregas(step) {
           '</div>' +
           '<div>' +
             '<label class="entrega-field-label" for="ent-' + i + '-responsavel">Respons\u00e1vel pela entrega</label>' +
-            '<div class="entrega-field-hint">Quem vai garantir que esta entrega aconteça</div>' +
+            '<div class="entrega-field-hint">Quem vai garantir que esta entrega aconteÃ§a</div>' +
             '<input type="text" class="small-textarea" id="ent-' + i + '-responsavel" value="' + esc(ent.responsavel || '') + '" placeholder="Ex: Chefe de Gabinete" style="padding:8px 12px">' +
           '</div>' +
           '<div style="grid-column:1/-1">' +
@@ -2534,7 +2534,7 @@ function gerarPDFIndividual() {
     }
 
 
-// === REVISÃO ===
+// === REVISÃO ===
 (function(){
   try{
     var ano=new Date().getFullYear();
@@ -2549,7 +2549,7 @@ function gerarPDFIndividual() {
         var b=document.createElement('div');
         b.id='cig-banner-revisao';
         b.style.cssText='position:fixed;top:0;left:0;right:0;background:#1a3a5c;color:#fff;padding:10px 20px;z-index:9999;display:flex;align-items:center;justify-content:space-between;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.3);';
-        b.innerHTML='<span>🔄 <strong>Revisão do plano '+env+'</strong> — Preencha as alterações e envie novamente.</span><button onclick="localStorage.removeItem('cig_plano_numero_enviado');localStorage.removeItem('cig_dados_plano');this.parentNode.remove();" style="background:#fff;color:#1a3a5c;border:none;padding:4px 14px;border-radius:4px;cursor:pointer;font-weight:bold;margin-left:16px;">Novo plano</button>';
+        b.innerHTML='<span>ð <strong>RevisÃ£o do plano '+env+'</strong> â Preencha as alteraÃ§Ãµes e envie novamente.</span><button onclick="localStorage.removeItem(\'cig_plano_numero_enviado\');localStorage.removeItem(\'cig_dados_plano\');this.parentNode.remove();" style="background:#fff;color:#1a3a5c;border:none;padding:4px 14px;border-radius:4px;cursor:pointer;font-weight:bold;margin-left:16px;">Novo plano</button>';
         document.body.prepend(b);
       },600);
     }
