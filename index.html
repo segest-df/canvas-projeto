@@ -1,10 +1,38 @@
 <!DOCTYPE html>
+<!--
+  ========================================================================
+  CORREÇÕES APLICADAS EM 22/04/2026 - PACOTE COMPLETO
+  ========================================================================
+  [Bug #1+#3] Encoding do <title> e <meta description> corrigido (mojibake)
+  [Bug #1]    16 sequências de mojibake normalizadas em todo o arquivo
+  [Bug #2]    getProgress() com cálculo híbrido (40% etapa + 60% preenchimento)
+  [Bug #4]    Stepper mostra "Fase X de 5 . Etapa Y de 8"
+  [Bug #6]    Botão admin com aria-label (WCAG 2.1 AA)
+  [Bug #7]    Validação padronizada + toast não-bloqueante de aviso
+  [Bug #8]    Removido min-height: 100vh que causava espaço em branco
+  [Bug #9]    Auto-save agora mostra horário e e mais visível
+  [M4]        Atalhos de teclado (Ctrl+<-/->, Ctrl+S)
+  ========================================================================
+  ADIÇÕES DE CONFORMIDADE LEGAL:
+  [Res 04/2024] Nova etapa "Pilares de Governança" (Liderança, Estratégia,
+                Controle, Integridade) com seleção múltipla e pilar primário
+  [Res 15/2026] Referência ao SAEweb na etapa de Riscos (cadastro formal
+                de riscos deve ser feito no sistema oficial do GDF)
+  [Base legal]  Welcome screen cita Res 04/2024, Res 15/2026 e Decreto 39.736/2019
+  [SAEweb]      Integração documentada para controle do andamento dos PEIs
+  ========================================================================
+  FEATURES REVOLUÇÃO (index_REVOLUCAO.html):
+  [REV #1]      Modo "Conte uma História" — narrativa + extração automática
+  [REV #2]      IA Conselheira — chatbot flutuante com base das Resoluções CGov
+  [REV #3]      QR Code "Plano Cidadão" na tela de revisão
+  ========================================================================
+-->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plano de AÃ§Ã£o do CIG â SEGOV/SEGEST</title>
-<meta name="description" content="Ferramenta guiada para elaboraÃ§Ã£o do Plano de AÃ§Ã£o do CIG das AdministraÃ§Ãµes Regionais do DF">
+<title>Plano de Ação do CIG – VERSÃO REVOLUÇÃO (SEGOV/SEGEST)</title>
+<meta name="description" content="Ferramenta guiada para elaboração do Plano de Ação do CIG das Administrações Regionais do DF">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 <style>
@@ -47,8 +75,8 @@
     font-family: var(--font);
     background: var(--bg-deep);
     color: var(--text-primary);
-    min-height: 100vh;
-    padding: 24px 16px;
+    min-height: auto; /* [Bug #8] antes era 100vh - eliminava espaço vazio */
+    padding: 24px 16px 40px;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -491,14 +519,17 @@
   .welcome-info-content p:last-child { margin-bottom: 0 !important; }
 
   /* Autosave indicator */
+  /* [Bug #9] Indicador de auto-save agora mais visível e informativo */
   .autosave-indicator {
-    position: fixed; bottom: 16px; right: 16px; padding: 6px 14px;
-    background: var(--accent-green-light); color: var(--accent-green-dark);
-    border: 1px solid #a7f3d0; border-radius: 20px;
-    font-size: 11px; font-weight: 600; font-family: var(--font);
-    opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 100;
+    position: fixed; bottom: 16px; right: 16px; padding: 8px 16px;
+    background: #10b981; color: #ffffff;
+    border: none; border-radius: 20px;
+    font-size: 12px; font-weight: 600; font-family: var(--font);
+    box-shadow: 0 4px 12px rgba(16,185,129,0.3);
+    opacity: 0; transform: translateY(10px);
+    transition: opacity 0.3s, transform 0.3s; pointer-events: none; z-index: 100;
   }
-  .autosave-indicator.show { opacity: 1; }
+  .autosave-indicator.show { opacity: 1; transform: translateY(0); }
 
   /* Review */
   .review-header { text-align: center; margin-bottom: 28px; }
@@ -679,11 +710,491 @@
     border-left: 3px solid var(--accent-red);
     line-height: 1.4;
   }
-  </style>
+  
+  /* ==========================================================
+     [REVOLUÇÃO] Estilos das novas features
+     ========================================================== */
+
+  /* Banner de modo revolução */
+  .revolucao-banner {
+    background: linear-gradient(90deg, #7C3AED 0%, #1565C0 100%);
+    color: #fff; padding: 14px 20px;
+    border-radius: 0 0 16px 16px;
+    max-width: 780px; margin: 0 auto 20px;
+    box-shadow: 0 6px 20px rgba(124,58,237,0.35);
+  }
+  .revolucao-banner .rev-title {
+    font-size: 16px; font-weight: 800; text-align: center;
+    margin-bottom: 8px; letter-spacing: 0.3px;
+  }
+  .revolucao-banner .rev-title .tag {
+    background: #F59E0B; padding: 3px 10px; border-radius: 12px;
+    font-size: 11px; margin-right: 10px; letter-spacing: 0.5px;
+  }
+  .revolucao-banner .rev-badges {
+    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+  }
+  .revolucao-banner .rev-badge {
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+    padding: 6px 14px; border-radius: 14px; font-size: 12px; font-weight: 600;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .revolucao-banner .rev-badge .num {
+    background: #F59E0B; color: #fff; width: 20px; height: 20px;
+    border-radius: 50%; display: inline-flex; align-items: center;
+    justify-content: center; font-size: 11px; font-weight: 800;
+  }
+
+  /* Toggle Modo História vs Formulário */
+  .modo-toggle { display: flex; gap: 8px; justify-content: center; margin: 24px 0 16px; flex-wrap: wrap; }
+  .modo-toggle button {
+    padding: 10px 20px; border: 2px solid #e2e8f0; background: #fff;
+    border-radius: 24px; cursor: pointer; font-size: 14px; font-weight: 600;
+    transition: all 0.2s; color: #64748b;
+  }
+  .modo-toggle button.ativo { background: #1565C0; color: #fff; border-color: #1565C0; box-shadow: 0 4px 12px rgba(21,101,192,0.3); }
+  .modo-toggle button:hover:not(.ativo) { border-color: #1565C0; color: #1565C0; }
+
+  /* Modo História - área de escrita */
+  .historia-container { background: #fff; border-radius: 16px; padding: 28px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 20px; }
+  .historia-prompt { background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-left: 4px solid #F59E0B; padding: 16px; border-radius: 8px; margin-bottom: 20px; }
+  .historia-prompt .emoji { font-size: 32px; display: block; margin-bottom: 8px; }
+  .historia-prompt p { font-size: 15px; line-height: 1.6; color: #78350F; margin: 4px 0; font-style: italic; }
+  .historia-textarea {
+    width: 100%; min-height: 200px; padding: 16px; border: 2px solid #e2e8f0;
+    border-radius: 12px; font-size: 15px; font-family: 'Source Sans 3', sans-serif;
+    line-height: 1.6; resize: vertical;
+  }
+  .historia-textarea:focus { outline: none; border-color: #1565C0; box-shadow: 0 0 0 3px rgba(21,101,192,0.1); }
+  .historia-extracao { background: #F0FDF4; border: 1px solid #86EFAC; border-radius: 8px; padding: 16px; margin-top: 16px; }
+  .historia-extracao h4 { color: #166534; margin-bottom: 10px; font-size: 14px; }
+  .historia-item { background: #fff; border: 1px solid #D1FAE5; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; }
+  .historia-item strong { color: #166534; }
+  .historia-item .valor { color: #374151; display: block; margin-top: 4px; }
+
+  /* IA Conselheira - botão flutuante */
+  /* [CORREÇÃO] Conselheira movida para a DIREITA para não sobrepor
+     o botão "Guia de Preenchimento" que já existe na esquerda */
+  .conselheira-fab {
+    position: fixed; bottom: 20px; right: 20px; z-index: 999;
+    height: 56px; border-radius: 28px; padding: 0 20px 0 14px;
+    background: linear-gradient(135deg, #7C3AED 0%, #1565C0 100%);
+    border: none; color: #fff; cursor: pointer;
+    box-shadow: 0 6px 24px rgba(124,58,237,0.5);
+    font-size: 15px; font-weight: 700; font-family: 'Source Sans 3', sans-serif;
+    display: flex; align-items: center; gap: 10px;
+    transition: all 0.25s;
+  }
+  .conselheira-fab:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(124,58,237,0.6); }
+  .conselheira-fab .fab-emoji { font-size: 24px; }
+  .conselheira-fab .fab-novo-badge {
+    background: #F59E0B; color: #fff; font-size: 10px;
+    padding: 2px 8px; border-radius: 10px; font-weight: 800;
+    letter-spacing: 0.5px; animation: novoBadgePulse 2s infinite;
+  }
+  @keyframes novoBadgePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+  .conselheira-fab .pulse {
+    position: absolute; top: 6px; right: 6px; width: 12px; height: 12px;
+    background: #10B981; border-radius: 50%; border: 2px solid #fff;
+    animation: pulseAnim 2s infinite;
+  }
+  @keyframes pulseAnim {
+    0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(16,185,129,0); }
+    100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+  }
+
+  /* IA Conselheira - painel */
+  .conselheira-panel {
+    position: fixed; bottom: 90px; right: 20px; z-index: 998;
+    width: 380px; max-width: calc(100vw - 40px); height: 500px; max-height: calc(100vh - 120px);
+    background: #fff; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    display: none; flex-direction: column; overflow: hidden;
+    border: 1px solid #e2e8f0;
+  }
+  .conselheira-panel.aberto { display: flex; }
+  .conselheira-header {
+    background: linear-gradient(135deg, #7C3AED 0%, #1565C0 100%);
+    color: #fff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .conselheira-header-title { display: flex; align-items: center; gap: 10px; }
+  .conselheira-avatar { width: 36px; height: 36px; background: rgba(255,255,255,0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .conselheira-header h3 { font-size: 15px; margin: 0; }
+  .conselheira-header p { font-size: 11px; opacity: 0.8; margin: 2px 0 0 0; }
+  .conselheira-close { background: transparent; border: none; color: #fff; cursor: pointer; font-size: 22px; opacity: 0.8; }
+  .conselheira-close:hover { opacity: 1; }
+  .conselheira-chat { flex: 1; overflow-y: auto; padding: 16px; background: #F8FAFC; }
+  .msg { margin-bottom: 12px; animation: fadeInUp 0.3s; }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .msg.bot { display: flex; gap: 8px; }
+  .msg.bot .bubble { background: #fff; padding: 10px 14px; border-radius: 14px 14px 14px 2px; max-width: 85%; font-size: 13px; line-height: 1.5; border: 1px solid #e2e8f0; }
+  .msg.user { text-align: right; }
+  .msg.user .bubble { display: inline-block; background: #1565C0; color: #fff; padding: 10px 14px; border-radius: 14px 14px 2px 14px; max-width: 85%; font-size: 13px; }
+  .msg .avatar { width: 28px; height: 28px; background: linear-gradient(135deg, #7C3AED 0%, #1565C0 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #fff; font-size: 14px; }
+  .conselheira-sugestoes { padding: 10px; background: #fff; border-top: 1px solid #e2e8f0; }
+  .conselheira-sugestoes p { font-size: 11px; color: #64748b; margin-bottom: 6px; }
+  .sugestao-chip {
+    display: inline-block; background: #EFF6FF; color: #1565C0; border: 1px solid #DBEAFE;
+    padding: 4px 10px; border-radius: 14px; font-size: 11px; margin: 2px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .sugestao-chip:hover { background: #1565C0; color: #fff; }
+  .conselheira-input { padding: 10px; background: #fff; border-top: 1px solid #e2e8f0; display: flex; gap: 8px; }
+  .conselheira-input input {
+    flex: 1; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 20px;
+    font-size: 13px; outline: none;
+  }
+  .conselheira-input input:focus { border-color: #1565C0; }
+  .conselheira-input button {
+    background: #1565C0; color: #fff; border: none; border-radius: 50%;
+    width: 38px; height: 38px; cursor: pointer; font-size: 16px;
+  }
+
+  /* QR Code box na review */
+  .qr-box {
+    background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+    border: 2px dashed #10B981; border-radius: 16px; padding: 24px; text-align: center;
+    margin: 24px 0;
+  }
+  .qr-box h3 { color: #166534; font-size: 18px; margin-bottom: 8px; }
+  .qr-box p { color: #166534; font-size: 13px; margin-bottom: 16px; }
+  .qr-canvas-wrap { display: inline-block; padding: 16px; background: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+  .qr-cidadao-texto { background: #fff; border-radius: 12px; padding: 20px; margin-top: 16px; text-align: left; border: 1px solid #BBF7D0; }
+  .qr-cidadao-texto h4 { color: #1565C0; margin-bottom: 10px; }
+  .qr-cidadao-texto p { color: #374151; font-size: 14px; line-height: 1.6; margin-bottom: 8px; }
+
+
+  /* ==========================================================
+     [BIBLIOTECA DE PLANOS] Dashboard e navegação
+     ========================================================== */
+  .biblioteca-container { padding: 20px 0; }
+  .biblioteca-header {
+    background: linear-gradient(135deg, #1565C0 0%, #0D4F8C 100%);
+    color: #fff; padding: 28px 24px; border-radius: 16px;
+    margin-bottom: 24px; box-shadow: 0 6px 20px rgba(21,101,192,0.3);
+  }
+  .biblioteca-header h1 { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+  .biblioteca-header p { font-size: 14px; opacity: 0.9; }
+
+  .biblioteca-stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px; margin-top: 16px;
+  }
+  .biblioteca-stat {
+    background: rgba(255,255,255,0.15); backdrop-filter: blur(4px);
+    padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);
+  }
+  .biblioteca-stat .num { font-size: 24px; font-weight: 800; display: block; }
+  .biblioteca-stat .label { font-size: 12px; opacity: 0.85; }
+
+  .biblioteca-acoes {
+    display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .btn-novo-plano {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: #fff; border: none; padding: 14px 24px; border-radius: 24px;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 4px 14px rgba(16,185,129,0.35); transition: all 0.2s;
+  }
+  .btn-novo-plano:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16,185,129,0.45); }
+
+  .plano-card {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+    padding: 18px 20px; margin-bottom: 12px;
+    transition: all 0.2s; cursor: pointer;
+    display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center;
+  }
+  .plano-card:hover { border-color: #1565C0; box-shadow: 0 6px 20px rgba(21,101,192,0.12); transform: translateY(-2px); }
+  .plano-card-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; font-size: 24px;
+  }
+  .plano-card-info h3 { font-size: 16px; font-weight: 700; color: #1E293B; margin-bottom: 4px; }
+  .plano-card-info .meta { font-size: 12px; color: #64748b; display: flex; gap: 12px; flex-wrap: wrap; }
+  .plano-card-info .meta span { display: inline-flex; align-items: center; gap: 4px; }
+  .plano-card-progress {
+    display: flex; align-items: center; gap: 10px; margin-top: 8px;
+  }
+  .plano-card-progress-bar { flex: 1; max-width: 200px; height: 6px; background: #F1F5F9; border-radius: 3px; overflow: hidden; }
+  .plano-card-progress-bar .fill { height: 100%; background: linear-gradient(90deg, #10B981, #059669); transition: width 0.3s; }
+  .plano-card-progress span { font-size: 12px; font-weight: 600; color: #64748b; }
+
+  .plano-status {
+    padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.3px; display: inline-flex; align-items: center; gap: 4px;
+    text-transform: uppercase;
+  }
+  .plano-status.rascunho { background: #F1F5F9; color: #64748B; }
+  .plano-status.enviado { background: #DBEAFE; color: #1E40AF; }
+  .plano-status.analise { background: #FEF3C7; color: #92400E; }
+  .plano-status.aprovado { background: #D1FAE5; color: #065F46; }
+  .plano-status.devolvido { background: #FEE2E2; color: #991B1B; }
+
+  .plano-card-actions { display: flex; gap: 6px; }
+  .plano-card-actions button {
+    background: none; border: 1px solid #E2E8F0; border-radius: 8px;
+    width: 34px; height: 34px; cursor: pointer; font-size: 14px;
+    transition: all 0.15s;
+  }
+  .plano-card-actions button:hover { background: #F8FAFC; border-color: #1565C0; }
+  .plano-card-actions button.danger:hover { background: #FEE2E2; border-color: #DC2626; }
+
+  .biblioteca-empty {
+    background: #F8FAFC; border: 2px dashed #CBD5E1; border-radius: 16px;
+    padding: 48px 24px; text-align: center;
+  }
+  .biblioteca-empty .icon { font-size: 56px; margin-bottom: 12px; }
+  .biblioteca-empty h3 { font-size: 18px; color: #334155; margin-bottom: 6px; }
+  .biblioteca-empty p { font-size: 13px; color: #64748B; margin-bottom: 20px; }
+
+  /* Header persistente durante edição */
+  .plano-editing-bar {
+    background: #FEF3C7; border-left: 4px solid #F59E0B;
+    padding: 10px 16px; margin-bottom: 16px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; color: #78350F; flex-wrap: wrap; gap: 8px;
+  }
+  .plano-editing-bar strong { font-weight: 700; }
+  .plano-editing-bar .btn-voltar-biblioteca {
+    background: #F59E0B; color: #fff; border: none; padding: 6px 14px;
+    border-radius: 14px; font-size: 12px; font-weight: 700; cursor: pointer;
+  }
+  .plano-editing-bar .btn-voltar-biblioteca:hover { background: #D97706; }
+
+  /* Modal de devolutiva */
+  .devolutiva-modal-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(15,23,42,0.6); z-index: 9999;
+    display: none; align-items: center; justify-content: center;
+  }
+  .devolutiva-modal-overlay.aberto { display: flex; }
+  .devolutiva-modal {
+    background: #fff; border-radius: 16px; padding: 24px; max-width: 560px;
+    width: 90%; max-height: 85vh; overflow-y: auto;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+  }
+  .devolutiva-modal h2 { font-size: 20px; font-weight: 800; margin-bottom: 8px; color: #1E293B; }
+  .devolutiva-modal .dev-status { margin-bottom: 16px; }
+  .devolutiva-modal input, .devolutiva-modal textarea {
+    width: 100%; padding: 10px 14px; border: 1px solid #E2E8F0; border-radius: 8px;
+    font-family: inherit; font-size: 14px; margin-bottom: 12px;
+  }
+  .devolutiva-modal textarea { min-height: 80px; resize: vertical; }
+  .devolutiva-modal .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+
+  /* [REV #5] Agenda Viva do CIG — gestão de reuniões */
+  .agenda-header {
+    background: linear-gradient(135deg, #7C3AED 0%, #4C1D95 100%);
+    color: #fff;
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+  .agenda-header h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .agenda-header p { font-size: 13px; opacity: 0.95; line-height: 1.5; }
+
+  .agenda-freq-box {
+    background: #F5F3FF;
+    border: 1px solid #DDD6FE;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .agenda-freq-box label { font-size: 13px; font-weight: 600; color: #5B21B6; display: block; margin-bottom: 6px; }
+  .agenda-freq-box select, .agenda-freq-box input, .agenda-freq-box textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #C4B5FD;
+    border-radius: 6px;
+    font-size: 13px;
+    background: #fff;
+  }
+
+  .agenda-timeline {
+    position: relative;
+    padding-left: 32px;
+    margin: 20px 0;
+  }
+  .agenda-timeline::before {
+    content: "";
+    position: absolute;
+    left: 10px; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(#7C3AED, #A78BFA, #DDD6FE);
+    border-radius: 2px;
+  }
+  .reuniao-card {
+    background: #fff;
+    border: 2px solid #E9D5FF;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 14px;
+    position: relative;
+    transition: all 0.2s;
+  }
+  .reuniao-card::before {
+    content: "";
+    position: absolute;
+    left: -27px; top: 18px;
+    width: 15px; height: 15px;
+    background: #7C3AED;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #7C3AED;
+  }
+  .reuniao-card.realizada { border-color: #10B981; background: #F0FDF4; }
+  .reuniao-card.realizada::before { background: #10B981; box-shadow: 0 0 0 2px #10B981; }
+  .reuniao-card.cancelada { border-color: #94A3B8; background: #F8FAFC; opacity: 0.7; }
+  .reuniao-card.cancelada::before { background: #94A3B8; box-shadow: 0 0 0 2px #94A3B8; }
+
+  .reuniao-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed #E9D5FF;
+  }
+  .reuniao-title { font-size: 15px; font-weight: 700; color: #5B21B6; }
+  .reuniao-status {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+  }
+  .status-agendada { background: #EDE9FE; color: #5B21B6; }
+  .status-realizada { background: #D1FAE5; color: #065F46; }
+  .status-cancelada { background: #E2E8F0; color: #475569; }
+
+  .reuniao-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .reuniao-field { font-size: 12px; }
+  .reuniao-field label { display: block; font-weight: 600; color: #6B7280; margin-bottom: 3px; font-size: 11px; }
+  .reuniao-field input, .reuniao-field select, .reuniao-field textarea {
+    width: 100%; padding: 6px 8px; border: 1px solid #E5E7EB;
+    border-radius: 5px; font-size: 12px; background: #fff;
+  }
+  .reuniao-field textarea { min-height: 50px; resize: vertical; }
+  .reuniao-full { grid-column: 1 / -1; }
+
+  .reuniao-entregas-vinc {
+    background: #F5F3FF;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 8px;
+  }
+  .reuniao-entregas-vinc-title {
+    font-size: 11px; font-weight: 700; color: #5B21B6;
+    margin-bottom: 6px; text-transform: uppercase;
+  }
+  .reuniao-entrega-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; padding: 3px 8px;
+    background: #fff; border: 1px solid #C4B5FD;
+    border-radius: 12px; margin: 2px 3px 2px 0;
+    cursor: pointer;
+  }
+  .reuniao-entrega-chip input { margin: 0; }
+  .reuniao-entrega-chip.selected { background: #7C3AED; color: #fff; border-color: #7C3AED; }
+
+  .reuniao-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .btn-reuniao {
+    padding: 5px 10px;
+    font-size: 11px;
+    border: 1px solid #C4B5FD;
+    background: #fff;
+    color: #5B21B6;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .btn-reuniao:hover { background: #EDE9FE; }
+  .btn-reuniao.danger { border-color: #FCA5A5; color: #991B1B; }
+  .btn-reuniao.danger:hover { background: #FEE2E2; }
+
+  .btn-add-reuniao {
+    width: 100%;
+    padding: 14px;
+    background: #fff;
+    border: 2px dashed #7C3AED;
+    color: #7C3AED;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.2s;
+  }
+  .btn-add-reuniao:hover { background: #F5F3FF; }
+
+  .agenda-resumo {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .agenda-stat {
+    background: #fff;
+    border: 1px solid #E9D5FF;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+  }
+  .agenda-stat-num { font-size: 22px; font-weight: 800; color: #7C3AED; }
+  .agenda-stat-label { font-size: 11px; color: #6B7280; margin-top: 2px; }
+
+  .agenda-empty {
+    text-align: center;
+    padding: 30px 20px;
+    background: #F5F3FF;
+    border: 2px dashed #C4B5FD;
+    border-radius: 12px;
+    color: #5B21B6;
+  }
+  .agenda-empty-icon { font-size: 40px; margin-bottom: 10px; }
+
+  @media (max-width: 640px) {
+    .agenda-freq-box, .reuniao-grid, .agenda-resumo { grid-template-columns: 1fr; }
+  }
+
+</style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
   </head>
   <body>
+
+<!-- [REVOLUÇÃO] Banner indicando versão demo -->
+<div class="revolucao-banner no-print">
+  <div class="rev-title">
+    <span class="tag">✨ REVOLUÇÃO</span>
+    Versão protótipo com 5 evoluções
+  </div>
+  <div class="rev-badges">
+    <span class="rev-badge"><span class="num">1</span>📰 Modo História</span>
+    <span class="rev-badge"><span class="num">2</span>🎓 IA Conselheira</span>
+    <span class="rev-badge"><span class="num">3</span>📱 QR Código Cidadão</span>
+    <span class="rev-badge"><span class="num">4</span>📚 Biblioteca de Planos</span>
+    <span class="rev-badge"><span class="num">5</span>📅 Agenda Viva do CIG</span>
+  </div>
+</div>
+
 
 <div class="container" id="app"></div>
 <div class="autosave-indicator" id="autosave-indicator">Salvo automaticamente</div>
@@ -973,10 +1484,10 @@ var FIELD_DEFS = {
     exemplos: []
   },
   cargo: {
-    field: "cargo", label: "Cargo/FunÃ§Ã£o",
-    question: "Qual Ã© o seu cargo ou funÃ§Ã£o?",
-    dica: "Informe o cargo ou funÃ§Ã£o que vocÃª exerce na AdministraÃ§Ã£o Regional.",
-    placeholder: "Ex: Chefe da Unidade de GovernanÃ§a...",
+    field: "cargo", label: "Cargo/Função",
+    question: "Qual é o seu cargo ou função?",
+    dica: "Informe o cargo ou função que você exerce na Administração Regional.",
+    placeholder: "Ex: Chefe da Unidade de Governança...",
     icon: "ð¢", color: "#1565C0", inputType: "input",
     exemplos: []
   },
@@ -1115,6 +1626,62 @@ var FIELD_DEFS = {
 /* ===================================================
    STEPS (grouped screens - 10 instead of 16)
    =================================================== */
+/* ===================================================
+   [Res. CGov 04/2024] PILARES DE GOVERNANÇA PÚBLICA
+   Aprovada em 19/08/2024, publicada no DODF 03/09/2024.
+   Modelo obrigatório para toda Administração Direta,
+   Autárquica e Fundacional do Executivo do DF.
+   =================================================== */
+var PILARES_RES_04_2024 = [
+  { id: "lideranca",   nome: "Liderança",   icone: "\uD83D\uDC64",
+    cor: "#1565C0",
+    descricao: "Práticas de natureza humana ou comportamental exercida nos principais cargos das organizações, que asseguram condições para o alcance dos objetivos.",
+    exemplos: "Designação formal do Administrador(a) como sponsor, capacitação de líderes do CIG, mentoria entre gestores." },
+  { id: "estrategia",  nome: "Estratégia",  icone: "\uD83C\uDFAF",
+    cor: "#2E7D32",
+    descricao: "Definição de diretrizes, objetivos, planos e ações, além dos mecanismos para o acompanhamento da implementação.",
+    exemplos: "Planejamento estratégico da RA, alinhamento ao PPA, definição de indicadores SMART, reuniões trimestrais de monitoramento." },
+  { id: "controle",    nome: "Controle",    icone: "\uD83D\uDCCA",
+    cor: "#F57C00",
+    descricao: "Processos estruturados para mitigar riscos, garantir conformidade e a efetividade das políticas públicas.",
+    exemplos: "Mapa de riscos da RA, auditoria interna, checklists de processos críticos, matriz de responsabilidades." },
+  { id: "integridade", nome: "Integridade", icone: "\u2705",
+    cor: "#7B1FA2",
+    descricao: "Alinhamento consistente de comportamentos e condutas a valores e princípios éticos, morais e legais.",
+    exemplos: "Código de conduta do servidor, canais de denúncia, programa de integridade, gestão de conflito de interesses." }
+];
+
+/* ===================================================
+   [Res. CGov 15/2026] GESTÃO DE RISCOS ESTRUTURADA
+   Fortalecimento das práticas de gestão de riscos.
+   =================================================== */
+var CATEGORIAS_RISCO = [
+  { id: "operacional",   nome: "Operacional",    icone: "\u2699\uFE0F" },
+  { id: "financeiro",    nome: "Financeiro",     icone: "\uD83D\uDCB0" },
+  { id: "reputacional",  nome: "Reputacional",   icone: "\uD83D\uDCE2" },
+  { id: "legal",         nome: "Legal/Conformidade", icone: "\u2696\uFE0F" },
+  { id: "tecnologico",   nome: "Tecnológico",    icone: "\uD83D\uDCBB" },
+  { id: "estrategico",   nome: "Estratégico",    icone: "\uD83C\uDFAF" }
+];
+var NIVEIS_RISCO = ["Baixa", "Média", "Alta"];
+var RESPOSTAS_RISCO = [
+  { id: "evitar",      nome: "Evitar",      descricao: "Não realizar a atividade que gera o risco" },
+  { id: "mitigar",     nome: "Mitigar",     descricao: "Reduzir a probabilidade ou impacto" },
+  { id: "transferir",  nome: "Transferir",  descricao: "Compartilhar com terceiros (contrato, seguro)" },
+  { id: "aceitar",     nome: "Aceitar",     descricao: "Assumir o risco dentro do apetite da organização" }
+];
+
+function calcularNivelRisco(prob, imp) {
+  // Matriz 3x3 de criticidade
+  var p = NIVEIS_RISCO.indexOf(prob) + 1;
+  var i = NIVEIS_RISCO.indexOf(imp) + 1;
+  if (p === 0 || i === 0) return "";
+  var score = p * i;
+  if (score >= 6) return "Crítico";
+  if (score >= 3) return "Moderado";
+  return "Baixo";
+}
+
 var STEPS = [
   { id: "welcome", type: "welcome" },
   {
@@ -1129,6 +1696,13 @@ var STEPS = [
     dica: "Escolha um nome claro e descreva o que pretende alcan\u00e7ar.",
     contexto: "Com a RA e pr\u00e1tica definidas, vamos nomear e direcionar o projeto.",
     fields: ["projeto", "objetivo"]
+  },
+  {
+    // [Res. CGov 04/2024] Nova etapa de classifica\u00e7\u00e3o por pilares
+    id: "pilares", type: "pilares", label: "Pilares de Governan\u00e7a",
+    icon: "\uD83C\uDFDB\uFE0F", question: "Em quais pilares da governan\u00e7a p\u00fablica seu projeto atua?",
+    dica: "Resolu\u00e7\u00e3o CGov n\u00ba 04/2024 \u2014 marque os pilares aplic\u00e1veis (m\u00ednimo 1) e selecione o pilar prim\u00e1rio.",
+    contexto: "Alinhe seu projeto ao Modelo de Governan\u00e7a P\u00fablica do DF."
   },
   {
     id: "detalhamento", type: "group", label: "Descri\u00e7\u00e3o e Produto",
@@ -1174,10 +1748,19 @@ var STEPS = [
     ]
   },
   {
+    // [REV #5] Agenda Viva do CIG — gest\u00e3o completa de reuni\u00f5es
+    id: "agenda", type: "agenda", label: "Agenda Viva do CIG",
+    question: "Planeje as reuni\u00f5es do CIG",
+    contexto: "Reuni\u00f5es s\u00e3o onde as decis\u00f5es acontecem. Cadastre o cronograma, pauta, participantes e vincule \u00e0s entregas do plano.",
+    icon: "\uD83D\uDCC5", color: "#7C3AED",
+    dica: "Defina a frequ\u00eancia das reuni\u00f5es ordin\u00e1rias e cadastre pelo menos 3 pr\u00f3ximas datas. Vincule cada reuni\u00e3o \u00e0s entregas que ser\u00e3o discutidas.",
+    ajuda: "A Agenda Viva cria uma linha do tempo do seu CIG. O sistema envia lembretes autom\u00e1ticos 7 dias antes de cada reuni\u00e3o e alerta sobre atas pendentes (Res. CGov 03/2021 \u2014 os CIGs devem se reunir regularmente e registrar atas)."
+  },
+  {
     id: "riscos-premissas", type: "group", label: "Premissas, Barreiras e Riscos",
     icon: "\u26A0\uFE0F", question: "Identifique premissas, barreiras e riscos",
-    dica: "Aten\u00e7\u00e3o: cada campo pede um tipo diferente de informa\u00e7\u00e3o. Leia as orienta\u00e7\u00f5es de cada um.",
-    contexto: "\u00daltimo bloco! Premissas = condi\u00e7\u00f5es que voc\u00ea assume como verdadeiras. Barreiras = obst\u00e1culos que j\u00e1 existem hoje. Riscos = eventos incertos que podem acontecer no futuro.",
+    dica: "Aten\u00e7\u00e3o: cada campo pede um tipo diferente de informa\u00e7\u00e3o. Liste aqui os riscos principais em linguagem simples \u2014 a equipe de gest\u00e3o de riscos far\u00e1 a an\u00e1lise detalhada depois.",
+    contexto: "\u00daltimo bloco! Premissas = condi\u00e7\u00f5es que voc\u00ea assume como verdadeiras. Barreiras = obst\u00e1culos que j\u00e1 existem hoje. Riscos = eventos incertos que podem acontecer no futuro. \uD83D\uDCDD Liste aqui sua percep\u00e7\u00e3o \u2014 a equipe de gest\u00e3o de riscos far\u00e1 a an\u00e1lise formal no SAEweb (Res. CGov 15/2026).",
     fields: ["premissas", "barreiras", "riscos"]
   },
   { id: "review", type: "review" }
@@ -1187,10 +1770,11 @@ var STEPS = [
    PHASES (visual grouping for stepper)
    =================================================== */
 var PHASES = [
-  { name: "Identifica\u00e7\u00e3o", steps: ["identificacao", "nome-objetivo"] },
+  { name: "Identifica\u00e7\u00e3o", steps: ["identificacao", "nome-objetivo", "pilares"] },
   { name: "Detalhamento", steps: ["detalhamento", "caracteristicas"] },
   { name: "An\u00e1lise", steps: ["analise"] },
   { name: "Pessoas e Entregas", steps: ["partes", "entregas"] },
+  { name: "Agenda do CIG", steps: ["agenda"] },
   { name: "Premissas e Riscos", steps: ["riscos-premissas"] }
 ];
 
@@ -1211,6 +1795,7 @@ var REVIEW_ITEMS = [
   { id: "indicador", field: "indicador", label: "Indicador", icon: "\uD83D\uDCCA", phase: "An\u00e1lise" },
   { id: "partes", type: "partes", label: "Partes Interessadas", icon: "\uD83D\uDC65", phase: "Pessoas e Entregas" },
   { id: "entregas", type: "entregas", label: "Entregas", icon: "\uD83D\uDCC5", phase: "Pessoas e Entregas" },
+  { id: "agenda", type: "agenda", label: "Agenda Viva do CIG", icon: "\uD83D\uDCC5", phase: "Agenda do CIG" },
   { id: "premissas", field: "premissas", label: "Premissas", icon: "\uD83C\uDFC5", phase: "Premissas e Riscos" },
   { id: "barreiras", field: "barreiras", label: "Barreiras", icon: "\uD83D\uDEA7", phase: "Premissas e Riscos" },
   { id: "riscos", field: "riscos", label: "Riscos", icon: "\u26A0\uFE0F", phase: "Premissas e Riscos" }
@@ -1238,6 +1823,7 @@ function getStepIndexForField(fieldId) {
     if (s.type === 'group' && s.fields && s.fields.indexOf(fieldId) >= 0) return i;
     if (s.type === 'partes' && ['patrocinio', 'equipe', 'publico', 'partes'].indexOf(fieldId) >= 0) return i;
     if (s.type === 'entregas' && fieldId === 'entregas') return i;
+    if (s.type === 'agenda' && fieldId === 'agenda') return i;
   }
   return 1;
 }
@@ -1313,11 +1899,425 @@ function getMotivation(pct) {
 /* ===================================================
    STATE
    =================================================== */
+
+/* ============================================================
+   [BIBLIOTECA DE PLANOS] Gerenciamento de múltiplos planos
+   ============================================================ */
+var STORAGE_BIBLIOTECA_KEY = 'cig-biblioteca-planos';
+var planoAtualId = null; // ID do plano sendo editado (null = está no dashboard)
+
+function carregarBiblioteca() {
+  try {
+    var raw = localStorage.getItem(STORAGE_BIBLIOTECA_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e){}
+  return [];
+}
+
+function salvarBiblioteca(planos) {
+  try { localStorage.setItem(STORAGE_BIBLIOTECA_KEY, JSON.stringify(planos)); } catch(e){}
+}
+
+function gerarIdPlano() {
+  var ano = new Date().getFullYear();
+  var planos = carregarBiblioteca();
+  var contador = planos.length + 1;
+  var raSigla = (data.ra || 'RA').replace(/[^A-Z0-9]/gi, '').substring(0, 5).toUpperCase() || 'RA';
+  return 'CIG-' + raSigla + '-' + ano + '-' + String(contador).padStart(3, '0');
+}
+
+function novoPlano() {
+  var planos = carregarBiblioteca();
+  // Se há um plano aberto, salva antes
+  if (planoAtualId) salvarPlanoAtual();
+
+  var id = 'plano_' + Date.now();
+  var nomeInicial = prompt('Dê um nome para o novo Plano de Ação:\n\n(Ex: "Modernização do Atendimento", "Capacitação do CIG")', '');
+  if (nomeInicial === null) return; // usuário cancelou
+  if (!nomeInicial.trim()) nomeInicial = 'Novo Plano ' + (planos.length + 1);
+
+  var novo = {
+    id: id,
+    nome: nomeInicial,
+    codigo: '', // será gerado no primeiro envio
+    status: 'rascunho',
+    versao: 1,
+    dataCreated: new Date().toISOString(),
+    dataModified: new Date().toISOString(),
+    dataEnviado: null,
+    dataDevolvido: null,
+    pct: 0,
+    dadosSnapshot: {
+      responsavel_nome: "", responsavel_email: "", cargo: "",
+      ra: "", pratica: "", projeto: nomeInicial, objetivo: "", descricao: "",
+      produto: "", caracteristicas: "", justificativa: "",
+      indicador: "", patrocinio: "", equipe: "", publico: "",
+      premissas: "", barreiras: "", riscos: "",
+      pilares_aplicaveis: [], pilar_primario: "",
+      riscos_estruturados: [],
+      entregas: [{ entrega: "", atividades: "", prazo: "", investimento: "Sem custo direto", responsavel: "" }]
+    },
+    devolutivas: [] // array de {data, analista, parecer, campos_ajustar}
+  };
+
+  planos.push(novo);
+  salvarBiblioteca(planos);
+  abrirPlano(id);
+}
+
+function abrirPlano(id) {
+  var planos = carregarBiblioteca();
+  var plano = planos.find(function(p){ return p.id === id; });
+  if (!plano) { alert('Plano não encontrado.'); return; }
+
+  planoAtualId = id;
+  // Carrega dados do plano para o objeto data
+  Object.keys(plano.dadosSnapshot).forEach(function(k) {
+    data[k] = plano.dadosSnapshot[k];
+  });
+  currentStep = 1; // pula welcome, vai direto pro primeiro passo
+  showSuccess = false;
+  modoHistoriaAtivo = false;
+  render();
+}
+
+function voltarBiblioteca() {
+  if (planoAtualId) salvarPlanoAtual();
+  planoAtualId = null;
+  currentStep = 0;
+  showSuccess = false;
+  render();
+}
+
+function salvarPlanoAtual() {
+  if (!planoAtualId) return;
+  var planos = carregarBiblioteca();
+  var idx = planos.findIndex(function(p){ return p.id === planoAtualId; });
+  if (idx < 0) return;
+
+  // Atualiza snapshot com dados atuais
+  var snap = {};
+  Object.keys(planos[idx].dadosSnapshot).forEach(function(k) {
+    snap[k] = data[k];
+  });
+  planos[idx].dadosSnapshot = snap;
+  planos[idx].dataModified = new Date().toISOString();
+  planos[idx].pct = getProgress();
+
+  // Atualiza nome se o projeto mudou
+  if (data.projeto && data.projeto.trim() && planos[idx].status === 'rascunho') {
+    planos[idx].nome = data.projeto.trim();
+  }
+
+  salvarBiblioteca(planos);
+}
+
+function excluirPlano(id, event) {
+  if (event) event.stopPropagation();
+  var planos = carregarBiblioteca();
+  var plano = planos.find(function(p){ return p.id === id; });
+  if (!plano) return;
+
+  if (!confirm('Excluir definitivamente o plano "' + plano.nome + '"?\n\nEsta ação não pode ser desfeita.')) return;
+
+  planos = planos.filter(function(p){ return p.id !== id; });
+  salvarBiblioteca(planos);
+
+  if (planoAtualId === id) {
+    planoAtualId = null;
+    currentStep = 0;
+  }
+  render();
+}
+
+function duplicarPlano(id, event) {
+  if (event) event.stopPropagation();
+  var planos = carregarBiblioteca();
+  var original = planos.find(function(p){ return p.id === id; });
+  if (!original) return;
+
+  var copia = JSON.parse(JSON.stringify(original));
+  copia.id = 'plano_' + Date.now();
+  copia.nome = '[Cópia] ' + original.nome;
+  copia.status = 'rascunho';
+  copia.versao = 1;
+  copia.dataCreated = new Date().toISOString();
+  copia.dataModified = new Date().toISOString();
+  copia.dataEnviado = null;
+  copia.devolutivas = [];
+  copia.codigo = '';
+
+  planos.push(copia);
+  salvarBiblioteca(planos);
+  render();
+}
+
+
+/* [INTEGRAÇÃO REAL v3] Consulta devolutivas estruturadas do Apps Script FINAL */
+function consultarDevolutivasReais() {
+  var planos = carregarBiblioteca();
+  var enviados = planos.filter(function(p) {
+    return (p.status === 'enviado' || p.status === 'analise') && p.codigo;
+  });
+  if (enviados.length === 0) return;
+
+  enviados.forEach(function(plano) {
+    var url = GOOGLE_SCRIPT_URL + '?action=devolutivas&plano=' + encodeURIComponent(plano.codigo);
+    fetch(url)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (data.status === 'ok' && data.total > 0) {
+          var planosAtuais = carregarBiblioteca();
+          var idx = planosAtuais.findIndex(function(p){ return p.id === plano.id; });
+          if (idx < 0) return;
+          // Substitui devolutivas locais pelas do servidor (fonte da verdade)
+          planosAtuais[idx].devolutivas = data.devolutivas.map(function(d) {
+            return {
+              data: d.data,
+              analista: d.analista,
+              decisao: d.decisao, // 'Aprovado' | 'Aprovado com ressalvas' | 'Ajustar e Reenviar'
+              pontos_positivos: d.pontos_positivos || [],
+              campos_completar: d.campos_completar || [],
+              sugestoes: d.sugestoes || [],
+              prazo: d.prazo || ''
+            };
+          });
+          // Atualiza status com base na última devolutiva
+          var ultima = data.devolutivas[data.devolutivas.length - 1];
+          var dec = (ultima.decisao || '').toLowerCase();
+          if (dec.indexOf('aprovado') === 0 && dec.indexOf('ressalva') < 0) {
+            planosAtuais[idx].status = 'aprovado';
+          } else if (dec.indexOf('ressalva') >= 0) {
+            planosAtuais[idx].status = 'aprovado_ressalvas';
+          } else {
+            planosAtuais[idx].status = 'devolvido';
+          }
+          planosAtuais[idx].dataDevolvido = ultima.data;
+          salvarBiblioteca(planosAtuais);
+          if (!planoAtualId) render();
+        }
+      })
+      .catch(function(){});
+  });
+}
+
+// Consulta devolutivas automaticamente a cada 60 segundos quando na biblioteca
+setInterval(function() {
+  if (!planoAtualId) consultarDevolutivasReais();
+}, 60000);
+
+// E também 3 segundos após load inicial
+setTimeout(function() {
+  if (!planoAtualId) consultarDevolutivasReais();
+}, 3000);
+
+function simularDevolutivaSEGOV(id, event) {
+  if (event) event.stopPropagation();
+  var planos = carregarBiblioteca();
+  var plano = planos.find(function(p){ return p.id === id; });
+  if (!plano) return;
+  if (plano.status !== 'enviado' && plano.status !== 'analise') {
+    alert('Este plano ainda não foi enviado para análise.');
+    return;
+  }
+
+  var modal = document.getElementById('devolutiva-modal');
+  document.getElementById('dev-plano-id').value = id;
+  document.getElementById('dev-parecer').value = '';
+  document.getElementById('dev-analista').value = '';
+  modal.classList.add('aberto');
+}
+
+function confirmarDevolutiva(aprovado) {
+  var id = document.getElementById('dev-plano-id').value;
+  var parecer = document.getElementById('dev-parecer').value.trim();
+  var analista = document.getElementById('dev-analista').value.trim();
+  if (!parecer) { alert('Escreva o parecer.'); return; }
+  if (!analista) { analista = 'SEGOV/SEGEST'; }
+
+  var planos = carregarBiblioteca();
+  var idx = planos.findIndex(function(p){ return p.id === id; });
+  if (idx < 0) return;
+
+  planos[idx].devolutivas.push({
+    data: new Date().toISOString(),
+    analista: analista,
+    parecer: parecer,
+    aprovado: aprovado
+  });
+  planos[idx].status = aprovado ? 'aprovado' : 'devolvido';
+  planos[idx].dataDevolvido = new Date().toISOString();
+  salvarBiblioteca(planos);
+  fecharModalDevolutiva();
+  render();
+}
+
+function fecharModalDevolutiva() {
+  var modal = document.getElementById('devolutiva-modal');
+  if (modal) modal.classList.remove('aberto');
+}
+
+function getStatusBadge(status) {
+  var mapping = {
+    'rascunho': { classe: 'rascunho', emoji: '📝', texto: 'Rascunho' },
+    'enviado':  { classe: 'enviado',  emoji: '📤', texto: 'Enviado' },
+    'analise':  { classe: 'analise',  emoji: '🔍', texto: 'Em análise' },
+    'aprovado': { classe: 'aprovado', emoji: '✅', texto: 'Aprovado' },
+    'aprovado_ressalvas': { classe: 'analise', emoji: '⚠️', texto: 'Aprovado c/ ressalvas' },
+    'devolvido':{ classe: 'devolvido',emoji: '🔁', texto: 'Ajustar e reenviar' }
+  };
+  var m = mapping[status] || mapping.rascunho;
+  return '<span class="plano-status ' + m.classe + '">' + m.emoji + ' ' + m.texto + '</span>';
+}
+
+function renderBiblioteca() {
+  var planos = carregarBiblioteca();
+  var html = '<div class="biblioteca-container">';
+
+  // Header com estatísticas
+  var totalPlanos = planos.length;
+  var rascunhos = planos.filter(function(p){return p.status==='rascunho'}).length;
+  var enviados = planos.filter(function(p){return p.status==='enviado'||p.status==='analise'}).length;
+  var aprovados = planos.filter(function(p){return p.status==='aprovado'}).length;
+  var devolvidos = planos.filter(function(p){return p.status==='devolvido'}).length;
+
+  html += '<div class="biblioteca-header">' +
+    '<h1>📚 Biblioteca de Planos de Ação</h1>' +
+    '<p>Gerencie todos os Planos do CIG da sua Administração Regional. Acompanhe status, devolutivas e crie novos planos.</p>' +
+    '<div class="biblioteca-stats">' +
+      '<div class="biblioteca-stat"><span class="num">' + totalPlanos + '</span><span class="label">Total de planos</span></div>' +
+      '<div class="biblioteca-stat"><span class="num">' + rascunhos + '</span><span class="label">📝 Rascunhos</span></div>' +
+      '<div class="biblioteca-stat"><span class="num">' + enviados + '</span><span class="label">🔍 Em análise</span></div>' +
+      '<div class="biblioteca-stat"><span class="num">' + aprovados + '</span><span class="label">✅ Aprovados</span></div>' +
+      '<div class="biblioteca-stat"><span class="num">' + devolvidos + '</span><span class="label">🔁 Devolvidos</span></div>' +
+    '</div>' +
+  '</div>';
+
+  // Ações
+  html += '<div class="biblioteca-acoes">' +
+    '<button class="btn-novo-plano" onclick="novoPlano()">' +
+      '<span>➕</span> Criar Novo Plano de Ação' +
+    '</button>' +
+  '</div>';
+
+  // Lista de planos ou vazio
+  if (totalPlanos === 0) {
+    html += '<div class="biblioteca-empty">' +
+      '<div class="icon">📋</div>' +
+      '<h3>Nenhum plano ainda</h3>' +
+      '<p>Clique em "Criar Novo Plano de Ação" acima para começar.<br>Você pode criar quantos planos precisar — um para cada projeto de governança.</p>' +
+    '</div>';
+  } else {
+    // Ordena: devolvidos primeiro (precisam atenção), depois por data modificada
+    planos.sort(function(a,b){
+      if (a.status === 'devolvido' && b.status !== 'devolvido') return -1;
+      if (b.status === 'devolvido' && a.status !== 'devolvido') return 1;
+      return new Date(b.dataModified) - new Date(a.dataModified);
+    });
+
+    planos.forEach(function(plano) {
+      var icones = {rascunho:'📝', enviado:'📤', analise:'🔍', aprovado:'🏆', devolvido:'🔁'};
+      var coresBg = {rascunho:'#F1F5F9', enviado:'#DBEAFE', analise:'#FEF3C7', aprovado:'#D1FAE5', devolvido:'#FEE2E2'};
+      var dataMod = new Date(plano.dataModified);
+
+      html += '<div class="plano-card" onclick="abrirPlano(\'' + plano.id + '\')">' +
+        '<div class="plano-card-icon" style="background:' + (coresBg[plano.status] || '#F1F5F9') + '">' +
+          (icones[plano.status] || '📝') +
+        '</div>' +
+        '<div class="plano-card-info">' +
+          '<h3>' + esc(plano.nome) + '</h3>' +
+          '<div class="meta">' +
+            '<span>' + getStatusBadge(plano.status) + '</span>' +
+            (plano.codigo ? '<span>🔖 ' + esc(plano.codigo) + '</span>' : '') +
+            '<span>📅 Modificado ' + dataMod.toLocaleDateString('pt-BR') + '</span>' +
+            '<span>📊 v' + plano.versao + '</span>' +
+          '</div>' +
+          '<div class="plano-card-progress">' +
+            '<div class="plano-card-progress-bar"><div class="fill" style="width:' + plano.pct + '%"></div></div>' +
+            '<span>' + plano.pct + '%</span>' +
+          '</div>';
+      // Card estruturado de devolutiva
+      if ((plano.status === 'devolvido' || plano.status === 'aprovado' || plano.status === 'aprovado_ressalvas') && plano.devolutivas.length > 0) {
+        var ultima = plano.devolutivas[plano.devolutivas.length - 1];
+        var corBorder, corBg, corTitulo, emoji, tituloStatus;
+        if (plano.status === 'aprovado') {
+          corBorder = '#059669'; corBg = '#D1FAE5'; corTitulo = '#065F46'; emoji = '✅'; tituloStatus = 'APROVADO';
+        } else if (plano.status === 'aprovado_ressalvas') {
+          corBorder = '#F59E0B'; corBg = '#FEF3C7'; corTitulo = '#78350F'; emoji = '⚠️'; tituloStatus = 'APROVADO COM RESSALVAS';
+        } else {
+          corBorder = '#DC2626'; corBg = '#FEE2E2'; corTitulo = '#991B1B'; emoji = '🔁'; tituloStatus = 'AJUSTAR E REENVIAR';
+        }
+
+        html += '<div style="margin-top:12px;border:2px solid ' + corBorder + ';border-radius:10px;background:' + corBg + ';overflow:hidden">' +
+          '<div style="padding:10px 14px;background:' + corBorder + ';color:#fff;font-weight:700;font-size:13px">' +
+            emoji + ' DEVOLUTIVA SEGEST — ' + tituloStatus +
+          '</div>' +
+          '<div style="padding:12px 14px;font-size:12px;color:' + corTitulo + '">' +
+            '<div style="margin-bottom:8px"><strong>Analista:</strong> ' + esc(ultima.analista || 'SEGEST') +
+            (ultima.data ? ' • <strong>Data:</strong> ' + esc(new Date(ultima.data).toLocaleDateString('pt-BR')) : '') + '</div>';
+
+        if (ultima.pontos_positivos && ultima.pontos_positivos.length > 0) {
+          html += '<div style="margin-bottom:8px"><strong>✅ Pontos Positivos:</strong><ul style="margin:4px 0 0 20px;padding:0">';
+          ultima.pontos_positivos.forEach(function(p){ html += '<li style="margin:2px 0">' + esc(p) + '</li>'; });
+          html += '</ul></div>';
+        }
+
+        if (ultima.campos_completar && ultima.campos_completar.length > 0) {
+          html += '<div style="margin-bottom:8px"><strong>⚠️ Campos a Completar:</strong><ul style="margin:4px 0 0 20px;padding:0">';
+          ultima.campos_completar.forEach(function(c, i) {
+            var sug = (ultima.sugestoes && ultima.sugestoes[i]) ? ' <em style="opacity:0.85">→ ' + esc(ultima.sugestoes[i]) + '</em>' : '';
+            html += '<li style="margin:3px 0"><strong>' + esc(c) + '</strong>' + sug + '</li>';
+          });
+          html += '</ul></div>';
+        }
+
+        if (ultima.prazo) {
+          html += '<div style="margin-top:8px;padding:6px 10px;background:rgba(255,255,255,0.6);border-radius:6px;font-weight:700"><strong>📅 Prazo para ajuste:</strong> ' + esc(ultima.prazo) + '</div>';
+        }
+
+        html += '</div></div>';
+      }
+      html += '</div>' +
+        '<div class="plano-card-actions" onclick="event.stopPropagation()">' +
+          '<button onclick="abrirPlano(\'' + plano.id + '\')" title="Abrir / Editar">✏️</button>' +
+          '<button onclick="duplicarPlano(\'' + plano.id + '\', event)" title="Duplicar">📋</button>' +
+          (plano.status === 'enviado' || plano.status === 'analise' ?
+            '<button onclick="simularDevolutivaSEGOV(\'' + plano.id + '\', event)" title="Simular devolutiva SEGOV" style="background:#FEF3C7;border-color:#F59E0B">💬</button>' : '') +
+          '<button class="danger" onclick="excluirPlano(\'' + plano.id + '\', event)" title="Excluir">🗑️</button>' +
+        '</div>' +
+      '</div>';
+    });
+  }
+
+  // Legenda
+  html += '<div style="margin-top:24px;padding:16px;background:#F8FAFC;border-radius:12px;border:1px dashed #CBD5E1">' +
+    '<p style="font-size:12px;color:#64748B;margin-bottom:8px"><strong>💡 Dica:</strong> cada plano é salvo localmente no seu navegador. Para colaborar com colegas ou acessar de outro computador, use "Exportar PDF" em cada plano.</p>' +
+    '<p style="font-size:11px;color:#94A3B8">Você pode criar quantos planos sua RA precisar — 1 por projeto de governança (atendimento, capacitação, gestão de riscos, etc.)</p>' +
+  '</div>';
+
+  html += '</div>';
+  return html;
+}
+
+/* Marca o plano como enviado quando submitToSEGOV for bem-sucedido */
+function marcarPlanoComoEnviado() {
+  if (!planoAtualId) return;
+  var planos = carregarBiblioteca();
+  var idx = planos.findIndex(function(p){ return p.id === planoAtualId; });
+  if (idx < 0) return;
+  planos[idx].status = 'enviado';
+  planos[idx].dataEnviado = new Date().toISOString();
+  if (!planos[idx].codigo) planos[idx].codigo = gerarIdPlano();
+  salvarBiblioteca(planos);
+}
+
+
 var STORAGE_KEY = 'canvas-projeto-data';
 var STORAGE_STEP_KEY = 'canvas-projeto-step';
 var STORAGE_SENT_KEY = 'canvas-projeto-sent';
 
 var currentStep = 0;
+var modoHistoriaAtivo = false; // [REVOLU\u00c7\u00c3O] declarado cedo para evitar ReferenceError
 var submitting = false;
 var showSuccess = false;
 
@@ -1327,9 +2327,21 @@ var data = {
   produto: "", caracteristicas: "", justificativa: "",
   indicador: "", patrocinio: "", equipe: "", publico: "",
   premissas: "", barreiras: "", riscos: "",
+  // [Res. CGov 04/2024] Pilares aplic\u00e1veis ao projeto (m\u00faltipla escolha)
+  pilares_aplicaveis: [], // array de IDs: ["lideranca", "estrategia", ...]
+  pilar_primario: "",     // ID do pilar prim\u00e1rio
+  // [Res. CGov 15/2026] Riscos estruturados
+  riscos_estruturados: [], // array de objetos {descricao, categoria, probabilidade, impacto, nivel, resposta, contingencia, responsavel}
   entregas: [
     { entrega: "", atividades: "", prazo: "", investimento: "Sem custo direto", responsavel: "" }
-  ]
+  ],
+  // [REV #5] Agenda Viva do CIG — gest\u00e3o completa de reuni\u00f5es (Res. CGov 03/2021)
+  agenda_frequencia: "",   // "mensal" | "bimestral" | "trimestral" | "outra"
+  agenda_observacoes: "",
+  reunioes: []
+  // cada reuni\u00e3o: { data, horario, duracao, local, plataforma, pauta, participantes,
+  //   entregas_vinculadas: [idx], ata_link, ata_sei, status: "agendada"|"realizada"|"cancelada",
+  //   presentes, ausentes, quorum }
 };
 
 /* ===================================================
@@ -1388,14 +2400,22 @@ function saveToStorage() {
 function showAutosaveIndicator() {
   var el = document.getElementById('autosave-indicator');
   if (!el) return;
+  // [Bug #9] Mostra horário do save para dar mais confiança ao usuário
+  var agora = new Date();
+  var hh = String(agora.getHours()).padStart(2, '0');
+  var mm = String(agora.getMinutes()).padStart(2, '0');
+  var ss = String(agora.getSeconds()).padStart(2, '0');
+  el.innerHTML = '✓ Salvo automaticamente • ' + hh + ':' + mm + ':' + ss;
   el.classList.add('show');
   clearTimeout(autosaveTimeout);
-  autosaveTimeout = setTimeout(function() { el.classList.remove('show'); }, 1500);
+  autosaveTimeout = setTimeout(function() { el.classList.remove('show'); }, 2500);
 }
 
 function scheduleAutosave() {
   saveCurrentInputs();
   saveToStorage();
+  // [BIBLIOTECA] também atualiza o snapshot do plano atual
+  if (typeof salvarPlanoAtual === 'function' && planoAtualId) salvarPlanoAtual();
 }
 
 /* ===================================================
@@ -1412,7 +2432,16 @@ function getProgress() {
   data.entregas.forEach(function(e) { ef.push(e.entrega, e.atividades, e.prazo, e.investimento, e.responsavel || ''); });
   var all = fields.concat(ef);
   var filled = all.filter(function(f) { return f && f.trim(); }).length;
-  return Math.round((filled / all.length) * 100);
+  var pctPreenchimento = all.length > 0 ? (filled / all.length) * 100 : 0;
+
+  // C\u00e1lculo h\u00edbrido: considera tamb\u00e9m a etapa atual para dar feedback visual
+  // de progress\u00e3o mesmo quando nada foi preenchido ainda.
+  var totalSteps = STEPS.length - 2; // exclui welcome e review
+  var stepIdx = Math.max(0, Math.min(currentStep - 1, totalSteps));
+  var pctEtapa = totalSteps > 0 ? (stepIdx / totalSteps) * 100 : 0;
+
+  // M\u00e9dia ponderada: 40% progress\u00e3o pelas etapas + 60% preenchimento efetivo
+  return Math.round(pctEtapa * 0.4 + pctPreenchimento * 0.6);
 }
 
 function getRequiredEmpty() {
@@ -1462,8 +2491,81 @@ function goTo(idx) {
   }
 }
 
-function next() { if (currentStep < STEPS.length - 1) goTo(currentStep + 1); }
+
+function iniciarModoHistoria() {
+  modoHistoriaAtivo = true;
+  // Vai para passo 1 mas renderiza o modo história em vez do passo normal
+  currentStep = 1;
+  render();
+}
+
+function next() {
+  // [Bug #7] Validação padronizada: permite avançar mas avisa sobre campos pendentes
+  // Isso unifica o comportamento em todas as etapas (antes era inconsistente)
+  if (currentStep < STEPS.length - 1) {
+    saveCurrentInputs();
+    // Check if current step has obvious empty required fields - show friendly toast
+    try {
+      var step = STEPS[currentStep];
+      if (step && step.type === 'group' && step.fields) {
+        var vazios = step.fields.filter(function(f) {
+          var v = data[f];
+          return !v || !String(v).trim();
+        });
+        if (vazios.length > 0 && currentStep > 0) {
+          mostrarAvisoSuave('Dica: você pode voltar depois para preencher ' + vazios.length + ' campo(s) desta etapa.');
+        }
+      }
+    } catch (e) { /* silencioso */ }
+    goTo(currentStep + 1);
+  }
+}
+
+// [Bug #7] Toast não-bloqueante para avisos de navegação
+function mostrarAvisoSuave(mensagem) {
+  var toast = document.getElementById('toast-aviso');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast-aviso';
+    toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-60px);' +
+      'background:#1565C0;color:#fff;padding:10px 20px;border-radius:24px;' +
+      'font-size:13px;font-weight:500;box-shadow:0 4px 12px rgba(21,101,192,0.3);' +
+      'transition:transform 0.3s ease;z-index:9999;max-width:90%;text-align:center';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = mensagem;
+  setTimeout(function() { toast.style.transform = 'translateX(-50%) translateY(0)'; }, 10);
+  setTimeout(function() { toast.style.transform = 'translateX(-50%) translateY(-60px)'; }, 3500);
+}
 function prev() { if (currentStep > 0) goTo(currentStep - 1); }
+
+// [Melhoria M4] Atalhos de teclado para agilizar navegação
+document.addEventListener('keydown', function(e) {
+  // Ignora se o usuário está digitando num campo
+  var tag = (e.target.tagName || '').toLowerCase();
+  var isTyping = tag === 'input' || tag === 'textarea' || tag === 'select';
+
+  // Ctrl+S: força save manual (em qualquer contexto)
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    try { saveCurrentInputs(); saveToStorage(); } catch (err) {}
+    return;
+  }
+
+  // Se está digitando, só Ctrl+S funciona
+  if (isTyping) return;
+
+  // Ctrl+→ ou Alt+→: próximo
+  if ((e.ctrlKey || e.altKey) && e.key === 'ArrowRight') {
+    e.preventDefault();
+    if (typeof next === 'function') next();
+  }
+  // Ctrl+← ou Alt+←: anterior
+  if ((e.ctrlKey || e.altKey) && e.key === 'ArrowLeft') {
+    e.preventDefault();
+    if (typeof prev === 'function') prev();
+  }
+});
 
 function saveCurrentInputs() {
   var step = STEPS[currentStep];
@@ -1670,7 +2772,10 @@ function clearAllData() {
     premissas: "", barreiras: "", riscos: "",
     entregas: [
       { entrega: "", atividades: "", prazo: "", investimento: "Sem custo direto", responsavel: "" }
-    ]
+    ],
+    agenda_frequencia: "",
+    agenda_observacoes: "",
+    reunioes: []
   };
   entregasExpandidas = {};
   currentStep = 0;
@@ -1797,6 +2902,7 @@ function submitToSEGOV() {
     showSuccess = true;
     try { localStorage.removeItem('cig_plano_numero_enviado'); localStorage.removeItem('cig_dados_plano'); } catch(e){}
     markAsSent();
+    marcarPlanoComoEnviado(); // [BIBLIOTECA] atualiza status do plano na biblioteca
     render();
   })
   .catch(function(err) {
@@ -1893,16 +2999,31 @@ function renderWelcome() {
       '<button class="btn-primary" onclick="next()">Come\u00e7ar o Plano de A\u00e7\u00e3o</button>' +
       resumeBtn +
     '</div>' +
+    // [REVOLU\u00c7\u00c3O] Toggle modo hist\u00f3ria
+    '<div class="modo-toggle no-print">' +
+      '<button class="ativo">\uD83D\uDCDD Modo Formul\u00e1rio (cl\u00e1ssico)</button>' +
+      '<button onclick="iniciarModoHistoria()" style="position:relative;border-color:#7C3AED;color:#7C3AED"><span style="position:absolute;top:-8px;right:-8px;background:#F59E0B;color:#fff;font-size:9px;padding:2px 6px;border-radius:8px;font-weight:800;letter-spacing:0.5px">NOVO</span>\uD83D\uDCF0 Modo Hist\u00f3ria (narrativo)</button>' +
+    '</div>' +
     '<div class="welcome-features">' +
-      '<div class="welcome-feat"><span>\uD83D\uDCDD</span> 8 etapas simples</div>' +
+      '<div class="welcome-feat"><span>\uD83D\uDCDD</span> 9 etapas simples</div>' +
       '<div class="welcome-feat"><span>\uD83D\uDCBE</span> Salva automaticamente</div>' +
       '<div class="welcome-feat"><span>\uD83D\uDCA1</span> Exemplos em cada campo</div>' +
     '</div>' +
     '<div style="margin-top:24px">' +
       '<button class="welcome-info-toggle" id="canvas-info-btn" onclick="toggleCanvasInfo()">O que \u00e9 o Plano de A\u00e7\u00e3o do CIG?</button>' +
       '<div id="canvas-info-content" class="welcome-info-content" style="display:none">' +
-        '<p><strong>O Plano de A\u00e7\u00e3o do CIG</strong> \u00e9 o instrumento que organiza os projetos de governan\u00e7a de cada Administra\u00e7\u00e3o Regional em uma estrutura clara e objetiva.</p>' +
-        '<p>De acordo com o <strong>Modelo de Governan\u00e7a P\u00fablica do Governo do DF</strong> (Resolu\u00e7\u00e3o CGOV N\u00ba 04/2024), cada RA deve implementar pr\u00e1ticas de governan\u00e7a monitoradas pela SEGOV e pela CGDF.</p>' +
+        '<p><strong>O Plano de A\u00e7\u00e3o do CIG</strong> \u00e9 o instrumento que organiza os projetos de governan\u00e7a de cada Administra\u00e7\u00e3o Regional em uma estrutura clara e objetiva, alinhada aos PEIs das RAs.</p>' +
+        '<p><strong>Base legal:</strong></p>' +
+        '<ul style="margin:8px 0 12px 20px;font-size:14px;line-height:1.6">' +
+          '<li><strong>Resolu\u00e7\u00e3o CGov n\u00ba 03/2021</strong> \u2014 Estrutura\u00e7\u00e3o dos Comit\u00eas Internos de Governan\u00e7a (CIG). \u2b50 base do sistema.</li>' +
+          '<li><strong>Resolu\u00e7\u00e3o CGov n\u00ba 04/2024</strong> \u2014 Modelo de Governan\u00e7a P\u00fablica do DF (pilares: Lideran\u00e7a, Estrat\u00e9gia, Controle e Integridade).</li>' +
+          '<li><strong>Resolu\u00e7\u00e3o CGov n\u00ba 15/2026</strong> \u2014 Fortalecimento das pr\u00e1ticas de gest\u00e3o de riscos.</li>' +
+          '<li><strong>IMGG 100 pontos</strong> e <strong>MDM</strong> \u2014 instrumentos de matura\u00e7\u00e3o em governan\u00e7a (Res. 08/2025 e 09/2025).</li>' +
+          '<li><strong>Decreto n\u00ba 39.736/2019</strong> \u2014 Pol\u00edtica de Governan\u00e7a P\u00fablica do DF.</li>' +
+        '</ul>' +
+        '<div style="background:#E8F1FA;border-left:4px solid #1565C0;padding:10px 14px;border-radius:6px;margin:12px 0;font-size:13px">' +
+          '\uD83D\uDD17 <strong>Integra\u00e7\u00e3o com SAEweb:</strong> voc\u00ea descreve os riscos aqui em linguagem simples; a <strong>equipe de gest\u00e3o de riscos</strong> faz a an\u00e1lise detalhada no SAEweb (sistema oficial do GDF operado por essa equipe). Este formul\u00e1rio registra o resumo executivo do PEI da sua RA.' +
+        '</div>' +
         '<p>Este formul\u00e1rio guia voc\u00ea por cada campo, com exemplos pr\u00e1ticos para inspirar. Suas respostas s\u00e3o salvas automaticamente no navegador. Ao final, o plano \u00e9 enviado diretamente para a SEGOV.</p>' +
         '<p>N\u00e3o se preocupe em acertar tudo de primeira! Voc\u00ea pode voltar e editar qualquer campo a qualquer momento.</p>' +
       '</div>' +
@@ -1988,6 +3109,288 @@ function renderSingleStep(step) {
   if (!def) return '';
   var contextoHTML = def.contexto ? '<div class="step-contexto">' + esc(def.contexto) + '</div>' : '';
   return contextoHTML + renderSingleFieldInput(def, false);
+}
+
+/* ============================================================
+   [REV #5] AGENDA VIVA DO CIG — gestão de reuniões (Res. 03/2021)
+   ============================================================ */
+
+function addReuniao() {
+  if (!data.reunioes) data.reunioes = [];
+  var proximaData = "";
+  // Sugerir próxima data com base na frequência
+  if (data.reunioes.length > 0) {
+    var ultima = data.reunioes[data.reunioes.length - 1];
+    if (ultima.data) {
+      var dt = new Date(ultima.data + 'T00:00:00');
+      var dias = data.agenda_frequencia === 'mensal' ? 30 :
+                 data.agenda_frequencia === 'bimestral' ? 60 :
+                 data.agenda_frequencia === 'trimestral' ? 90 : 30;
+      dt.setDate(dt.getDate() + dias);
+      proximaData = dt.toISOString().substring(0, 10);
+    }
+  }
+  data.reunioes.push({
+    data: proximaData,
+    horario: "14:00",
+    duracao: "90",
+    local: "",
+    plataforma: "hibrida",
+    pauta: "",
+    participantes: "",
+    entregas_vinculadas: [],
+    ata_link: "",
+    ata_sei: "",
+    status: "agendada",
+    presentes: "",
+    ausentes: "",
+    quorum: ""
+  });
+  saveToStorage();
+  render();
+}
+
+function removeReuniao(idx) {
+  if (!confirm('Remover esta reunião?')) return;
+  data.reunioes.splice(idx, 1);
+  saveToStorage();
+  render();
+}
+
+function updateReuniaoField(idx, field, valor) {
+  if (!data.reunioes[idx]) return;
+  data.reunioes[idx][field] = valor;
+  saveToStorage();
+}
+
+function toggleEntregaVinculada(idx, entregaIdx) {
+  if (!data.reunioes[idx]) return;
+  var r = data.reunioes[idx];
+  if (!r.entregas_vinculadas) r.entregas_vinculadas = [];
+  var pos = r.entregas_vinculadas.indexOf(entregaIdx);
+  if (pos >= 0) r.entregas_vinculadas.splice(pos, 1);
+  else r.entregas_vinculadas.push(entregaIdx);
+  saveToStorage();
+  render();
+}
+
+function changeReuniaoStatus(idx, novoStatus) {
+  if (!data.reunioes[idx]) return;
+  data.reunioes[idx].status = novoStatus;
+  saveToStorage();
+  render();
+}
+
+function renderAgenda(step) {
+  if (!data.reunioes) data.reunioes = [];
+  var contextoHTML = step.contexto ? '<div class="step-contexto">' + esc(step.contexto) + '</div>' : '';
+  var ajudaBtnHTML = step.ajuda ? ' <button class="ajuda-btn" onclick="toggleAjuda(this)">Saiba mais</button>' : '';
+  var ajudaBlockHTML = step.ajuda ? '<div class="ajuda-content" style="display:none">' + esc(step.ajuda) + '</div>' : '';
+
+  // Estatísticas
+  var total = data.reunioes.length;
+  var agendadas = 0, realizadas = 0, canceladas = 0;
+  data.reunioes.forEach(function(r) {
+    if (r.status === 'agendada') agendadas++;
+    else if (r.status === 'realizada') realizadas++;
+    else if (r.status === 'cancelada') canceladas++;
+  });
+
+  var statsHTML =
+    '<div class="agenda-resumo">' +
+      '<div class="agenda-stat"><div class="agenda-stat-num">' + total + '</div><div class="agenda-stat-label">Total</div></div>' +
+      '<div class="agenda-stat"><div class="agenda-stat-num" style="color:#7C3AED">' + agendadas + '</div><div class="agenda-stat-label">Agendadas</div></div>' +
+      '<div class="agenda-stat"><div class="agenda-stat-num" style="color:#10B981">' + realizadas + '</div><div class="agenda-stat-label">Realizadas</div></div>' +
+      '<div class="agenda-stat"><div class="agenda-stat-num" style="color:#94A3B8">' + canceladas + '</div><div class="agenda-stat-label">Canceladas</div></div>' +
+    '</div>';
+
+  // Cabeçalho da seção
+  var headerHTML =
+    '<div class="agenda-header">' +
+      '<h3>📅 Agenda Viva do CIG</h3>' +
+      '<p>Timeline de todas as reuniões do seu Comitê Interno de Governança. Alimenta os lembretes automáticos e a devolutiva da SEGEST.</p>' +
+    '</div>';
+
+  // Frequência + observações
+  var freqOpts = [
+    { v: '', l: 'Selecione...' },
+    { v: 'mensal', l: 'Mensal' },
+    { v: 'bimestral', l: 'Bimestral' },
+    { v: 'trimestral', l: 'Trimestral' },
+    { v: 'outra', l: 'Outra frequência' }
+  ];
+  var freqHTML = '';
+  freqOpts.forEach(function(o) {
+    freqHTML += '<option value="' + o.v + '"' + (data.agenda_frequencia === o.v ? ' selected' : '') + '>' + o.l + '</option>';
+  });
+
+  var freqBoxHTML =
+    '<div class="agenda-freq-box">' +
+      '<div>' +
+        '<label>🔄 Frequência das reuniões ordinárias</label>' +
+        '<select onchange="data.agenda_frequencia=this.value;saveToStorage()">' + freqHTML + '</select>' +
+      '</div>' +
+      '<div>' +
+        '<label>📝 Observações (local padrão, duração, etc.)</label>' +
+        '<input type="text" value="' + esc(data.agenda_observacoes || '') + '" ' +
+          'oninput="data.agenda_observacoes=this.value;saveToStorage()" ' +
+          'placeholder="Ex: sempre 1ª quinta do mês, Sala 1, 14h">' +
+      '</div>' +
+    '</div>';
+
+  // Lista de reuniões (timeline)
+  var reunioesHTML = '';
+  if (data.reunioes.length === 0) {
+    reunioesHTML =
+      '<div class="agenda-empty">' +
+        '<div class="agenda-empty-icon">📅</div>' +
+        '<div style="font-weight:700;margin-bottom:4px">Nenhuma reunião cadastrada ainda</div>' +
+        '<div style="font-size:13px">Clique em "Adicionar reunião" para começar.</div>' +
+      '</div>';
+  } else {
+    reunioesHTML = '<div class="agenda-timeline">';
+    data.reunioes.forEach(function(r, i) {
+      var statusClass = 'status-' + (r.status || 'agendada');
+      var cardClass = r.status === 'realizada' ? 'realizada' :
+                      r.status === 'cancelada' ? 'cancelada' : '';
+      var statusLabel = r.status === 'realizada' ? '✓ Realizada' :
+                        r.status === 'cancelada' ? '✕ Cancelada' : '⏰ Agendada';
+
+      // Data formatada
+      var dataFmt = '(sem data)';
+      if (r.data) {
+        var d = new Date(r.data + 'T00:00:00');
+        var meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+        dataFmt = d.getDate() + ' de ' + meses[d.getMonth()] + ' de ' + d.getFullYear();
+      }
+
+      // Chips de entregas vinculadas
+      var entregasChipsHTML = '<div class="reuniao-entregas-vinc">' +
+        '<div class="reuniao-entregas-vinc-title">🔗 Entregas discutidas nesta reunião</div>';
+      if (!data.entregas || data.entregas.length === 0 || (data.entregas.length === 1 && !data.entregas[0].entrega)) {
+        entregasChipsHTML += '<div style="font-size:11px;color:#6B7280;font-style:italic">Cadastre entregas na etapa anterior para vincular.</div>';
+      } else {
+        data.entregas.forEach(function(ent, j) {
+          if (!ent.entrega || !ent.entrega.trim()) return;
+          var sel = (r.entregas_vinculadas || []).indexOf(j) >= 0;
+          var label = ent.entrega.length > 50 ? ent.entrega.substring(0, 50) + '…' : ent.entrega;
+          entregasChipsHTML += '<span class="reuniao-entrega-chip' + (sel ? ' selected' : '') + '" ' +
+            'onclick="toggleEntregaVinculada(' + i + ',' + j + ')">' +
+            (sel ? '✓ ' : '+ ') + esc(label) +
+            '</span>';
+        });
+      }
+      entregasChipsHTML += '</div>';
+
+      // Campos de ata (só se realizada)
+      var ataHTML = '';
+      if (r.status === 'realizada') {
+        ataHTML =
+          '<div class="reuniao-grid" style="margin-top:8px;background:#D1FAE5;padding:10px;border-radius:6px">' +
+            '<div class="reuniao-field">' +
+              '<label>📄 Número SEI da ata</label>' +
+              '<input type="text" value="' + esc(r.ata_sei || '') + '" ' +
+                'oninput="updateReuniaoField(' + i + ',\'ata_sei\',this.value)" ' +
+                'placeholder="SEI-00000.000000/2026-00">' +
+            '</div>' +
+            '<div class="reuniao-field">' +
+              '<label>👥 Presentes</label>' +
+              '<input type="text" value="' + esc(r.presentes || '') + '" ' +
+                'oninput="updateReuniaoField(' + i + ',\'presentes\',this.value)" ' +
+                'placeholder="Ex: 5 membros">' +
+            '</div>' +
+            '<div class="reuniao-field">' +
+              '<label>✅ Quorum</label>' +
+              '<select onchange="updateReuniaoField(' + i + ',\'quorum\',this.value)">' +
+                '<option value=""' + (!r.quorum ? ' selected' : '') + '>-</option>' +
+                '<option value="sim"' + (r.quorum === 'sim' ? ' selected' : '') + '>Sim, atingido</option>' +
+                '<option value="nao"' + (r.quorum === 'nao' ? ' selected' : '') + '>Não atingido</option>' +
+              '</select>' +
+            '</div>' +
+          '</div>';
+      }
+
+      reunioesHTML +=
+        '<div class="reuniao-card ' + cardClass + '">' +
+          '<div class="reuniao-header">' +
+            '<div class="reuniao-title">📅 Reunião ' + (i + 1) + ' — ' + dataFmt + '</div>' +
+            '<span class="reuniao-status ' + statusClass + '">' + statusLabel + '</span>' +
+          '</div>' +
+
+          '<div class="reuniao-grid">' +
+            '<div class="reuniao-field">' +
+              '<label>📆 Data</label>' +
+              '<input type="date" value="' + esc(r.data || '') + '" ' +
+                'onchange="updateReuniaoField(' + i + ',\'data\',this.value);render()">' +
+            '</div>' +
+            '<div class="reuniao-field">' +
+              '<label>🕐 Horário</label>' +
+              '<input type="time" value="' + esc(r.horario || '14:00') + '" ' +
+                'onchange="updateReuniaoField(' + i + ',\'horario\',this.value)">' +
+            '</div>' +
+            '<div class="reuniao-field">' +
+              '<label>⏱️ Duração (min)</label>' +
+              '<input type="number" min="15" step="15" value="' + esc(r.duracao || '90') + '" ' +
+                'onchange="updateReuniaoField(' + i + ',\'duracao\',this.value)">' +
+            '</div>' +
+            '<div class="reuniao-field">' +
+              '<label>📍 Local físico</label>' +
+              '<input type="text" value="' + esc(r.local || '') + '" ' +
+                'oninput="updateReuniaoField(' + i + ',\'local\',this.value)" ' +
+                'placeholder="Ex: Sala de reuniões da RA">' +
+            '</div>' +
+            '<div class="reuniao-field">' +
+              '<label>💻 Formato</label>' +
+              '<select onchange="updateReuniaoField(' + i + ',\'plataforma\',this.value)">' +
+                '<option value="presencial"' + (r.plataforma === 'presencial' ? ' selected' : '') + '>Presencial</option>' +
+                '<option value="hibrida"' + (r.plataforma === 'hibrida' ? ' selected' : '') + '>Híbrida</option>' +
+                '<option value="teams"' + (r.plataforma === 'teams' ? ' selected' : '') + '>Teams</option>' +
+                '<option value="meet"' + (r.plataforma === 'meet' ? ' selected' : '') + '>Google Meet</option>' +
+              '</select>' +
+            '</div>' +
+            '<div class="reuniao-field">' +
+              '<label>🔀 Status</label>' +
+              '<select onchange="changeReuniaoStatus(' + i + ',this.value)">' +
+                '<option value="agendada"' + (r.status === 'agendada' ? ' selected' : '') + '>Agendada</option>' +
+                '<option value="realizada"' + (r.status === 'realizada' ? ' selected' : '') + '>Realizada</option>' +
+                '<option value="cancelada"' + (r.status === 'cancelada' ? ' selected' : '') + '>Cancelada</option>' +
+              '</select>' +
+            '</div>' +
+            '<div class="reuniao-field reuniao-full">' +
+              '<label>📋 Pauta prevista</label>' +
+              '<textarea oninput="updateReuniaoField(' + i + ',\'pauta\',this.value)" ' +
+                'placeholder="Ex: Aprovação da ata anterior, apresentação do andamento da Entrega 1, deliberação sobre...">' +
+                esc(r.pauta || '') +
+              '</textarea>' +
+            '</div>' +
+            '<div class="reuniao-field reuniao-full">' +
+              '<label>👥 Participantes esperados</label>' +
+              '<input type="text" value="' + esc(r.participantes || '') + '" ' +
+                'oninput="updateReuniaoField(' + i + ',\'participantes\',this.value)" ' +
+                'placeholder="Ex: Administrador Regional, Chefe CIG, representantes das coordenações">' +
+            '</div>' +
+          '</div>' +
+
+          entregasChipsHTML +
+          ataHTML +
+
+          '<div class="reuniao-actions">' +
+            '<button class="btn-reuniao danger" onclick="removeReuniao(' + i + ')">🗑 Remover</button>' +
+          '</div>' +
+        '</div>';
+    });
+    reunioesHTML += '</div>';
+  }
+
+  var addBtnHTML = '<button class="btn-add-reuniao" onclick="addReuniao()">+ Adicionar reunião</button>';
+
+  return contextoHTML + headerHTML +
+    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">' +
+      '<span class="step-icon">' + step.icon + '</span>' +
+      '<h2 class="step-question" style="margin:0">' + esc(step.question) + '</h2>' +
+    '</div>' +
+    (step.dica ? '<div class="dica-box">💡 ' + esc(step.dica) + ajudaBtnHTML + '</div>' + ajudaBlockHTML : '') +
+    statsHTML + freqBoxHTML + reunioesHTML + addBtnHTML;
 }
 
 /* Render a group step (multiple fields per screen) */
@@ -2119,7 +3522,7 @@ function renderEntregas(step) {
           '</div>' +
           '<div>' +
             '<label class="entrega-field-label" for="ent-' + i + '-responsavel">Respons\u00e1vel pela entrega</label>' +
-            '<div class="entrega-field-hint">Quem vai garantir que esta entrega aconteÃ§a</div>' +
+            '<div class="entrega-field-hint">Quem vai garantir que esta entrega aconteça</div>' +
             '<input type="text" class="small-textarea" id="ent-' + i + '-responsavel" value="' + esc(ent.responsavel || '') + '" placeholder="Ex: Chefe de Gabinete" style="padding:8px 12px">' +
           '</div>' +
           '<div style="grid-column:1/-1">' +
@@ -2174,6 +3577,95 @@ function renderSuccessScreen() {
   '</div>';
 }
 
+/* ===================================================
+   [Res. CGov 04/2024] RENDER: Etapa de Pilares
+   =================================================== */
+function renderPilares(step) {
+  var html = '<div class="step-content">';
+
+  // Contexto introdutório
+  html += '<div class="step-context-box">' + esc(step.contexto || '') + '</div>';
+
+  // Header da etapa
+  html += '<div class="step-header">';
+  html += '<div class="step-icon-wrap"><span class="step-icon">' + step.icon + '</span></div>';
+  html += '<h2 class="step-question">' + esc(step.question) + '</h2>';
+  html += '<p class="step-dica">' + esc(step.dica) + '</p>';
+  html += '</div>';
+
+  // Grid de pilares
+  html += '<div class="pilares-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin:20px 0">';
+  PILARES_RES_04_2024.forEach(function(pilar) {
+    var checked = (data.pilares_aplicaveis || []).indexOf(pilar.id) >= 0;
+    var isPrimario = data.pilar_primario === pilar.id;
+    var bgColor = checked ? (pilar.cor + '15') : '#ffffff';
+    var borderColor = checked ? pilar.cor : '#e2e8f0';
+    html += '<div class="pilar-card" data-pilar="' + pilar.id + '" ' +
+      'style="background:' + bgColor + ';border:2px solid ' + borderColor +
+      ';border-radius:12px;padding:16px;cursor:pointer;transition:all 0.2s">' +
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">' +
+        '<input type="checkbox" id="pilar-' + pilar.id + '" ' + (checked ? 'checked' : '') +
+          ' onchange="togglePilar(\'' + pilar.id + '\')" style="width:18px;height:18px;cursor:pointer">' +
+        '<span style="font-size:24px">' + pilar.icone + '</span>' +
+        '<strong style="font-size:16px;color:' + pilar.cor + '">' + esc(pilar.nome) + '</strong>' +
+      '</div>' +
+      '<p style="font-size:13px;color:#475569;margin-bottom:8px;line-height:1.4">' + esc(pilar.descricao) + '</p>' +
+      '<p style="font-size:12px;color:#64748b;font-style:italic;margin-bottom:8px">' +
+        '<strong>Exemplos:</strong> ' + esc(pilar.exemplos) + '</p>';
+    if (checked) {
+      html += '<label style="display:flex;align-items:center;gap:6px;font-size:12px;color:' + pilar.cor + ';cursor:pointer">' +
+        '<input type="radio" name="pilar-primario" value="' + pilar.id + '" ' +
+          (isPrimario ? 'checked' : '') + ' onchange="setPilarPrimario(\'' + pilar.id + '\')" ' +
+          'style="cursor:pointer"> Pilar primário</label>';
+    }
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // Alerta de validação mínima
+  var aplicaveis = (data.pilares_aplicaveis || []).length;
+  if (aplicaveis === 0) {
+    html += '<div class="alert" style="background:#FEF3C7;border-left:4px solid #F59E0B;padding:12px;border-radius:6px;margin-top:12px;font-size:13px">' +
+      '\u26A0\uFE0F Selecione ao menos 1 pilar aplicável ao projeto (Resolução CGov nº 04/2024).</div>';
+  } else if (!data.pilar_primario || (data.pilares_aplicaveis || []).indexOf(data.pilar_primario) < 0) {
+    html += '<div class="alert" style="background:#DBEAFE;border-left:4px solid #3B82F6;padding:12px;border-radius:6px;margin-top:12px;font-size:13px">' +
+      '\u2139\uFE0F Selecione qual é o pilar primário do projeto (o mais relevante).</div>';
+  } else {
+    html += '<div class="alert" style="background:#D1FAE5;border-left:4px solid #10B981;padding:12px;border-radius:6px;margin-top:12px;font-size:13px">' +
+      '\u2705 Classificação concluída! ' + aplicaveis + ' pilar(es) aplicável(is), primário: ' +
+      (PILARES_RES_04_2024.filter(function(p){return p.id===data.pilar_primario;})[0] || {}).nome + '.</div>';
+  }
+
+  // Base legal
+  html += '<div style="margin-top:20px;padding:12px;background:#F8FAFC;border-radius:8px;font-size:11px;color:#64748b;border:1px dashed #cbd5e1">' +
+    '<strong>Base legal:</strong> ' +
+    '<a href="https://www.sinj.df.gov.br/sinj/Norma/6fd76d2d5eee447fbddbc3e08c9ff07b/Resolu_o_4_19_08_2024.html" target="_blank" rel="noopener" style="color:#1565C0">Resolução CGov nº 04/2024</a> — ' +
+    'Modelo de Governança Pública do DF (baseado no Decreto nº 39.736/2019).</div>';
+
+  html += '</div>';
+  return html;
+}
+
+function togglePilar(pilarId) {
+  if (!data.pilares_aplicaveis) data.pilares_aplicaveis = [];
+  var idx = data.pilares_aplicaveis.indexOf(pilarId);
+  if (idx >= 0) {
+    data.pilares_aplicaveis.splice(idx, 1);
+    if (data.pilar_primario === pilarId) data.pilar_primario = "";
+  } else {
+    data.pilares_aplicaveis.push(pilarId);
+    if (!data.pilar_primario) data.pilar_primario = pilarId;
+  }
+  saveToStorage();
+  render();
+}
+
+function setPilarPrimario(pilarId) {
+  data.pilar_primario = pilarId;
+  saveToStorage();
+  render();
+}
+
 function renderReview() {
   if (showSuccess) return renderSuccessScreen();
 
@@ -2181,6 +3673,12 @@ function renderReview() {
     if (item.field) return data[item.field];
     if (item.type === 'partes') return [data.patrocinio, data.equipe, data.publico].filter(Boolean).join('\n');
     if (item.type === 'entregas') return data.entregas.map(function(e, i) { return (i+1) + '. ' + e.entrega + (e.responsavel ? ' (' + e.responsavel + ')' : ''); }).filter(function(e) { return e.length > 3; }).join('\n');
+    if (item.type === 'agenda') {
+      if (!data.reunioes || !data.reunioes.length) return '';
+      var freqLabel = { mensal: 'Mensal', bimestral: 'Bimestral', trimestral: 'Trimestral', outra: 'Outra' }[data.agenda_frequencia] || '';
+      var freqPart = freqLabel ? 'Frequência: ' + freqLabel + '. ' : '';
+      return freqPart + data.reunioes.length + ' reunião(ões) cadastrada(s).';
+    }
     return '';
   }
 
@@ -2241,6 +3739,7 @@ function renderReview() {
     '</div>' +
     items +
     submitHTML +
+    renderQRCodeCidadao() + // [REVOLU\u00c7\u00c3O] QR Code do Plano Cidad\u00e3o
     '<div class="review-actions">' +
       '<button class="btn-nav btn-nav-prev" onclick="clearAllData()">Limpar tudo e recome\u00e7ar</button>' +
     '</div>';
@@ -2285,9 +3784,16 @@ function renderPhaseStepper(pct) {
   var progressPct = isWelcome ? 0 : (isReview ? 100 : ((currentStep - 1) / (STEPS.length - 2)) * 100);
   var progressHTML = '<div class="progress-track" style="margin-top:10px"><div class="progress-fill" style="width:' + progressPct + '%"></div></div>';
 
-  // Info line
+  // Info line - agora mostra Fase + Etapa para evitar confus\u00e3o
+  var faseIdxInfo = (currentPhaseIdx >= 0 ? currentPhaseIdx + 1 : 0);
   var infoHTML = '<div class="phase-stepper-info">' +
-    '<span style="color:var(--text-secondary)">Etapa ' + Math.min(currentStep, STEPS.length - 1) + ' de ' + (STEPS.length - 2) + '</span>' +
+    '<span style="color:var(--text-secondary)">' +
+      (isWelcome ? 'In\u00edcio' : isReview ? 'Revis\u00e3o final' :
+        'Fase ' + faseIdxInfo + ' de ' + PHASES.length +
+        ' <span style="color:var(--text-muted)">\u2022</span> Etapa ' +
+        Math.min(currentStep, STEPS.length - 1) + ' de ' + (STEPS.length - 2)
+      ) +
+    '</span>' +
     '<span style="font-weight:700;color:' + (pct === 100 ? 'var(--gdf-blue)' : 'var(--gdf-blue)') + '">' + pct + '% preenchido</span>' +
   '</div>';
 
@@ -2305,11 +3811,46 @@ function render() {
   var isFirst = currentStep === 0;
   var isLast = currentStep === STEPS.length - 1;
 
+  // [BIBLIOTECA] Se n\u00e3o h\u00e1 plano aberto E h\u00e1 planos salvos, mostra dashboard da Biblioteca
+  if (!planoAtualId) {
+    var planosSalvos = carregarBiblioteca();
+    if (planosSalvos.length > 0) {
+      document.getElementById('app').innerHTML =
+        '<div class="header no-print">' +
+          '<div class="header-brand">' +
+            '<div class="header-brand-text">' +
+              '<span>SECRETARIA DE GOVERNO \u2022 CONTROLADORIA-GERAL DO DF</span>' +
+              '<h1>Plano de A\u00e7\u00e3o do CIG</h1>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        renderBiblioteca();
+      return;
+    }
+    // Se n\u00e3o h\u00e1 planos, mostra welcome normal (primeiro uso)
+  }
+
+  // [REVOLU\u00c7\u00c3O] Se modo hist\u00f3ria ativo e n\u00e3o est\u00e1 no welcome/review, renderiza o modo hist\u00f3ria
+  if (modoHistoriaAtivo && !isFirst && !isLast) {
+    var motivHTML2 = '<div class="motivation no-print">\uD83D\uDCF0 Modo Hist\u00f3ria ativo \u2014 conte sua narrativa e extraia os campos automaticamente.</div>';
+    var navHTML2 = '<div class="nav-row no-print">' +
+      '<button class="btn-nav" onclick="modoHistoriaAtivo=false;currentStep=0;render()">\u2190 Voltar ao in\u00edcio</button>' +
+      '<button class="btn-nav btn-nav-next" onclick="modoHistoriaAtivo=false;render()">Modo formul\u00e1rio \u2192</button>' +
+      '</div>';
+    document.getElementById('app').innerHTML =
+      '<div class="header no-print"><div class="header-brand"><div class="header-brand-text"><span>GOVERNO DO DF</span><h1>Plano de A\u00e7\u00e3o do CIG</h1></div></div></div>' +
+      motivHTML2 + renderModoHistoria() + navHTML2;
+    return;
+  }
+
+
   var contentHTML = '';
   if (step.type === 'welcome') contentHTML = renderWelcome();
   else if (step.type === 'review') contentHTML = renderReview();
+  else if (step.type === 'pilares') contentHTML = renderPilares(step);
   else if (step.type === 'partes') contentHTML = renderPartes(step);
   else if (step.type === 'entregas') contentHTML = renderEntregas(step);
+  else if (step.type === 'agenda') contentHTML = renderAgenda(step);
   else if (step.type === 'group') contentHTML = renderGroup(step);
   else if (step.type === 'single') contentHTML = renderSingleStep(step);
 
@@ -2317,6 +3858,22 @@ function render() {
   var motivHTML = '';
   if (!isFirst && !isLast) {
     motivHTML = '<div class="motivation no-print">' + getMotivation(pct) + '</div>';
+  }
+
+  // [BIBLIOTECA] Barra mostrando qual plano est\u00e1 sendo editado
+  var editingBar = '';
+  if (planoAtualId) {
+    var planosAtual = carregarBiblioteca();
+    var planoEdit = planosAtual.find(function(p){ return p.id === planoAtualId; });
+    if (planoEdit) {
+      editingBar = '<div class="plano-editing-bar no-print">' +
+        '<div>\uD83D\uDCDD Editando: <strong>' + esc(planoEdit.nome) + '</strong> ' +
+        getStatusBadge(planoEdit.status) +
+        (planoEdit.codigo ? ' <span style="color:#92400E">\u2022 ' + esc(planoEdit.codigo) + '</span>' : '') +
+        '</div>' +
+        '<button class="btn-voltar-biblioteca" onclick="voltarBiblioteca()">\u2190 Biblioteca</button>' +
+      '</div>';
+    }
   }
 
   // Navigation
@@ -2343,8 +3900,9 @@ function render() {
           '<h1>Plano de A\u00e7\u00e3o do CIG</h1>' +
         '</div>' +
       '</div>' +
-      '<button onclick="verificarAdmin()" title="Acesso administrativo" style="background:none;border:1px solid #e2e8f0;border-radius:6px;padding:4px 8px;cursor:pointer;font-size:12px;opacity:0.5">\uD83D\uDD11</button>' +
+      '<button onclick="verificarAdmin()" aria-label="Acesso administrativo" title="Acesso administrativo" type="button" style="background:none;border:1px solid #e2e8f0;border-radius:6px;padding:4px 8px;cursor:pointer;font-size:12px;opacity:0.5"><span aria-hidden="true">\uD83D\uDD11</span></button>' +
     '</div>' +
+    editingBar +
     renderPhaseStepper(pct) +
     motivHTML +
     '<div class="step-card">' +
@@ -2557,7 +4115,7 @@ function gerarPDFIndividual() {
     }
 
 
-// === REVISÃO ===
+// === REVISÃO ===
 (function(){
   try{
     var ano=new Date().getFullYear();
@@ -2572,7 +4130,7 @@ function gerarPDFIndividual() {
         var b=document.createElement('div');
         b.id='cig-banner-revisao';
         b.style.cssText='position:fixed;top:0;left:0;right:0;background:#1a3a5c;color:#fff;padding:10px 20px;z-index:9999;display:flex;align-items:center;justify-content:space-between;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.3);';
-        b.innerHTML='<span>ð <strong>RevisÃ£o do plano '+env+'</strong> â Preencha as alteraÃ§Ãµes e envie novamente.</span><button onclick="localStorage.removeItem(\'cig_plano_numero_enviado\');localStorage.removeItem(\'cig_dados_plano\');this.parentNode.remove();" style="background:#fff;color:#1a3a5c;border:none;padding:4px 14px;border-radius:4px;cursor:pointer;font-weight:bold;margin-left:16px;">Novo plano</button>';
+        b.innerHTML='<span>ð <strong>Revisão do plano '+env+'</strong> — Preencha as alterações e envie novamente.</span><button onclick="localStorage.removeItem(\'cig_plano_numero_enviado\');localStorage.removeItem(\'cig_dados_plano\');this.parentNode.remove();" style="background:#fff;color:#1a3a5c;border:none;padding:4px 14px;border-radius:4px;cursor:pointer;font-weight:bold;margin-left:16px;">Novo plano</button>';
         document.body.prepend(b);
       },600);
     }
@@ -2581,5 +4139,318 @@ function gerarPDFIndividual() {
 
   render();
 </script>
+
+<!-- [REVOLUÇÃO] IA Conselheira - Botão Flutuante + Painel -->
+<button class="conselheira-fab no-print" onclick="abrirConselheira()" aria-label="Conselheira de Governança" title="Fale com a Conselheira">
+  <span class="fab-emoji" aria-hidden="true">🎓</span>
+  <span>Conselheira</span>
+  <span class="fab-novo-badge" aria-hidden="true">NOVO</span>
+  <span class="pulse" aria-hidden="true"></span>
+</button>
+
+<div class="conselheira-panel no-print" id="conselheira-panel" role="dialog" aria-label="Conselheira de Governança">
+  <div class="conselheira-header">
+    <div class="conselheira-header-title">
+      <div class="conselheira-avatar">🎓</div>
+      <div>
+        <h3>Conselheira de Governança</h3>
+        <p>Treinada nas Resoluções do CGov/DF</p>
+      </div>
+    </div>
+    <button class="conselheira-close" onclick="fecharConselheira()" aria-label="Fechar">×</button>
+  </div>
+  <div class="conselheira-chat" id="conselheira-chat">
+    <div class="msg bot">
+      <div class="avatar">🎓</div>
+      <div class="bubble">
+        Oi! Sou a <strong>Conselheira</strong>. Posso te ajudar com dúvidas sobre governança, Resoluções do CGov, IMGG, gestão de riscos e PEI. O que você quer saber?
+      </div>
+    </div>
+  </div>
+  <div class="conselheira-sugestoes">
+    <p>💡 Perguntas frequentes:</p>
+    <span class="sugestao-chip" onclick="enviarPergunta('Como escrever um bom indicador?')">Como escrever um bom indicador?</span>
+    <span class="sugestao-chip" onclick="enviarPergunta('Qual a diferença entre premissa, barreira e risco?')">Premissa × Barreira × Risco?</span>
+    <span class="sugestao-chip" onclick="enviarPergunta('O que é a Resolução 04/2024?')">Res 04/2024?</span>
+    <span class="sugestao-chip" onclick="enviarPergunta('Meu CIG precisa de portaria?')">CIG precisa de portaria?</span>
+    <span class="sugestao-chip" onclick="enviarPergunta('Como funciona o SAEweb?')">SAEweb?</span>
+  </div>
+  <div class="conselheira-input">
+    <input type="text" id="conselheira-input-txt" placeholder="Digite sua dúvida..." onkeydown="if(event.key==='Enter'){enviarConselheira()}">
+    <button onclick="enviarConselheira()" aria-label="Enviar">➤</button>
+  </div>
+</div>
+
+<!-- [REVOLUÇÃO] Script QR Code (qrcode.js minimal embedded) -->
+<script>
+/* ============================================================
+   [REVOLUÇÃO] FEATURE 2: IA CONSELHEIRA (base de conhecimento híbrida)
+   ============================================================ */
+var BASE_CONSELHEIRA = [
+  {
+    palavras: ['indicador', 'medir', 'métrica', 'medição'],
+    resposta: 'Um bom indicador tem 3 elementos:<br>1️⃣ <strong>Fórmula</strong> (ex: nº de servidores capacitados ÷ total × 100)<br>2️⃣ <strong>Meta numérica</strong> (ex: atingir 80%)<br>3️⃣ <strong>Prazo</strong> (ex: até 31/12/2026)<br><br>📜 Base: Resolução CGov nº 08/2025 (IMGG 100 pontos) exige indicadores mensuráveis. Evite termos vagos como "melhorar" ou "aumentar".'
+  },
+  {
+    palavras: ['premissa', 'barreira', 'risco', 'diferença'],
+    resposta: '<strong>Premissa</strong> 🟢 = o que você ASSUME ser verdade (ex: "o Administrador vai apoiar")<br><br><strong>Barreira</strong> 🟡 = obstáculo que JÁ EXISTE hoje (ex: "faltam servidores capacitados")<br><br><strong>Risco</strong> 🔴 = evento INCERTO que PODE acontecer (ex: "pode haver corte orçamentário")<br><br>📜 Base: Res CGov 15/2026 — só os riscos vão ao SAEweb.'
+  },
+  {
+    palavras: ['resolução 04', 'res 04', 'modelo de governança', 'pilares'],
+    resposta: 'A <strong>Resolução CGov nº 04/2024</strong> aprovou o Modelo de Governança Pública do DF, obrigatório para toda Administração Direta, Autárquica e Fundacional.<br><br>Tem 4 pilares:<br>👤 <strong>Liderança</strong> — práticas comportamentais<br>🎯 <strong>Estratégia</strong> — diretrizes e objetivos<br>📊 <strong>Controle</strong> — mitigação de riscos<br>✅ <strong>Integridade</strong> — alinhamento ético<br><br>Seu plano deve se encaixar em pelo menos 1 pilar.'
+  },
+  {
+    palavras: ['resolução 15', 'res 15', '15/2026', 'gestão de riscos', 'saeweb'],
+    resposta: 'A <strong>Res 15/2026</strong> institui rotina de acompanhamento de gestão de riscos. A análise formal é feita pela equipe especializada no <strong>SAEweb</strong>.<br><br>Você, no seu plano, só precisa listar os riscos em linguagem simples. A equipe de gestão de riscos faz a matriz probabilidade×impacto depois.<br><br>🔗 saeweb.cg.df.gov.br'
+  },
+  {
+    palavras: ['portaria', 'cig', 'comitê', 'designação', '03/2021', 'resolução 03'],
+    resposta: 'Sim, o CIG precisa de <strong>portaria de designação formal</strong>.<br><br>Conforme <strong>Resolução CGov nº 03/2021</strong>, a Administração Regional deve:<br>1️⃣ Designar membros via portaria no DODF<br>2️⃣ Aprovar regimento interno<br>3️⃣ Manter calendário de reuniões<br>4️⃣ Registrar atas no SEI<br><br>Sem isso, o plano não tem respaldo formal.'
+  },
+  {
+    palavras: ['objetivo', 'como escrever', 'nome projeto'],
+    resposta: 'Um bom objetivo responde: <strong>O QUE</strong> + <strong>PARA QUÊ</strong> + <strong>QUANDO</strong>.<br><br>❌ Ruim: "Melhorar o atendimento"<br>✅ Bom: "Reduzir o tempo de espera do cidadão de 45 para 15 minutos até dezembro/2026 através da modernização digital do atendimento".<br><br>Dica: comece com verbo de ação (Implantar, Reduzir, Ampliar, Modernizar).'
+  },
+  {
+    palavras: ['imgg', 'maturidade', '100 pontos'],
+    resposta: 'O <strong>IMGG 100 pontos</strong> (Res 08/2025) é a autoavaliação da maturidade em governança da sua RA.<br><br>Seu plano é a base para pontuar bem no IMGG. Quanto mais completo (pilares classificados, indicadores SMART, riscos identificados), mais pontos sua RA ganha.<br><br>Dica: preencha tudo com capricho — isso vira ranking CGov.'
+  },
+  {
+    palavras: ['salvar', 'perdi', 'dados', 'browser'],
+    resposta: 'Relaxa! O sistema <strong>salva automaticamente</strong> no navegador a cada alteração.<br><br>Você vê o aviso "✓ Salvo automaticamente • HH:MM:SS" no canto da tela. Pode fechar e voltar depois — tudo fica guardado.<br><br>⚠️ Atenção: limpar cache do navegador apaga os dados. Exporte PDF antes.'
+  },
+  {
+    palavras: ['público', 'stakeholder', 'partes interessadas', 'quem envolver'],
+    resposta: 'Partes interessadas têm 3 tipos:<br>🎩 <strong>Patrocínio</strong>: quem APOIA e DECIDE (Administrador, Chefe de Gabinete)<br>🛠️ <strong>Executores</strong>: quem FAZ (CIG, servidores, assessorias)<br>🏘️ <strong>Beneficiários</strong>: quem USA o resultado (cidadãos, servidores, órgãos de controle)<br><br>Pense nas 3 camadas para não esquecer ninguém.'
+  },
+  {
+    palavras: ['sei', 'processo', 'tramitar', 'número'],
+    resposta: 'O Plano de Ação do CIG deve ser protocolado no <strong>SEI</strong> (Sistema Eletrônico de Informações).<br><br>Passo a passo:<br>1️⃣ Finalize o preenchimento e exporte em PDF<br>2️⃣ Cadastre novo processo SEI tipo "Governança: Plano de Ação"<br>3️⃣ Anexe o PDF<br>4️⃣ Encaminhe à SEGOV/SEGEST para homologação'
+  },
+  {
+    palavras: ['prazo', 'quanto tempo', 'deadline'],
+    resposta: '📅 Prazos típicos do CIG:<br><br>• <strong>Portaria do CIG</strong>: até 30 dias da posse do Administrador<br>• <strong>1ª reunião</strong>: até 60 dias<br>• <strong>Plano de Ação</strong>: até 90 dias<br>• <strong>Revisão do plano</strong>: a cada 6 meses<br><br>📜 Base: Resolução CGov nº 03/2021.'
+  }
+];
+
+function consultarConselheira(pergunta) {
+  var p = pergunta.toLowerCase();
+  // Busca em regras locais primeiro
+  for (var i = 0; i < BASE_CONSELHEIRA.length; i++) {
+    var match = BASE_CONSELHEIRA[i].palavras.some(function(kw) { return p.indexOf(kw) >= 0; });
+    if (match) return BASE_CONSELHEIRA[i].resposta;
+  }
+  // Fallback: sugere entrar em contato com SEGEST
+  return 'Boa pergunta! Não tenho uma resposta específica na minha base local. <br><br>💡 <strong>Sugestões:</strong><br>• Consulte o <a href="http://www.cg.df.gov.br/conselho-de-governanca" target="_blank">Portal do CGov</a><br>• Envie por e-mail à SEGEST<br>• Reformule a pergunta usando termos como: indicador, risco, pilar, portaria, SEI, IMGG, SAEweb.';
+}
+
+function abrirConselheira() {
+  document.getElementById('conselheira-panel').classList.add('aberto');
+}
+function fecharConselheira() {
+  document.getElementById('conselheira-panel').classList.remove('aberto');
+}
+function enviarPergunta(pergunta) {
+  document.getElementById('conselheira-input-txt').value = pergunta;
+  enviarConselheira();
+}
+function enviarConselheira() {
+  var input = document.getElementById('conselheira-input-txt');
+  var texto = input.value.trim();
+  if (!texto) return;
+  var chat = document.getElementById('conselheira-chat');
+
+  // User msg
+  var userMsg = document.createElement('div');
+  userMsg.className = 'msg user';
+  userMsg.innerHTML = '<div class="bubble">' + esc(texto) + '</div>';
+  chat.appendChild(userMsg);
+
+  input.value = '';
+  chat.scrollTop = chat.scrollHeight;
+
+  // Bot typing
+  setTimeout(function() {
+    var resposta = consultarConselheira(texto);
+    var botMsg = document.createElement('div');
+    botMsg.className = 'msg bot';
+    botMsg.innerHTML = '<div class="avatar">🎓</div><div class="bubble">' + resposta + '</div>';
+    chat.appendChild(botMsg);
+    chat.scrollTop = chat.scrollHeight;
+  }, 500);
+}
+
+/* ============================================================
+   [REVOLUÇÃO] FEATURE 1: MODO "CONTE UMA HISTÓRIA"
+   ============================================================ */
+// modoHistoriaAtivo j\u00e1 foi declarado no topo do script principal
+
+function toggleModoHistoria() {
+  modoHistoriaAtivo = !modoHistoriaAtivo;
+  render();
+}
+
+function renderModoHistoria() {
+  var historia = data._historia || '';
+  var extracao = data._extracao || null;
+  var html = '<div class="historia-container">';
+  html += '<div class="historia-prompt">' +
+    '<span class="emoji">📰</span>' +
+    '<p><strong>Imagine que é daqui a 1 ano.</strong> Um jornal local publicou uma matéria sobre o projeto que sua RA implementou com sucesso.</p>' +
+    '<p>Conte como começa essa matéria — em linguagem simples, sem juridiquês. Inclua: <em>o que foi feito</em>, <em>para quem</em>, e <em>qual o impacto real</em>.</p>' +
+    '</div>';
+  html += '<textarea class="historia-textarea" id="historia-txt" placeholder="Ex: A Administração Regional de Taguatinga inaugurou em agosto um novo posto de atendimento digital que reduziu o tempo de espera dos cidadãos de 45 para 15 minutos. O projeto, coordenado pelo CIG, capacitou 45 servidores em 6 meses..." oninput="atualizarHistoria()">' + esc(historia) + '</textarea>';
+
+  if (extracao) {
+    html += '<div class="historia-extracao">';
+    html += '<h4>✨ Extraímos os campos do seu plano:</h4>';
+    Object.keys(extracao).forEach(function(k) {
+      if (extracao[k]) {
+        html += '<div class="historia-item"><strong>' + k + ':</strong><span class="valor">' + esc(extracao[k]) + '</span></div>';
+      }
+    });
+    html += '<div style="margin-top:12px;text-align:center">' +
+      '<button class="btn-primary" onclick="aceitarExtracao()">✓ Aceitar e preencher formulário</button>' +
+      '<button class="btn-nav" onclick="descartarExtracao()" style="margin-left:8px">Ajustar história</button>' +
+      '</div>';
+    html += '</div>';
+  } else if (historia.length > 80) {
+    html += '<div style="text-align:center;margin-top:16px">' +
+      '<button class="btn-primary" onclick="extrairCamposHistoria()">✨ Extrair campos automaticamente</button>' +
+      '</div>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
+function atualizarHistoria() {
+  var txt = document.getElementById('historia-txt');
+  if (txt) {
+    data._historia = txt.value;
+    saveToStorage();
+  }
+}
+
+function extrairCamposHistoria() {
+  var h = (data._historia || '').trim();
+  if (h.length < 50) {
+    alert('Escreva um pouco mais antes de extrair (pelo menos 2-3 frases).');
+    return;
+  }
+  // Extrator baseado em regras simples
+  var extracao = {};
+
+  // Objetivo: primeira frase ou frase com verbo de ação
+  var frases = h.split(/[.!?]\s+/).filter(function(f) { return f.trim().length > 10; });
+  extracao['Objetivo'] = frases[0] ? frases[0].trim() + '.' : '';
+
+  // Público-alvo: procura palavras-chave
+  var publicoMatch = h.match(/(cidadãos?|servidores?|moradores?|usuários?|idosos?|jovens?|crianças?|famílias?)[\w\s]*/i);
+  extracao['Público-alvo'] = publicoMatch ? publicoMatch[0].trim() : '';
+
+  // Região (RA): procura nomes de RAs comuns
+  var ras = ['Taguatinga','Ceilândia','Brasília','Gama','Sobradinho','Planaltina','Guará','Santa Maria','São Sebastião','Paranoá','Lago Sul','Lago Norte','Riacho Fundo','Samambaia','Cruzeiro','Núcleo Bandeirante','Candangolândia','Águas Claras','Recanto das Emas','Varjão','SCIA','Sudoeste','Itapoã','Jardim Botânico','Vicente Pires','Park Way','SIA'];
+  var raMatch = ras.find(function(r) { return h.toLowerCase().indexOf(r.toLowerCase()) >= 0; });
+  extracao['Região Administrativa'] = raMatch || '';
+
+  // Números/indicadores
+  var numeros = h.match(/\d+\s*(%|horas?|minutos?|servidores?|reuniões?|dias?|meses?|cidadãos?)/gi);
+  if (numeros) extracao['Métricas identificadas'] = numeros.join(', ');
+
+  // Descrição: história inteira como descrição
+  extracao['Descrição (resumo)'] = h.length > 400 ? h.substring(0, 400) + '...' : h;
+
+  // Palavras-chave do impacto
+  var impactoMatch = h.match(/(reduziu|aumentou|ampliou|melhorou|economizou|capacitou|implantou|inaugurou|modernizou)[^.]*/i);
+  extracao['Impacto principal'] = impactoMatch ? impactoMatch[0].trim() : '';
+
+  data._extracao = extracao;
+  saveToStorage();
+  render();
+}
+
+function aceitarExtracao() {
+  var e = data._extracao || {};
+  if (e['Objetivo']) data.objetivo = e['Objetivo'];
+  if (e['Descrição (resumo)']) data.descricao = e['Descrição (resumo)'];
+  if (e['Público-alvo']) data.publico = e['Público-alvo'];
+  if (e['Região Administrativa']) {
+    var raSelect = document.getElementById('ra');
+    // apenas sinaliza - usuário pode ajustar no select
+    data._raSugerida = e['Região Administrativa'];
+  }
+  if (e['Impacto principal'] && !data.justificativa) data.justificativa = e['Impacto principal'];
+  if (!data.projeto && e['Objetivo']) {
+    data.projeto = 'Projeto ' + (e['Região Administrativa'] || 'da RA') + ' - ' + e['Objetivo'].substring(0, 60);
+  }
+  alert('✓ Campos preenchidos! Clique em "Próximo" para revisar e complementar.');
+  modoHistoriaAtivo = false;
+  data._extracao = null;
+  saveToStorage();
+  currentStep = 1;
+  render();
+}
+
+function descartarExtracao() {
+  data._extracao = null;
+  saveToStorage();
+  render();
+}
+
+/* ============================================================
+   [REVOLUÇÃO] FEATURE 3: QR CODE "PLANO CIDADÃO"
+   ============================================================ */
+function gerarPlanoCidadao() {
+  var txt = '📣 PLANO DA ' + (data.ra || 'SUA RA') + '\n\n';
+  txt += '🎯 O QUE VAMOS FAZER: ' + (data.objetivo || '(não informado)') + '\n\n';
+  txt += '👥 PARA QUEM: ' + (data.publico || 'cidadãos da região') + '\n\n';
+  txt += '📅 COMO MEDIR O SUCESSO: ' + (data.indicador || '(ainda a definir)') + '\n\n';
+  txt += '✍️ RESPONSÁVEL: ' + (data.responsavel_nome || '(a designar')  + '\n\n';
+  txt += '💬 Dúvidas? Fale com o CIG da sua RA.';
+  return txt;
+}
+
+function gerarQRSimples(texto, canvasId) {
+  // QR Code via Google Charts API (sem lib externa) - fallback visual
+  var url = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' + encodeURIComponent(texto);
+  var img = document.getElementById(canvasId);
+  if (img) img.src = url;
+}
+
+function renderQRCodeCidadao() {
+  var planoCidadao = gerarPlanoCidadao();
+  var html = '<div class="qr-box no-print">';
+  html += '<h3>📱 Plano para o Cidadão</h3>';
+  html += '<p>Imprima este QR Code e coloque no quiosque da sua RA. O cidadão escaneia e lê seu plano em linguagem simples.</p>';
+  html += '<div class="qr-canvas-wrap">';
+  html += '<img id="qr-plano-img" alt="QR Code do Plano" style="width:200px;height:200px;display:block" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(planoCidadao) + '">';
+  html += '</div>';
+  html += '<div class="qr-cidadao-texto">';
+  html += '<h4>Pré-visualização do conteúdo (linguagem cidadã):</h4>';
+  html += '<p style="white-space:pre-line;font-family:Consolas,monospace;font-size:13px;background:#F9FAFB;padding:12px;border-radius:6px">' + esc(planoCidadao) + '</p>';
+  html += '<p style="font-size:12px;color:#64748b;margin-top:10px">💡 Esta é a versão amigável do seu plano. Serve para acessibilidade, transparência ativa e comunicação direta com o cidadão.</p>';
+  html += '</div></div>';
+  return html;
+}
+</script>
+
+
+<!-- [BIBLIOTECA] Modal de simulação de devolutiva SEGOV -->
+<div class="devolutiva-modal-overlay no-print" id="devolutiva-modal">
+  <div class="devolutiva-modal">
+    <h2>💬 Simular devolutiva SEGOV</h2>
+    <p style="font-size:13px;color:#64748b;margin-bottom:16px">Esta tela simula uma devolutiva da SEGOV. Em produção, esses dados virão do backend (Google Sheets, SEI ou similar).</p>
+    <input type="hidden" id="dev-plano-id">
+    <input type="text" id="dev-analista" placeholder="Nome do analista SEGOV (ex: Maria Silva)">
+    <textarea id="dev-parecer" placeholder="Parecer da SEGOV (ex: 'Plano bem estruturado, apenas ajustes no indicador que precisa de meta numérica.')"></textarea>
+    <div class="modal-actions">
+      <button onclick="fecharModalDevolutiva()" style="background:#F1F5F9;color:#334155;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;font-size:13px">Cancelar</button>
+      <button onclick="confirmarDevolutiva(false)" style="background:#DC2626;color:#fff;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;font-size:13px">🔁 Devolver para ajustes</button>
+      <button onclick="confirmarDevolutiva(true)" style="background:#059669;color:#fff;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;font-size:13px">✅ Aprovar plano</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
