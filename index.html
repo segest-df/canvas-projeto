@@ -1944,13 +1944,21 @@ var PEI_POR_RA = {
 
 function getPEIdaRA(nomeRA) {
   if (!nomeRA) return null;
-  // Normaliza: remove acentos, maiúsculas, trim
   var ra = nomeRA.trim();
+  // Match exato
   if (PEI_POR_RA[ra]) return PEI_POR_RA[ra];
-  // Tentar match case-insensitive
+  // Match case-insensitive
   var keys = Object.keys(PEI_POR_RA);
+  var raLow = ra.toLowerCase();
   for (var i = 0; i < keys.length; i++) {
-    if (keys[i].toLowerCase() === ra.toLowerCase()) return PEI_POR_RA[keys[i]];
+    if (keys[i].toLowerCase() === raLow) return PEI_POR_RA[keys[i]];
+  }
+  // Match por substring (ex: "RA-II Gama" contém "Gama")
+  for (var j = 0; j < keys.length; j++) {
+    var keyLow = keys[j].toLowerCase();
+    if (raLow.indexOf(keyLow) >= 0 || keyLow.indexOf(raLow) >= 0) {
+      return PEI_POR_RA[keys[j]];
+    }
   }
   return null;
 }
