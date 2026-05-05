@@ -16,10 +16,9 @@
   ADIÇÕES DE CONFORMIDADE LEGAL:
   [Res 04/2024] Nova etapa "Pilares de Governança" (Liderança, Estratégia,
                 Controle, Integridade) com seleção múltipla e pilar primário
-  [Res 15/2026] Referência ao SAEweb na etapa de Riscos (cadastro formal
+  [Res 15/2026] Referência à equipe de gestão de riscos
                 de riscos deve ser feito no sistema oficial do GDF)
   [Base legal]  Welcome screen cita Res 04/2024, Res 15/2026 e Decreto 39.736/2019
-  [SAEweb]      Integração documentada para controle do andamento dos PEIs
   ========================================================================
   FEATURES REVOLUÇÃO (index_REVOLUCAO.html):
   [REV #1]      Modo "Conte uma História" — narrativa + extração automática
@@ -1349,6 +1348,70 @@
   }
   .bussola-sem-pei-icon { font-size: 40px; margin-bottom: 10px; }
 
+
+  /* [MELHORIA v2] Botões flutuantes com destaque pulsante para servidores saberem que existem */
+  @keyframes cig-fab-pulse-glow {
+    0%, 100% { box-shadow: 0 4px 14px rgba(0,0,0,0.15), 0 0 0 0 rgba(124, 58, 237, 0.4); }
+    50%      { box-shadow: 0 4px 14px rgba(0,0,0,0.25), 0 0 0 14px rgba(124, 58, 237, 0); }
+  }
+  @keyframes cig-fab-pulse-cyan {
+    0%, 100% { box-shadow: 0 4px 14px rgba(0,0,0,0.15), 0 0 0 0 rgba(14, 165, 233, 0.45); }
+    50%      { box-shadow: 0 4px 14px rgba(0,0,0,0.25), 0 0 0 14px rgba(14, 165, 233, 0); }
+  }
+  .guia-fab { animation: cig-fab-pulse-cyan 2.4s ease-in-out infinite; }
+  .guia-fab:hover { animation: none; }
+  .conselheira-fab { animation: cig-fab-pulse-glow 2.4s ease-in-out infinite 1.2s; }
+  .conselheira-fab:hover { animation: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .guia-fab, .conselheira-fab { animation: none; }
+  }
+  /* [MELHORIA v2] Banner de ajuda na welcome — destaca os 2 botões */
+  .welcome-ajuda-banner {
+    margin: 24px auto 0;
+    max-width: 620px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    text-align: left;
+  }
+  @media (max-width: 600px) { .welcome-ajuda-banner { grid-template-columns: 1fr; } }
+  .welcome-ajuda-card {
+    background: #F8FAFC;
+    border: 2px dashed #CBD5E1;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #334155;
+    line-height: 1.5;
+    transition: border-color .2s, background .2s;
+  }
+  .welcome-ajuda-card:hover { background: #EFF6FF; border-color: #60A5FA; }
+  .welcome-ajuda-card strong { color: #1a3a5c; display: block; margin-bottom: 4px; font-size: 14px; }
+  .welcome-info-destaque {
+    background: linear-gradient(135deg, #EFF6FF 0%, #F5F3FF 100%);
+    border-left: 4px solid #1565C0;
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 720px;
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #1E293B;
+  }
+  .welcome-info-destaque h3 { margin: 0 0 8px; color: #1a3a5c; font-size: 16px; }
+  .welcome-info-destaque ul { margin: 6px 0 10px 20px; padding: 0; }
+  .welcome-info-destaque li { margin: 3px 0; }
+  .welcome-info-destaque .nota-formal-box {
+    background: #FEF3C7;
+    border: 1px solid #F59E0B;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #78350F;
+  }
+
 </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
@@ -1405,6 +1468,9 @@
     </div>
     <div class="guia-campo">
       <strong>Pr&aacute;tica de Governan&ccedil;a:</strong> Selecione a pr&aacute;tica principal que o projeto implementa ou fortalece, conforme a Resolu&ccedil;&atilde;o CGOV N&ordm; 04/2024.
+      <div class="guia-dica-box" style="margin-top:8px;margin-bottom:0">
+        &#128218; <strong>Caixa did&aacute;tica autom&aacute;tica:</strong> ao escolher a pr&aacute;tica, o sistema exibe logo abaixo o <strong>Pilar de Governan&ccedil;a</strong> a que ela pertence (Lideran&ccedil;a, Estrat&eacute;gia, Controle ou Integridade). Voc&ecirc; n&atilde;o precisa escolher o pilar manualmente &mdash; o plano ser&aacute; classificado no pilar correto na devolutiva da SEGEST.
+      </div>
     </div>
 
     <h4>2. Nome e Objetivo</h4>
@@ -1417,7 +1483,19 @@
       <div class="guia-ex">Ex: &ldquo;Estruturar o CIG como inst&acirc;ncia deliberativa para qualificar decis&otilde;es da RA.&rdquo;</div>
     </div>
 
-    <h4>3. Descri&ccedil;&atilde;o e Produto</h4>
+    <h4>3. B&uacute;ssola Estrat&eacute;gica</h4>
+    <div class="guia-dica-box">
+      &#129517; <strong>Nova etapa:</strong> cada Regi&atilde;o Administrativa tem seu <strong>Plano Estrat&eacute;gico Institucional (PEI)</strong>. Nesta etapa voc&ecirc; mostra como seu plano do CIG apoia os objetivos do PEI da sua RA.
+    </div>
+    <div class="guia-campo">
+      <strong>Como preencher:</strong> marque todos os objetivos do PEI da sua RA que o seu plano apoia. Se quiser, escreva em 1 frase como cada apoio acontece na pr&aacute;tica.
+      <div class="guia-ex">Ex: "Este plano apoia o objetivo de <em>ampliar a efici&ecirc;ncia da gest&atilde;o</em> porque o CIG cria rotina formal de decis&atilde;o e reduz retrabalho."</div>
+    </div>
+    <div class="guia-campo">
+      <strong>Por que essa etapa importa:</strong> planos isolados da estrat&eacute;gia da RA t&ecirc;m baixa prioridade e pouca devolutiva. Quando voc&ecirc; conecta ao PEI, o plano deixa de ser "mais um documento" e vira pe&ccedil;a da estrat&eacute;gia da RA &mdash; e a SEGEST consegue dar feedback fundamentado.
+    </div>
+
+    <h4>4. Descri&ccedil;&atilde;o e Produto</h4>
     <div class="guia-campo">
       <strong>Descri&ccedil;&atilde;o:</strong> Diferente do objetivo (o que quer alcan&ccedil;ar), aqui descreva <em>o que ser&aacute; feito na pr&aacute;tica</em>: escopo, abrang&ecirc;ncia e diretrizes vinculadas.
     </div>
@@ -1426,13 +1504,13 @@
       <div class="guia-ex">Ex: &ldquo;CIG formalmente institu&iacute;do, com regimento aprovado e reuni&otilde;es em funcionamento.&rdquo;</div>
     </div>
 
-    <h4>4. Caracter&iacute;sticas</h4>
+    <h4>5. Caracter&iacute;sticas</h4>
     <div class="guia-campo">
       <strong>Caracter&iacute;sticas do Produto:</strong> Atributos de qualidade. Pense: &ldquo;para funcionar bem, ele precisa ser/ter...&rdquo;
       <div class="guia-ex">Ex: &ldquo;Reuni&otilde;es mensais com ata no SEI &bull; Composi&ccedil;&atilde;o multissetorial &bull; Pauta estruturada&rdquo;</div>
     </div>
 
-    <h4>5. Justificativa e Indicadores</h4>
+    <h4>6. Justificativa e Indicadores</h4>
     <div class="guia-campo">
       <strong>Justificativa:</strong> Responda: qual problema resolve? Que risco evita? Por que agora? Traga dados se poss&iacute;vel.
     </div>
@@ -1449,7 +1527,7 @@
       </div>
     </div>
 
-    <h4>6. Partes Interessadas</h4>
+    <h4>7. Partes Interessadas</h4>
     <div class="guia-campo">
       <strong>Patroc&iacute;nio e Gest&atilde;o:</strong> Quem apoia e decide (ex: Administrador(a) Regional).
     </div>
@@ -1460,7 +1538,7 @@
       <strong>P&uacute;blico-alvo:</strong> Quem se beneficia &mdash; diretos e indiretos.
     </div>
 
-    <h4>7. Entregas Intermedi&aacute;rias</h4>
+    <h4>8. Entregas Intermedi&aacute;rias</h4>
     <div class="guia-campo">
       <strong>Cada entrega deve ter:</strong>
       <ul>
@@ -1472,7 +1550,27 @@
       <div class="guia-ex">Voc&ecirc; pode cadastrar m&uacute;ltiplas entregas usando o bot&atilde;o &ldquo;+ Adicionar mais uma entrega&rdquo;.</div>
     </div>
 
-    <h4>8. Premissas, Barreiras e Riscos</h4>
+    <h4>9. Agenda Viva do CIG</h4>
+    <div class="guia-dica-box">
+      &#128197; <strong>Nova etapa:</strong> o CIG precisa se reunir regularmente e registrar atas. Esta etapa cadastra a agenda de reuni&otilde;es, vincula as entregas do plano a cada encontro e dispara lembretes autom&aacute;ticos.
+    </div>
+    <div class="guia-campo">
+      <strong>O que preencher:</strong>
+      <ul>
+        <li><strong>Frequ&ecirc;ncia</strong> das reuni&otilde;es ordin&aacute;rias (mensal, bimestral ou trimestral).</li>
+        <li>Pelo menos <strong>3 pr&oacute;ximas datas</strong>, com hor&aacute;rio, dura&ccedil;&atilde;o estimada e plataforma (presencial, remota ou h&iacute;brida).</li>
+        <li>Pauta b&aacute;sica e participantes esperados.</li>
+        <li>Vincula&ccedil;&atilde;o de cada reuni&atilde;o &agrave;s <strong>entregas</strong> do plano que ser&atilde;o discutidas.</li>
+      </ul>
+    </div>
+    <div class="guia-campo">
+      <strong>Avisos autom&aacute;ticos:</strong> o sistema envia lembrete 7 dias antes de cada reuni&atilde;o e alerta sobre atas pendentes.
+      <div class="guia-dica-box" style="margin-top:8px;margin-bottom:0">
+        &#128220; Base: <strong>Resolu&ccedil;&atilde;o CGov n&ordm; 03/2021</strong> &mdash; os CIGs devem se reunir regularmente e registrar as atas no SEI.
+      </div>
+    </div>
+
+    <h4>10. Premissas, Barreiras e Riscos</h4>
     <div class="guia-dica-box">
       &#9888;&#65039; <strong>Aten&ccedil;&atilde;o:</strong> Este &eacute; o campo com mais erros conceituais. Leia com cuidado a diferen&ccedil;a entre os tr&ecirc;s conceitos.
     </div>
@@ -1493,6 +1591,9 @@
     <div class="guia-campo">
       <strong>Riscos</strong> = eventos <em>incertos e futuros</em> que podem impactar negativamente.
       <div class="guia-ex">Ex: &ldquo;Troca de Administrador(a) com descontinuidade&rdquo;, &ldquo;Corte or&ccedil;ament&aacute;rio inesperado&rdquo;</div>
+      <div class="guia-dica-box" style="margin-top:8px;margin-bottom:0">
+        &#128269; Liste aqui somente sua percep&ccedil;&atilde;o em linguagem simples. A <strong>an&aacute;lise formal</strong> (matriz probabilidade &times; impacto, plano de tratamento) &eacute; feita pela equipe especializada de gest&atilde;o de riscos, conforme <strong>Resolu&ccedil;&atilde;o CGov n&ordm; 15/2026</strong>.
+      </div>
     </div>
 
     <h4>D&uacute;vidas frequentes</h4>
@@ -1506,9 +1607,13 @@
       <strong>Como exportar?</strong> Na tela de revis&atilde;o, use &ldquo;Baixar PDF&rdquo; ou &ldquo;Imprimir&rdquo;. Voc&ecirc; tamb&eacute;m pode exportar como JSON para backup.
     </div>
 
-    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);font-size:11px;color:var(--text-muted);text-align:center;">
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);font-size:11px;color:var(--text-muted);text-align:center;line-height:1.8">
       Guia de Preenchimento &mdash; SEGOV/SEGEST<br>
-      Modelo de Governan&ccedil;a P&uacute;blica do DF &mdash; Resolu&ccedil;&atilde;o CGOV N&ordm; 04/2024
+      <strong>Base normativa (consulta oficial no SINJ-DF):</strong><br>
+      <a href="https://www.sinj.df.gov.br" target="_blank" rel="noopener" style="color:#1565C0;text-decoration:underline">Res. CGov n&ordm; 03/2021</a> (CIG e reuni&otilde;es) &bull;
+      <a href="https://www.sinj.df.gov.br/sinj/Norma/6fd76d2d5eee447fbddbc3e08c9ff07b/Resolu_o_4_19_08_2024.html" target="_blank" rel="noopener" style="color:#1565C0;text-decoration:underline">Res. CGov n&ordm; 04/2024</a> (Modelo / 4 pilares)<br>
+      <a href="https://www.sinj.df.gov.br" target="_blank" rel="noopener" style="color:#1565C0;text-decoration:underline">Res. CGov n&ordm; 08/2025</a> (IMGG 100 pontos) &bull;
+      <a href="https://www.sinj.df.gov.br" target="_blank" rel="noopener" style="color:#1565C0;text-decoration:underline">Res. CGov n&ordm; 15/2026</a> (Gest&atilde;o de riscos)
     </div>
   </div>
 </div>
@@ -1630,6 +1735,46 @@ var PRATICAS_GOVERNANCA = [
   "Dimens\u00e3o Ambiental",
   "Dimens\u00e3o Social"
 ];
+
+/* ============================================================
+   MAPEAMENTO PRÁTICA → PILAR DE GOVERNANÇA (Res. CGov 04/2024)
+   ============================================================
+   Cada prática da lista acima pertence naturalmente a um dos
+   4 pilares do Modelo de Governança do DF. Ao escolher a
+   prática, o sistema INFERE o pilar automaticamente — o usuário
+   não precisa responder duas vezes a mesma pergunta.
+   ============================================================ */
+var PRATICA_PARA_PILAR = {
+  "Comit\u00ea Interno de Governan\u00e7a (CIG)": "lideranca",
+  "Planejamento Estrat\u00e9gico":          "estrategia",
+  "Gest\u00e3o de Riscos":                  "controle",
+  "Programa de Integridade P\u00fablica":   "integridade",
+  "Programa de Integridade Privada":        "integridade",
+  "Conformidade":                           "controle",
+  "Controle Interno":                       "controle",
+  "Correi\u00e7\u00e3o":                    "integridade",
+  "Ouvidoria":                              "integridade",
+  "Transpar\u00eancia":                     "integridade",
+  "Governan\u00e7a de Pessoas":             "lideranca",
+  "Governan\u00e7a de Dados":               "controle",
+  "Governan\u00e7a nas Contrata\u00e7\u00f5es": "controle",
+  "Gerenciamento de Processos":             "estrategia",
+  "Inova\u00e7\u00e3o":                     "estrategia",
+  "Dimens\u00e3o Ambiental":                "estrategia",
+  "Dimens\u00e3o Social":                   "estrategia"
+};
+
+function getPilarDaPratica(praticaNome) {
+  if (!praticaNome) return null;
+  var pilarId = PRATICA_PARA_PILAR[praticaNome];
+  if (!pilarId) return null;
+  // PILARES_RES_04_2024 é definido mais abaixo no código
+  if (typeof PILARES_RES_04_2024 === 'undefined') return null;
+  for (var i = 0; i < PILARES_RES_04_2024.length; i++) {
+    if (PILARES_RES_04_2024[i].id === pilarId) return PILARES_RES_04_2024[i];
+  }
+  return null;
+}
 
 /* ===================================================
    PRAZOS PARA ENTREGAS (dropdown)
@@ -3827,13 +3972,6 @@ var STEPS = [
     fields: ["projeto", "objetivo"]
   },
   {
-    // [Res. CGov 04/2024] Nova etapa de classifica\u00e7\u00e3o por pilares
-    id: "pilares", type: "pilares", label: "Pilares de Governan\u00e7a",
-    icon: "\uD83C\uDFDB\uFE0F", question: "Em quais pilares da governan\u00e7a p\u00fablica seu projeto atua?",
-    dica: "Resolu\u00e7\u00e3o CGov n\u00ba 04/2024 \u2014 marque os pilares aplic\u00e1veis (m\u00ednimo 1) e selecione o pilar prim\u00e1rio.",
-    contexto: "Alinhe seu projeto ao Modelo de Governan\u00e7a P\u00fablica do DF."
-  },
-  {
     // [REV #6] B\u00fassola Estrat\u00e9gica \u2014 alinhamento ao PEI da RA
     id: "bussola", type: "bussola", label: "B\u00fassola Estrat\u00e9gica",
     icon: "\uD83E\uDDED", question: "Seu plano apoia quais objetivos do PEI da sua RA?",
@@ -3897,7 +4035,7 @@ var STEPS = [
     id: "riscos-premissas", type: "group", label: "Premissas, Barreiras e Riscos",
     icon: "\u26A0\uFE0F", question: "Identifique premissas, barreiras e riscos",
     dica: "Aten\u00e7\u00e3o: cada campo pede um tipo diferente de informa\u00e7\u00e3o. Liste aqui os riscos principais em linguagem simples \u2014 a equipe de gest\u00e3o de riscos far\u00e1 a an\u00e1lise detalhada depois.",
-    contexto: "\u00daltimo bloco! Premissas = condi\u00e7\u00f5es que voc\u00ea assume como verdadeiras. Barreiras = obst\u00e1culos que j\u00e1 existem hoje. Riscos = eventos incertos que podem acontecer no futuro. \uD83D\uDCDD Liste aqui sua percep\u00e7\u00e3o \u2014 a equipe de gest\u00e3o de riscos far\u00e1 a an\u00e1lise formal no SAEweb (Res. CGov 15/2026).",
+    contexto: "\u00daltimo bloco! Premissas = condi\u00e7\u00f5es que voc\u00ea assume como verdadeiras. Barreiras = obst\u00e1culos que j\u00e1 existem hoje. Riscos = eventos incertos que podem acontecer no futuro. \uD83D\uDCDD Liste aqui sua percep\u00e7\u00e3o \u2014 a equipe especializada far\u00e1 a an\u00e1lise formal de riscos (Res. CGov 15/2026).",
     fields: ["premissas", "barreiras", "riscos"]
   },
   { id: "review", type: "review" }
@@ -3907,7 +4045,7 @@ var STEPS = [
    PHASES (visual grouping for stepper)
    =================================================== */
 var PHASES = [
-  { name: "Identifica\u00e7\u00e3o", steps: ["identificacao", "nome-objetivo", "pilares"] },
+  { name: "Identifica\u00e7\u00e3o", steps: ["identificacao", "nome-objetivo"] },
   { name: "B\u00fassola Estrat\u00e9gica", steps: ["bussola"] },
   { name: "Detalhamento", steps: ["detalhamento", "caracteristicas"] },
   { name: "An\u00e1lise", steps: ["analise"] },
@@ -4503,6 +4641,14 @@ function loadFromStorage() {
           if (typeof ent.responsavel === 'undefined') ent.responsavel = '';
         });
       }
+      // [UNIFICAÇÃO PRÁTICA↔PILAR] Derivar pilar automaticamente a partir da prática
+      if (data.pratica && typeof PRATICA_PARA_PILAR !== 'undefined') {
+        var pilarId = PRATICA_PARA_PILAR[data.pratica];
+        if (pilarId) {
+          data.pilares_aplicaveis = [pilarId];
+          data.pilar_primario = pilarId;
+        }
+      }
     }
     var savedStep = localStorage.getItem(STORAGE_STEP_KEY);
     if (savedStep) {
@@ -5081,6 +5227,17 @@ function attachInputListeners() {
         if (el.id === 'field-ra') {
           atualizarProcessoSEI(el.value);
         }
+        // [UNIFICAÇÃO PRÁTICA↔PILAR] Re-renderizar ao escolher a prática para mostrar caixa do pilar
+        if (el.id === 'field-pratica') {
+          data.pratica = el.value;
+          // Atualizar também pilares_aplicaveis e pilar_primario derivados
+          var pilarId = PRATICA_PARA_PILAR[el.value] || '';
+          data.pilares_aplicaveis = pilarId ? [pilarId] : [];
+          data.pilar_primario = pilarId;
+          saveToStorage();
+          render();
+          return;
+        }
         validarCampoEmTempoReal(el);
       });
     }
@@ -5138,8 +5295,25 @@ function renderWelcome() {
       '</div>' +
     '</div>' +
     '<h2>Plano de A\u00e7\u00e3o do CIG</h2>' +
-    '<p>Elabore o <strong>Plano de A\u00e7\u00e3o do Comit\u00ea Interno de Governan\u00e7a</strong> da sua Regi\u00e3o Administrativa de forma guiada, passo a passo.</p>' +
-    '<div class="welcome-time">\u23F1\uFE0F Preenchimento em aproximadamente 15 minutos</div>' +
+    '<div class="welcome-info-destaque">' +
+      '<h3>\uD83D\uDCCB O que \u00e9 o Plano de A\u00e7\u00e3o do CIG?</h3>' +
+      '<p>O Plano de A\u00e7\u00e3o do CIG \u00e9 o instrumento que organiza os projetos de governan\u00e7a de cada Administra\u00e7\u00e3o Regional em uma estrutura clara e objetiva, <strong>alinhada aos PEIs das RAs</strong>.</p>' +
+      '<p style="margin:8px 0 4px"><strong>Base legal:</strong></p>' +
+      '<ul>' +
+        '<li><strong>Resolu\u00e7\u00e3o CGov n\u00ba 03/2021</strong> \u2014 Estrutura\u00e7\u00e3o dos Comit\u00eas Internos de Governan\u00e7a (CIG). \u2B50 base do sistema.</li>' +
+        '<li><strong>Resolu\u00e7\u00e3o CGov n\u00ba 04/2024</strong> \u2014 Modelo de Governan\u00e7a P\u00fablica do DF (pilares: Lideran\u00e7a, Estrat\u00e9gia, Controle e Integridade).</li>' +
+        '<li><strong>Resolu\u00e7\u00e3o CGov n\u00ba 15/2026</strong> \u2014 Fortalecimento das pr\u00e1ticas de gest\u00e3o de riscos.</li>' +
+        '<li><strong>IMGG 100 pontos</strong> e <strong>MDM</strong> \u2014 instrumentos de matura\u00e7\u00e3o em governan\u00e7a (Res. 08/2025 e 09/2025).</li>' +
+        '<li><strong>Decreto n\u00ba 39.736/2019</strong> \u2014 Pol\u00edtica de Governan\u00e7a P\u00fablica do DF.</li>' +
+      '</ul>' +
+      '<p style="margin-top:10px">Este formul\u00e1rio guia voc\u00ea por cada campo, com exemplos pr\u00e1ticos para inspirar. <strong>Suas respostas s\u00e3o salvas automaticamente</strong> no navegador. Ao final, o plano \u00e9 enviado diretamente para a SEGOV.</p>' +
+      '<p style="margin-top:6px"><em>N\u00e3o se preocupe em acertar tudo de primeira! Voc\u00ea pode voltar e editar qualquer campo a qualquer momento.</em></p>' +
+    '</div>' +
+    '<div class="welcome-ajuda-banner">' +
+      '<div class="welcome-ajuda-card"><strong>\uD83D\uDCD6 Guia de Preenchimento</strong>No canto <strong>inferior esquerdo</strong> da tela. Abre um painel lateral com <strong>orienta\u00e7\u00e3o detalhada</strong> e exemplos para cada etapa \u2014 fique \u00e0 vontade para consultar a qualquer momento.</div>' +
+      '<div class="welcome-ajuda-card"><strong>\uD83C\uDF93 Conselheira de Governan\u00e7a</strong>No canto <strong>inferior direito</strong>. \u00c9 uma <strong>IA treinada nas Resolu\u00e7\u00f5es do CGov/DF</strong> (03/2021, 04/2024, 08/2025, 15/2026). Fa\u00e7a perguntas sobre conceitos, indicadores, riscos, pilares, PEI.</div>' +
+    '</div>' +
+    '<div class="welcome-time" style="margin-top:16px">\u23F1\uFE0F Preenchimento em aproximadamente 15 minutos</div>' +
     '<div class="welcome-btns">' +
       '<button class="btn-primary" onclick="next()">Come\u00e7ar o Plano de A\u00e7\u00e3o</button>' +
       resumeBtn +
@@ -5154,25 +5328,8 @@ function renderWelcome() {
       '<div class="welcome-feat"><span>\uD83D\uDCBE</span> Salva automaticamente</div>' +
       '<div class="welcome-feat"><span>\uD83D\uDCA1</span> Exemplos em cada campo</div>' +
     '</div>' +
-    '<div style="margin-top:24px">' +
-      '<button class="welcome-info-toggle" id="canvas-info-btn" onclick="toggleCanvasInfo()">O que \u00e9 o Plano de A\u00e7\u00e3o do CIG?</button>' +
-      '<div id="canvas-info-content" class="welcome-info-content" style="display:none">' +
-        '<p><strong>O Plano de A\u00e7\u00e3o do CIG</strong> \u00e9 o instrumento que organiza os projetos de governan\u00e7a de cada Administra\u00e7\u00e3o Regional em uma estrutura clara e objetiva, alinhada aos PEIs das RAs.</p>' +
-        '<p><strong>Base legal:</strong></p>' +
-        '<ul style="margin:8px 0 12px 20px;font-size:14px;line-height:1.6">' +
-          '<li><strong>Resolu\u00e7\u00e3o CGov n\u00ba 03/2021</strong> \u2014 Estrutura\u00e7\u00e3o dos Comit\u00eas Internos de Governan\u00e7a (CIG). \u2b50 base do sistema.</li>' +
-          '<li><strong>Resolu\u00e7\u00e3o CGov n\u00ba 04/2024</strong> \u2014 Modelo de Governan\u00e7a P\u00fablica do DF (pilares: Lideran\u00e7a, Estrat\u00e9gia, Controle e Integridade).</li>' +
-          '<li><strong>Resolu\u00e7\u00e3o CGov n\u00ba 15/2026</strong> \u2014 Fortalecimento das pr\u00e1ticas de gest\u00e3o de riscos.</li>' +
-          '<li><strong>IMGG 100 pontos</strong> e <strong>MDM</strong> \u2014 instrumentos de matura\u00e7\u00e3o em governan\u00e7a (Res. 08/2025 e 09/2025).</li>' +
-          '<li><strong>Decreto n\u00ba 39.736/2019</strong> \u2014 Pol\u00edtica de Governan\u00e7a P\u00fablica do DF.</li>' +
-        '</ul>' +
-        '<div style="background:#E8F1FA;border-left:4px solid #1565C0;padding:10px 14px;border-radius:6px;margin:12px 0;font-size:13px">' +
-          '\uD83D\uDD17 <strong>Integra\u00e7\u00e3o com SAEweb:</strong> voc\u00ea descreve os riscos aqui em linguagem simples; a <strong>equipe de gest\u00e3o de riscos</strong> faz a an\u00e1lise detalhada no SAEweb (sistema oficial do GDF operado por essa equipe). Este formul\u00e1rio registra o resumo executivo do PEI da sua RA.' +
-        '</div>' +
-        '<p>Este formul\u00e1rio guia voc\u00ea por cada campo, com exemplos pr\u00e1ticos para inspirar. Suas respostas s\u00e3o salvas automaticamente no navegador. Ao final, o plano \u00e9 enviado diretamente para a SEGOV.</p>' +
-        '<p>N\u00e3o se preocupe em acertar tudo de primeira! Voc\u00ea pode voltar e editar qualquer campo a qualquer momento.</p>' +
-      '</div>' +
-    '</div>' +
+    // [MELHORIA v2] Info section moved UP and expanded (not collapsed anymore)
+
   '</div>';
 }
 
@@ -5202,6 +5359,30 @@ function renderSingleFieldInput(def, isInsideGroup) {
       inputHTML += '<option value="' + esc(op) + '"' + (data[def.field] === op ? ' selected' : '') + '>' + esc(op) + '</option>';
     });
     inputHTML += '</select>';
+
+    // [UNIFICAÇÃO PRÁTICA↔PILAR] Caixa didática que aparece ao escolher uma prática
+    if (def.field === 'pratica' && data.pratica) {
+      var pilar = getPilarDaPratica(data.pratica);
+      if (pilar) {
+        inputHTML += '<div class="pilar-auto-box" style="' +
+          'margin-top: 14px; padding: 14px 16px; border-radius: 10px; ' +
+          'background: ' + pilar.cor + '12; border-left: 4px solid ' + pilar.cor + ';">' +
+          '<div style="font-size:12px;font-weight:700;color:' + pilar.cor + ';text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">' +
+            '📚 Pilar de Governança identificado automaticamente' +
+          '</div>' +
+          '<div style="font-size:15px;font-weight:700;color:#1a3a5c;margin-bottom:4px">' +
+            pilar.icone + ' ' + esc(pilar.nome) +
+          '</div>' +
+          '<div style="font-size:13px;color:#475569;line-height:1.5;margin-bottom:6px">' +
+            esc(pilar.descricao) +
+          '</div>' +
+          '<div style="font-size:11px;color:#64748b;font-style:italic">' +
+            'Sua prática "' + esc(data.pratica) + '" se encaixa neste pilar conforme o Modelo de Governança Pública do DF (Resolução CGov nº 04/2024). O plano será classificado automaticamente no pilar ' + esc(pilar.nome) + ' na devolutiva da SEGEST.' +
+          '</div>' +
+          '</div>';
+      }
+    }
+
     // Processo SEI para o campo RA
     if (def.field === 'ra') {
       var processoSEI = data.ra && PROCESSOS_SEI[data.ra] ? PROCESSOS_SEI[data.ra] : '';
@@ -5912,11 +6093,38 @@ function renderSuccessScreen() {
     '<div style="margin-top:16px;padding:12px 16px;background:#eff6ff;border:1px solid #93C5FD;border-radius:10px;font-size:13px;color:#1e40af;text-align:center">' +
       '\uD83D\uDCE7 Uma notifica\u00e7\u00e3o foi enviada para a equipe SEGEST para acompanhamento e devolutiva.' +
     '</div>' +
-    '<div class="success-actions" style="margin-top:24px">' +
-      '<button class="btn-nav btn-nav-prev" onclick="showSuccess=false;render()">Voltar para revis\u00e3o</button>' +
-      '<button class="btn-nav btn-nav-prev" onclick="clearAllData()">Iniciar novo plano</button>' +
+    '<div class="success-actions" style="margin-top:24px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center">' +
+      '<button class="btn-nav btn-nav-prev" onclick="irParaBibliotecaVerDevolutiva()" aria-label="Ir para a biblioteca e ver as devolutivas deste plano">\uD83D\uDCEC Ver minhas devolutivas</button>' +
+      '<button class="btn-nav btn-nav-prev" onclick="atualizarDevolutivasAgora(this)" aria-label="Buscar agora novas devolutivas">\uD83D\uDD04 Atualizar agora</button>' +
+      '<button class="btn-nav btn-nav-prev" onclick="showSuccess=false;render()" aria-label="Voltar para a revis\u00e3o">Voltar para revis\u00e3o</button>' +
+      '<button class="btn-nav btn-nav-prev" onclick="clearAllData()" aria-label="Iniciar novo plano">Iniciar novo plano</button>' +
     '</div>' +
+    '<p style="margin-top:18px;font-size:12px;color:#64748b;text-align:center;max-width:500px;margin-left:auto;margin-right:auto">\uD83D\uDCA1 A devolutiva da SEGEST chega por e-mail e tamb\u00e9m aparece automaticamente na Biblioteca de Planos em at\u00e9 60 segundos ap\u00f3s o envio.</p>' +
   '</div>';
+}
+
+/* [#2] Botões auxiliares da tela de sucesso — ir ver devolutivas e atualizar */
+function irParaBibliotecaVerDevolutiva() {
+  showSuccess = false;
+  planoAtualId = null;
+  render();
+  if (typeof consultarDevolutivasReais === 'function') {
+    try { consultarDevolutivasReais(); } catch(e){}
+  }
+}
+
+function atualizarDevolutivasAgora(btn) {
+  if (btn) { btn.disabled = true; btn.textContent = '\u23F3 Buscando...'; }
+  if (typeof consultarDevolutivasReais === 'function') {
+    try { consultarDevolutivasReais(); } catch(e){}
+  }
+  setTimeout(function() {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = '\u2713 Atualizado';
+      setTimeout(function() { if (btn) btn.textContent = '\uD83D\uDD04 Atualizar agora'; }, 2500);
+    }
+  }, 2000);
 }
 
 /* ===================================================
@@ -6490,7 +6698,11 @@ function gerarPDFIndividual() {
   }catch(e){}
 })();
 
-  render();
+// [FIX TELA EM BRANCO 2026-05-05] render() movido para o fim do script2.
+// Antes era chamado aqui, mas renderReview() depende de renderQRCodeCidadao()
+// que é definida no próximo bloco <script>. Quando currentStep no localStorage
+// era 12 (Revisão), render() crashava silenciosamente com ReferenceError e #app
+// ficava vazio (tela branca em produção).
 </script>
 
 <!-- [REVOLUÇÃO] IA Conselheira - Botão Flutuante + Painel -->
@@ -6516,7 +6728,7 @@ function gerarPDFIndividual() {
     <div class="msg bot">
       <div class="avatar">🎓</div>
       <div class="bubble">
-        Oi! Sou a <strong>Conselheira</strong>. Posso te ajudar com dúvidas sobre governança, Resoluções do CGov, IMGG, gestão de riscos e PEI. O que você quer saber?
+        Oi! Sou a <strong>Conselheira</strong>. Posso te ajudar com dúvidas sobre as fases do plano, pilares de governança, Bússola Estratégica (PEI), Agenda Viva do CIG, indicadores, riscos e as Resoluções do CGov/DF (03/2021, 04/2024, 08/2025, 15/2026). O que você quer saber?
       </div>
     </div>
   </div>
@@ -6524,9 +6736,12 @@ function gerarPDFIndividual() {
     <p>💡 Perguntas frequentes:</p>
     <span class="sugestao-chip" onclick="enviarPergunta('Como escrever um bom indicador?')">Como escrever um bom indicador?</span>
     <span class="sugestao-chip" onclick="enviarPergunta('Qual a diferença entre premissa, barreira e risco?')">Premissa × Barreira × Risco?</span>
+    <span class="sugestao-chip" onclick="enviarPergunta('Como funciona o pilar automático da caixa didática?')">Pilar automático?</span>
+    <span class="sugestao-chip" onclick="enviarPergunta('O que é a Bússola Estratégica e o PEI?')">Bússola / PEI?</span>
+    <span class="sugestao-chip" onclick="enviarPergunta('Como funciona a Agenda Viva do CIG?')">Agenda Viva?</span>
+    <span class="sugestao-chip" onclick="enviarPergunta('Quantas fases tem o plano?')">Quantas fases?</span>
     <span class="sugestao-chip" onclick="enviarPergunta('O que é a Resolução 04/2024?')">Res 04/2024?</span>
     <span class="sugestao-chip" onclick="enviarPergunta('Meu CIG precisa de portaria?')">CIG precisa de portaria?</span>
-    <span class="sugestao-chip" onclick="enviarPergunta('Como funciona o SAEweb?')">SAEweb?</span>
   </div>
   <div class="conselheira-input">
     <input type="text" id="conselheira-input-txt" placeholder="Digite sua dúvida..." onkeydown="if(event.key==='Enter'){enviarConselheira()}">
@@ -6546,15 +6761,15 @@ var BASE_CONSELHEIRA = [
   },
   {
     palavras: ['premissa', 'barreira', 'risco', 'diferença'],
-    resposta: '<strong>Premissa</strong> 🟢 = o que você ASSUME ser verdade (ex: "o Administrador vai apoiar")<br><br><strong>Barreira</strong> 🟡 = obstáculo que JÁ EXISTE hoje (ex: "faltam servidores capacitados")<br><br><strong>Risco</strong> 🔴 = evento INCERTO que PODE acontecer (ex: "pode haver corte orçamentário")<br><br>📜 Base: Res CGov 15/2026 — só os riscos vão ao SAEweb.'
+    resposta: '<strong>Premissa</strong> 🟢 = o que você ASSUME ser verdade (ex: "o Administrador vai apoiar")<br><br><strong>Barreira</strong> 🟡 = obstáculo que JÁ EXISTE hoje (ex: "faltam servidores capacitados")<br><br><strong>Risco</strong> 🔴 = evento INCERTO que PODE acontecer (ex: "pode haver corte orçamentário")<br><br>📜 Base: Res CGov 15/2026 — a análise formal dos riscos é feita pela equipe especializada de gestão de riscos.'
   },
   {
     palavras: ['resolução 04', 'res 04', 'modelo de governança', 'pilares'],
     resposta: 'A <strong>Resolução CGov nº 04/2024</strong> aprovou o Modelo de Governança Pública do DF, obrigatório para toda Administração Direta, Autárquica e Fundacional.<br><br>Tem 4 pilares:<br>👤 <strong>Liderança</strong> — práticas comportamentais<br>🎯 <strong>Estratégia</strong> — diretrizes e objetivos<br>📊 <strong>Controle</strong> — mitigação de riscos<br>✅ <strong>Integridade</strong> — alinhamento ético<br><br>Seu plano deve se encaixar em pelo menos 1 pilar.'
   },
   {
-    palavras: ['resolução 15', 'res 15', '15/2026', 'gestão de riscos', 'saeweb'],
-    resposta: 'A <strong>Res 15/2026</strong> institui rotina de acompanhamento de gestão de riscos. A análise formal é feita pela equipe especializada no <strong>SAEweb</strong>.<br><br>Você, no seu plano, só precisa listar os riscos em linguagem simples. A equipe de gestão de riscos faz a matriz probabilidade×impacto depois.<br><br>🔗 saeweb.cg.df.gov.br'
+    palavras: ['resolução 15', 'res 15', '15/2026', 'gestão de riscos'],
+    resposta: 'A <strong>Resolução CGov nº 15/2026</strong> institui rotina de acompanhamento da gestão de riscos no GDF.<br><br>No seu Plano de Ação do CIG você descreve os riscos em <strong>linguagem simples</strong>. A análise formal (matriz probabilidade × impacto, plano de tratamento) é feita pela <strong>equipe especializada de gestão de riscos</strong>, em momento próprio do fluxo institucional.'
   },
   {
     palavras: ['portaria', 'cig', 'comitê', 'designação', '03/2021', 'resolução 03'],
@@ -6583,7 +6798,72 @@ var BASE_CONSELHEIRA = [
   {
     palavras: ['prazo', 'quanto tempo', 'deadline'],
     resposta: '📅 Prazos típicos do CIG:<br><br>• <strong>Portaria do CIG</strong>: até 30 dias da posse do Administrador<br>• <strong>1ª reunião</strong>: até 60 dias<br>• <strong>Plano de Ação</strong>: até 90 dias<br>• <strong>Revisão do plano</strong>: a cada 6 meses<br><br>📜 Base: Resolução CGov nº 03/2021.'
-  }
+  },
+  {
+    palavras: ['pilar automatico', 'pilar automático', 'caixa didática', 'caixa didatica', 'pilar auto', 'classificação automática', 'classificacao automatica', 'pratica pilar', 'prática pilar'],
+    resposta: '📚 <strong>Classificação automática do Pilar</strong>: ao escolher a sua <strong>prática de governança</strong> na etapa de Identificação, o sistema mostra logo abaixo uma caixa didática com o <strong>Pilar</strong> a que ela pertence.<br><br>Exemplos do mapeamento:<br>• 👤 <strong>Liderança</strong>: CIG, Governança de Pessoas<br>• 🎯 <strong>Estratégia</strong>: Planejamento Estratégico, Inovação, Processos, Dimensão Ambiental/Social<br>• 📊 <strong>Controle</strong>: Riscos, Conformidade, Controle Interno, Dados, Contratações<br>• ✅ <strong>Integridade</strong>: Integridade Pública/Privada, Correição, Ouvidoria, Transparência<br><br>Você NÃO precisa escolher o pilar manualmente &mdash; o plano será classificado automaticamente na devolutiva da SEGEST.<br><br>📜 Base: Resolução CGov nº 04/2024.'
+  },
+  {
+    palavras: ['bussola', 'bússola', 'pei', 'plano estratégico institucional', 'plano estrategico institucional', 'alinhamento estratégico', 'alinhamento estrategico'],
+    resposta: '🧭 <strong>Bússola Estratégica</strong>: é a etapa onde você mostra como o seu plano do CIG apoia o <strong>PEI (Plano Estratégico Institucional)</strong> da sua RA.<br><br>Como preencher:<br>1️⃣ O sistema carrega automaticamente os objetivos do PEI da sua RA (se cadastrado)<br>2️⃣ Marque todos os objetivos que o seu plano apoia<br>3️⃣ Se quiser, escreva em 1 frase como cada apoio acontece<br><br>⭐ <strong>Por que importa:</strong> planos desconectados da estratégia da RA recebem baixa prioridade. Conectar ao PEI transforma o plano em peça da estratégia, e a SEGEST consegue dar devolutiva fundamentada.'
+  },
+  {
+    palavras: ['agenda', 'agenda viva', 'reunião', 'reuniao', 'reuniões', 'reunioes', 'calendário', 'calendario', 'ata'],
+    resposta: '📅 <strong>Agenda Viva do CIG</strong>: gestão completa de reuniões do comitê.<br><br>O que você cadastra:<br>• <strong>Frequência</strong> das reuniões ordinárias (mensal, bimestral, trimestral)<br>• Pelo menos <strong>3 próximas datas</strong> com horário, duração e plataforma (presencial/remota/híbrida)<br>• <strong>Pauta</strong> básica e participantes esperados<br>• <strong>Vinculação</strong> de cada reunião às entregas do plano que serão discutidas<br><br>🔔 <strong>Lembretes automáticos:</strong> o sistema avisa 7 dias antes de cada reunião e alerta sobre atas pendentes.<br><br>📜 Base: Resolução CGov nº 03/2021 &mdash; CIGs devem se reunir regularmente e registrar atas no SEI.'
+  },
+  {
+    palavras: ['modo historia', 'modo história', 'conte uma história', 'conte uma historia', 'narrativa', 'jornal'],
+    resposta: '📰 <strong>Modo Conte uma História</strong>: uma forma alternativa de começar o plano. Em vez de preencher campos técnicos, você escreve como se fosse uma notícia de jornal de 1 ano no futuro contando o projeto pronto.<br><br>O sistema lê o texto e sugere automaticamente o preenchimento de campos como objetivo, produto, partes interessadas e indicadores.<br><br>Ótimo para quem trava na linguagem técnica. Clique no botão "📰 Modo História" no topo da tela para experimentar.'
+  },
+  {
+    palavras: ['biblioteca', 'planos salvos', 'outras ras', 'exemplos de plano', 'referência', 'referencia'],
+    resposta: '📚 <strong>Biblioteca de Planos</strong>: base com planos de outras RAs que já foram aprovados pela SEGEST. Serve de referência para ver como outras regiões redigiram objetivos, indicadores, entregas.<br><br>Como usar:<br>1️⃣ Clique no botão "📚 Biblioteca de Planos"<br>2️⃣ Filtre por RA, pilar ou prática<br>3️⃣ Abra o plano para inspiração<br><br>⚠️ Use como inspiração, não copie. Cada RA tem contexto próprio.'
+  },
+  {
+    palavras: ['qr', 'qr code', 'código cidadão', 'codigo cidadao', 'compartilhar', 'publicar', 'link'],
+    resposta: '🔲 <strong>QR Código Cidadão</strong>: ao finalizar o plano, o sistema gera um QR Code que pode ser publicado no portal da RA, murais ou redes sociais. Ao escanear, o cidadão vê o plano em linguagem acessível.<br><br>Serve para dar transparência ao trabalho do CIG e fortalecer o controle social.'
+  },
+  {
+    palavras: ['fase', 'fases', 'etapa', 'etapas', 'passo', 'passos', 'quantos'],
+    resposta: '🗺️ O plano tem <strong>7 fases</strong>, divididas em 11 etapas:<br><br>1️⃣ <strong>Identificação</strong> (responsável, RA, prática)<br>2️⃣ <strong>Bússola Estratégica</strong> (alinhamento ao PEI)<br>3️⃣ <strong>Detalhamento</strong> (descrição, produto, características)<br>4️⃣ <strong>Análise</strong> (justificativa, indicadores)<br>5️⃣ <strong>Pessoas e Entregas</strong> (partes interessadas, entregas)<br>6️⃣ <strong>Agenda do CIG</strong> (reuniões)<br>7️⃣ <strong>Premissas e Riscos</strong><br><br>Você pode navegar livremente entre as fases &mdash; seus dados são salvos automaticamente.'
+  },
+  {
+    palavras: ['conselheira', 'quem é você', 'quem é voce', 'ia', 'chatbot', 'como funciona'],
+    resposta: '🎓 Sou a <strong>Conselheira de Governança</strong>, IA da SEGEST/SEGOV. Tenho duas camadas: (1) <strong>base local</strong> com respostas pré-formuladas para as dúvidas mais comuns (indicadores, riscos, pilares, etc); (2) quando a base local não bate, eu chamo um modelo de IA treinado nas Resoluções do CGov/DF (03/2021, 04/2024, 08/2025, 09/2025, 15/2026) e respondo qualquer pergunta sobre o Plano de Ação do CIG. Posso te ajudar tanto com conceitos quanto com situações específicas do seu plano.'
+  },
+  {
+    palavras: ['devolutiva', 'parecer', 'resposta segest', 'analise final', 'análise final'],
+    resposta: '📨 <strong>Devolutiva da SEGEST</strong>: depois que você envia o plano, a equipe da SEGEST analisa e devolve um parecer técnico em até alguns dias úteis. A devolutiva chega:<br>1️⃣ Por <strong>e-mail institucional</strong> (com PDF anexado oficial, no padrão SEGEST/SEGOV)<br>2️⃣ Automaticamente na <strong>Biblioteca de Planos</strong> deste sistema (em até 60 segundos após envio)<br><br>Decisões possíveis:<br>• ✅ <strong>Aprovado</strong>: plano completo e adequado<br>• ⚠️ <strong>Aprovado com ressalvas</strong>: ajustes pontuais sugeridos<br>• 🔁 <strong>Ajustar e Reenviar</strong>: campos essenciais incompletos<br><br>O PDF da devolutiva tem timbre GDF e assinaturas institucionais — pode anexar no SEI.'
+  },
+  {
+    palavras: ['reenviar', 'reenvio', 'corrigir', 'devolvido', 'voltou', 'ajustar e reenviar', 'versao 2', 'versão 2', 'v2'],
+    resposta: '🔁 <strong>Reenvio do plano</strong>: se sua devolutiva foi "Ajustar e Reenviar" (ou se você quer atualizar mesmo após aprovação):<br>1️⃣ Abra a Biblioteca de Planos e clique no plano<br>2️⃣ O sistema carrega os dados — você só edita os campos apontados na devolutiva<br>3️⃣ Clica em Enviar de novo<br><br>O sistema cria automaticamente a <strong>versão 2 (v2)</strong> e mantém a versão anterior no histórico. A SEGEST consegue comparar as duas versões e ver se você incorporou as sugestões. Não tem limite de versões.'
+  },
+  {
+    palavras: ['campos vazios', '4 campos', 'pratica descricao caracteristicas publico', 'esquece', 'comuns'],
+    resposta: '⚠️ <strong>Os 4 campos que ~100% dos planos esquecem</strong>: Prática de Governança, Descrição, Características, Público-alvo. Verifiquei nas devolutivas das outras RAs — quase todas receberam ressalva nesses mesmos 4 campos. Vale conferir antes de enviar:<br><br>• <strong>Prática</strong>: escolha na lista (sistema sugere o pilar automaticamente)<br>• <strong>Descrição</strong>: o que será feito na prática (diferente do objetivo)<br>• <strong>Características</strong>: atributos de qualidade do produto<br>• <strong>Público-alvo</strong>: quem se beneficia (diretos e indiretos)'
+  },
+  {
+    palavras: ['indicador generico', 'indicador genérico', 'indicador ruim', 'numerico quanto maior', 'percentual sozinho', 'indice'],
+    resposta: '⚠️ <strong>Indicadores genéricos NÃO passam na análise da SEGEST</strong>. Termos como "Numérico quanto maior melhor", "Índice", "Percentual" sozinhos vão ser apontados como incompletos.<br><br>Um bom indicador tem 3 partes:<br>1️⃣ <strong>Nome</strong> claro do que se mede<br>2️⃣ <strong>Fórmula</strong> de cálculo (use ÷, ×, %)<br>3️⃣ <strong>Meta</strong> numérica (% ou número absoluto)<br><br>✅ Bom: "Taxa de reuniões realizadas = nº realizadas ÷ nº programadas × 100. Meta: 100% no ano".<br>❌ Ruim: "Percentual de execução".'
+  },
+  {
+    palavras: ['responsavel ra', 'responsável ra', 'nome do servidor', 'quem assina'],
+    resposta: '👤 <strong>O campo Responsável precisa ter o nome de uma pessoa</strong>, não a sigla da RA. A SEGEST aponta isso quando vê algo como "RA-VIII Núcleo Bandeirante" no campo Responsável. Coloque o nome completo do servidor que está conduzindo o plano (geralmente o Administrador, Chefe de Gabinete ou ASPLAN).<br><br>O e-mail também precisa ser <strong>institucional</strong> (terminado em @df.gov.br) — e-mails @gmail/@hotmail são rejeitados pelo sistema.'
+  },
+  {
+    palavras: ['multiplos projetos', 'múltiplos projetos', 'consolidar', 'agrupar', 'varios planos', 'vários planos'],
+    resposta: '📚 <strong>Sobre múltiplos projetos da mesma RA</strong>: o sistema aceita quantos planos a Regional quiser enviar, mas a SEGEST tem recomendado consolidação quando os projetos se sobrepõem.<br><br>Exemplo da RA-V Sobradinho I (que enviou 9 projetos): a devolutiva sugeriu agrupar "Melhorar a qualidade de vida" e "Aperfeiçoar o Atendimento" num único projeto mais estruturado.<br><br>Antes de criar um novo plano, pergunte: <em>esse projeto poderia ser uma entrega ou subprojeto de algo já cadastrado?</em>'
+  },
+  {
+    palavras: ['cig ja existe', 'cig já existe', 'cig instituido', 'cig instituído', 'os portaria', 'cig antigo'],
+    resposta: '✅ <strong>CIG já instituído</strong>: se a sua RA já tem o CIG criado por Ordem de Serviço (ex: OS nº 31/2020 do Lago Sul), o plano pode focar em <strong>fortalecimento e operacionalização</strong>, não em implantação.<br><br>Mencione no campo Justificativa que o CIG já existe (cite a OS) e direcione o projeto para: revisão do regimento, aumento de frequência das reuniões, ampliação da composição, integração com PEI, etc.<br><br>A SEGEST reconhece e valoriza CIGs já consolidados.'
+  },
+  {
+    palavras: ['imgg', '100 pontos', 'maturidade', 'ranking', 'pontuacao', 'pontuação', 'mdm'],
+    resposta: '📊 <strong>IMGG (Índice de Maturidade da Governança)</strong> e <strong>MDM (Modelo de Maturidade)</strong> são instrumentos que medem o quanto cada RA evoluiu em governança (Resoluções 08/2025 e 09/2025). Cada Plano de Ação aprovado contribui para a pontuação da sua RA no IMGG.<br><br>O ranking é divulgado anualmente pelo CGov. RAs com plano completo, indicadores SMART, riscos identificados e CIG funcionando ganham mais pontos. RAs com planos incompletos ou sem CIG perdem posições.'
+  },
+
 ];
 
 function consultarConselheira(pergunta) {
@@ -6594,7 +6874,7 @@ function consultarConselheira(pergunta) {
     if (match) return BASE_CONSELHEIRA[i].resposta;
   }
   // Fallback: sugere entrar em contato com SEGEST
-  return 'Boa pergunta! Não tenho uma resposta específica na minha base local. <br><br>💡 <strong>Sugestões:</strong><br>• Consulte o <a href="http://www.cg.df.gov.br/conselho-de-governanca" target="_blank">Portal do CGov</a><br>• Envie por e-mail à SEGEST<br>• Reformule a pergunta usando termos como: indicador, risco, pilar, portaria, SEI, IMGG, SAEweb.';
+  return 'Boa pergunta! Não tenho uma resposta específica na minha base local. <br><br>💡 <strong>Sugestões:</strong><br>• Consulte o <a href="http://www.cg.df.gov.br/conselho-de-governanca" target="_blank">Portal do CGov</a><br>• Envie por e-mail à SEGEST<br>• Reformule a pergunta usando termos como: indicador, risco, pilar, portaria, SEI, IMGG.';
 }
 
 function abrirConselheira() {
@@ -6781,11 +7061,15 @@ function renderQRCodeCidadao() {
   html += '</div>';
   html += '<div class="qr-cidadao-texto">';
   html += '<h4>Pré-visualização do conteúdo (linguagem cidadã):</h4>';
-  html += '<p style="white-space:pre-line;font-family:Consolas,monospace;font-size:13px;background:#F9FAFB;padding:12px;border-radius:6px">' + esc(planoCidadao) + '</p>';
   html += '<p style="font-size:12px;color:#64748b;margin-top:10px">💡 Esta é a versão amigável do seu plano. Serve para acessibilidade, transparência ativa e comunicação direta com o cidadão.</p>';
   html += '</div></div>';
   return html;
 }
+
+// [FIX TELA EM BRANCO 2026-05-05] Chamada inicial de render() movida para cá.
+// Agora script1 + script2 já carregaram, então renderReview() consegue chamar
+// renderQRCodeCidadao() sem ReferenceError.
+render();
 </script>
 
 
@@ -6804,6 +7088,9 @@ function renderQRCodeCidadao() {
     </div>
   </div>
 </div>
+
+<!-- [MELHORIAS v2] Script externo -->
+<script src="enhancements.js"></script>
 
 </body>
 </html>
