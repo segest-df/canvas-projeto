@@ -1412,6 +1412,117 @@
     color: #78350F;
   }
 
+
+/* ===================================================
+   [PI 2026-05-05] Estilos do passo Programa de Integridade
+   =================================================== */
+.pi-caixa-legal {
+  background: #f0f9ff;
+  border-left: 4px solid #0EA5E9;
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #0c4a6e;
+}
+.pi-caixa-legal strong { color: #075985; }
+.pi-eixo {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+.pi-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+.pi-radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pi-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  background: #f8fafc;
+  transition: background 0.15s, border-color 0.15s;
+}
+.pi-radio:hover { background: #e0f2fe; border-color: #0EA5E9; }
+.pi-radio input[type="radio"] { margin: 0; accent-color: #0EA5E9; }
+.pi-radio input[type="radio"]:checked + span { font-weight: 700; color: #075985; }
+.pi-input {
+  width: 100%;
+  padding: 8px 11px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+.pi-input:focus { border-color: #0EA5E9; outline: 2px solid #bae6fd; outline-offset: 0; }
+
+/* Entrega concluída — checkbox e estilo */
+.entrega-concluida-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #065f46;
+}
+.entrega-concluida-box input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #059669;
+}
+.entrega-concluida.feito .entrega-titulo { text-decoration: line-through; opacity: 0.7; }
+
+/* Status de execução do plano */
+.status-exec-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #fafbff;
+  border: 1px solid #c7d2fe;
+  border-radius: 8px;
+  margin-bottom: 14px;
+  font-size: 13px;
+}
+.status-exec-box label { font-weight: 600; color: #312e81; margin: 0; }
+.status-exec-box select {
+  padding: 6px 10px;
+  border: 1px solid #c7d2fe;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 13px;
+}
+.status-exec-pct {
+  margin-left: auto;
+  background: #1e293b;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
 </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
@@ -1874,18 +1985,6 @@ var FIELD_DEFS = {
       { titulo: "Governan\u00e7a", texto: "CIG formalmente institu\u00eddo, com regimento aprovado e reuni\u00f5es ordin\u00e1rias em funcionamento." },
       { titulo: "Atendimento", texto: "Central de atendimento reorganizada com sistema de senhas, agendamento e pesquisa de satisfa\u00e7\u00e3o." },
       { titulo: "Riscos", texto: "Matriz de riscos da RA elaborada com planos de tratamento para os 10 riscos priorit\u00e1rios." }
-    ]
-  },
-  caracteristicas: {
-    field: "caracteristicas", label: "Caracter\u00edsticas",
-    question: "Quais s\u00e3o as caracter\u00edsticas essenciais desse produto?",
-    dica: "Liste os atributos que tornam o produto completo. Pense: \"para funcionar bem, ele precisa ser/ter...\"",
-    ajuda: "Caracter\u00edsticas s\u00e3o os atributos de qualidade do que ser\u00e1 entregue. Exemplo: se o produto \u00e9 um comit\u00ea, as caracter\u00edsticas podem ser 'reuni\u00f5es mensais', 'atas no SEI', 'composi\u00e7\u00e3o multissetorial'.",
-    placeholder: "Caracter\u00edsticas do produto principal...",
-    icon: "\u2B50", color: "#7c3aed",
-    exemplos: [
-      { titulo: "CIG", texto: "Composi\u00e7\u00e3o multissetorial \u2022 Reuni\u00f5es mensais com ata no SEI \u2022 Pauta estruturada \u2022 Delibera\u00e7\u00f5es registradas \u2022 Alinhamento com a SEGOV/CGDF." },
-      { titulo: "Atendimento", texto: "Acess\u00edvel a PCD \u2022 Bil\u00edngue (portugu\u00eas/Libras) \u2022 Tempo m\u00e1ximo de espera: 15 min \u2022 Pesquisa de satisfa\u00e7\u00e3o digital." }
     ]
   },
   justificativa: {
@@ -3987,10 +4086,6 @@ var STEPS = [
     fields: ["descricao", "produto"]
   },
   {
-    id: "caracteristicas", type: "single", label: "Caracter\u00edsticas",
-    fieldId: "caracteristicas"
-  },
-  {
     id: "analise", type: "group", label: "Justificativa e Indicadores",
     icon: "\uD83D\uDCCA", question: "Justifique o projeto e defina como medir o sucesso",
     dica: "Explique por que o projeto \u00e9 necess\u00e1rio e como ser\u00e1 avaliado.",
@@ -4032,6 +4127,17 @@ var STEPS = [
     ajuda: "A Agenda Viva cria uma linha do tempo do seu CIG. O sistema envia lembretes autom\u00e1ticos 7 dias antes de cada reuni\u00e3o e alerta sobre atas pendentes (Res. CGov 03/2021 \u2014 os CIGs devem se reunir regularmente e registrar atas)."
   },
   {
+    // [PI 2026-05-05] Programa de Integridade — vis\u00e3o curta institucional
+    // Base: Decreto Distrital 39.736/2019, Resolu\u00e7\u00e3o CGov 04/2024,
+    // Portarias CGDF (PROINT) 117/2021 e 301/2023, LC 840/2011.
+    id: "integridade", type: "integridade", label: "Programa de Integridade",
+    icon: "\u2705", color: "#0EA5E9",
+    question: "Como est\u00e1 o Programa de Integridade da sua RA?",
+    contexto: "Cinco perguntas r\u00e1pidas sobre o estado do PI da Administra\u00e7\u00e3o Regional. \u00c9 fotografia, n\u00e3o avalia\u00e7\u00e3o.",
+    dica: "Marque o que de fato est\u00e1 implantado. Se ainda n\u00e3o tem, marque \"N\u00e3o\" ou \"Em implanta\u00e7\u00e3o\". O importante \u00e9 a fotografia atual da RA.",
+    ajuda: "O Programa de Integridade \u00e9 estruturado pelo Decreto 39.736/2019 e regulado pelas Portarias CGDF. O CIG \u00e9 o \u00f3rg\u00e3o que aprova o Plano de Integridade da RA e determina sua publica\u00e7\u00e3o no s\u00edtio institucional. Esta etapa serve apenas para registro do estado atual \u2014 a avalia\u00e7\u00e3o de maturidade institucional \u00e9 atribui\u00e7\u00e3o da CGDF (IMGG 100 pontos, Resolu\u00e7\u00e3o CGov 08/2025)."
+  },
+  {
     id: "riscos-premissas", type: "group", label: "Premissas, Barreiras e Riscos",
     icon: "\u26A0\uFE0F", question: "Identifique premissas, barreiras e riscos",
     dica: "Aten\u00e7\u00e3o: cada campo pede um tipo diferente de informa\u00e7\u00e3o. Liste aqui os riscos principais em linguagem simples \u2014 a equipe de gest\u00e3o de riscos far\u00e1 a an\u00e1lise detalhada depois.",
@@ -4047,10 +4153,11 @@ var STEPS = [
 var PHASES = [
   { name: "Identifica\u00e7\u00e3o", steps: ["identificacao", "nome-objetivo"] },
   { name: "B\u00fassola Estrat\u00e9gica", steps: ["bussola"] },
-  { name: "Detalhamento", steps: ["detalhamento", "caracteristicas"] },
+  { name: "Detalhamento", steps: ["detalhamento"] },
   { name: "An\u00e1lise", steps: ["analise"] },
   { name: "Pessoas e Entregas", steps: ["partes", "entregas"] },
   { name: "Agenda do CIG", steps: ["agenda"] },
+  { name: "Programa de Integridade", steps: ["integridade"] },
   { name: "Premissas e Riscos", steps: ["riscos-premissas"] }
 ];
 
@@ -4067,12 +4174,16 @@ var REVIEW_ITEMS = [
   { id: "bussola", type: "bussola", label: "Alinhamento ao PEI", icon: "\uD83E\uDDED", phase: "B\u00fassola Estrat\u00e9gica" },
   { id: "descricao", field: "descricao", label: "Descri\u00e7\u00e3o", icon: "\uD83D\uDCCB", phase: "Detalhamento" },
   { id: "produto", field: "produto", label: "Produto Principal", icon: "\uD83D\uDCE6", phase: "Detalhamento" },
-  { id: "caracteristicas", field: "caracteristicas", label: "Caracter\u00edsticas", icon: "\u2B50", phase: "Detalhamento" },
   { id: "justificativa", field: "justificativa", label: "Justificativa", icon: "\u2705", phase: "An\u00e1lise" },
   { id: "indicador", field: "indicador", label: "Indicador", icon: "\uD83D\uDCCA", phase: "An\u00e1lise" },
   { id: "partes", type: "partes", label: "Partes Interessadas", icon: "\uD83D\uDC65", phase: "Pessoas e Entregas" },
   { id: "entregas", type: "entregas", label: "Entregas", icon: "\uD83D\uDCC5", phase: "Pessoas e Entregas" },
   { id: "agenda", type: "agenda", label: "Agenda Viva do CIG", icon: "\uD83D\uDCC5", phase: "Agenda do CIG" },
+  { id: "pi_implantado", field: "pi_implantado", label: "PI \u00b7 Programa implantado", icon: "\u2705", phase: "Programa de Integridade" },
+  { id: "pi_plano_aprovado", field: "pi_plano_aprovado", label: "PI \u00b7 Plano aprovado pelo CIG", icon: "\u2611\uFE0F", phase: "Programa de Integridade" },
+  { id: "pi_data_aprovacao", field: "pi_data_aprovacao", label: "PI \u00b7 Data da aprova\u00e7\u00e3o", icon: "\uD83D\uDCC5", phase: "Programa de Integridade" },
+  { id: "pi_publicacao", field: "pi_publicacao", label: "PI \u00b7 Publica\u00e7\u00e3o (link/SEI)", icon: "\uD83D\uDD17", phase: "Programa de Integridade" },
+  { id: "pi_observacao", field: "pi_observacao", label: "PI \u00b7 Observa\u00e7\u00e3o", icon: "\uD83D\uDCDD", phase: "Programa de Integridade" },
   { id: "premissas", field: "premissas", label: "Premissas", icon: "\uD83C\uDFC5", phase: "Premissas e Riscos" },
   { id: "barreiras", field: "barreiras", label: "Barreiras", icon: "\uD83D\uDEA7", phase: "Premissas e Riscos" },
   { id: "riscos", field: "riscos", label: "Riscos", icon: "\u26A0\uFE0F", phase: "Premissas e Riscos" }
@@ -4118,7 +4229,7 @@ function getFirstStepOfPhase(phaseIdx) {
 /* ===================================================
    CAMPOS OBRIGATORIOS
    =================================================== */
-var REQUIRED_FIELDS = ['responsavel_nome', 'responsavel_email', 'ra', 'pratica', 'projeto', 'objetivo', 'descricao', 'produto', 'caracteristicas', 'justificativa', 'indicador', 'partes', 'entregas', 'premissas', 'barreiras', 'riscos'];
+var REQUIRED_FIELDS = ['responsavel_nome', 'responsavel_email', 'ra', 'pratica', 'projeto', 'objetivo', 'descricao', 'produto', 'justificativa', 'indicador', 'partes', 'entregas', 'premissas', 'barreiras', 'riscos'];
 
 function isRequired(fieldOrId) {
   return REQUIRED_FIELDS.indexOf(fieldOrId) >= 0;
@@ -4228,12 +4339,11 @@ function novoPlano() {
     dadosSnapshot: {
       responsavel_nome: "", responsavel_email: "", cargo: "",
       ra: "", pratica: "", projeto: nomeInicial, objetivo: "", descricao: "",
-      produto: "", caracteristicas: "", justificativa: "",
+      produto: "", justificativa: "",
       indicador: "", patrocinio: "", equipe: "", publico: "",
       premissas: "", barreiras: "", riscos: "",
       pilares_aplicaveis: [], pilar_primario: "",
-      riscos_estruturados: [],
-      entregas: [{ entrega: "", atividades: "", prazo: "", investimento: "Sem custo direto", responsavel: "" }]
+      entregas: [{ entrega: "", atividades: "", prazo: "", investimento: "Sem custo direto", responsavel: "", concluida: false }]
     },
     devolutivas: [] // array de {data, analista, parecer, campos_ajustar}
   };
@@ -4602,24 +4712,28 @@ var showSuccess = false;
 var data = {
   responsavel_nome: "", responsavel_email: "", cargo: "",
   ra: "", pratica: "", projeto: "", objetivo: "", descricao: "",
-  produto: "", caracteristicas: "", justificativa: "",
+  produto: "", justificativa: "",
   indicador: "", patrocinio: "", equipe: "", publico: "",
   premissas: "", barreiras: "", riscos: "",
   // [Res. CGov 04/2024] Pilares aplic\u00e1veis ao projeto (m\u00faltipla escolha)
   pilares_aplicaveis: [], // array de IDs: ["lideranca", "estrategia", ...]
   pilar_primario: "",     // ID do pilar prim\u00e1rio
-  // [Res. CGov 15/2026] Riscos estruturados
-  riscos_estruturados: [], // array de objetos {descricao, categoria, probabilidade, impacto, nivel, resposta, contingencia, responsavel}
   entregas: [
-    { entrega: "", atividades: "", prazo: "", investimento: "Sem custo direto", responsavel: "" }
+    { entrega: "", atividades: "", prazo: "", investimento: "Sem custo direto", responsavel: "", concluida: false }
   ],
   // [REV #5] Agenda Viva do CIG — gest\u00e3o completa de reuni\u00f5es (Res. CGov 03/2021)
   agenda_frequencia: "",   // "mensal" | "bimestral" | "trimestral" | "outra"
-  agenda_observacoes: "",
   reunioes: [],
   // [REV #6] B\u00fassola Estrat\u00e9gica — alinhamento ao PEI da RA
   pei_objetivos_apoiados: [], // array de {id, justificativa}
-  pei_observacao: ""
+  // [PI 2026-05-05] Programa de Integridade — vis\u00e3o curta (estilo Agenda Viva)
+  pi_implantado: "",        // "Sim" | "N\u00e3o" | "Em implanta\u00e7\u00e3o"
+  pi_plano_aprovado: "",    // "Sim" | "N\u00e3o" | "Pendente"
+  pi_data_aprovacao: "",    // ano ou data textual
+  pi_publicacao: "",        // link ou n\u00ba SEI
+  pi_observacao: "",        // texto livre opcional
+  // [PI 2026-05-05] Status de execu\u00e7\u00e3o do plano (acompanhamento p\u00f3s-envio)
+  status_execucao: "",      // "" | "em_execucao" | "concluido" | "suspenso"
   // cada reuni\u00e3o: { data, horario, duracao, local, plataforma, pauta, participantes,
   //   entregas_vinculadas: [idx], ata_link, ata_sei, status: "agendada"|"realizada"|"cancelada",
   //   presentes, ausentes, quorum }
@@ -4714,7 +4828,7 @@ function esc(s) { var d = document.createElement('div'); d.textContent = s; retu
 
 function getProgress() {
   var fields = [data.responsavel_nome, data.responsavel_email, data.ra, data.pratica, data.projeto, data.objetivo, data.descricao, data.produto,
-    data.caracteristicas, data.justificativa, data.indicador,
+    data.justificativa, data.indicador,
     data.patrocinio, data.equipe, data.publico,
     data.premissas, data.barreiras, data.riscos];
   var ef = [];
@@ -4958,7 +5072,7 @@ function getEntregaPreenchimento(ent) {
 function addEntrega() {
   saveCurrentInputs();
   var newIdx = data.entregas.length;
-  data.entregas.push({ entrega: '', atividades: '', prazo: '', investimento: 'Sem custo direto', responsavel: '' });
+  data.entregas.push({ entrega: '', atividades: '', prazo: '', investimento: 'Sem custo direto', responsavel: '', concluida: false });
   entregasExpandidas[newIdx] = true;
   saveToStorage();
   render();
@@ -5056,17 +5170,21 @@ function clearAllData() {
   data = {
     responsavel_nome: "", responsavel_email: "", cargo: "",
     ra: "", pratica: "", projeto: "", objetivo: "", descricao: "",
-    produto: "", caracteristicas: "", justificativa: "",
+    produto: "", justificativa: "",
     indicador: "", patrocinio: "", equipe: "", publico: "",
     premissas: "", barreiras: "", riscos: "",
     entregas: [
-      { entrega: "", atividades: "", prazo: "", investimento: "Sem custo direto", responsavel: "" }
+      { entrega: "", atividades: "", prazo: "", investimento: "Sem custo direto", responsavel: "", concluida: false }
     ],
     agenda_frequencia: "",
-    agenda_observacoes: "",
-    reunioes: [],
+        reunioes: [],
     pei_objetivos_apoiados: [],
-    pei_observacao: ""
+    pi_implantado: "",
+    pi_plano_aprovado: "",
+    pi_data_aprovacao: "",
+    pi_publicacao: "",
+    pi_observacao: "",
+    status_execucao: ""
   };
   entregasExpandidas = {};
   currentStep = 0;
@@ -5507,6 +5625,79 @@ function changeReuniaoStatus(idx, novoStatus) {
   render();
 }
 
+/* ===================================================
+   [PI 2026-05-05] Programa de Integridade — vis\u00e3o enxuta institucional
+   Base: Decreto 39.736/2019; Resolu\u00e7\u00e3o CGov 04/2024;
+         Portarias CGDF 117/2021 e 301/2023; LC 840/2011.
+   Crit\u00e9rio: 5 perguntas r\u00e1pidas. Avalia\u00e7\u00e3o de maturidade
+   permanece com a CGDF (IMGG 100 pontos, Res. CGov 08/2025).
+   =================================================== */
+function renderIntegridadeEnxuto(step) {
+  function radio(field, opcoes) {
+    var html = '<div class="pi-radio-group" role="radiogroup">';
+    opcoes.forEach(function(opt) {
+      var checked = data[field] === opt ? ' checked' : '';
+      html += '<label class="pi-radio">' +
+        '<input type="radio" name="' + field + '" value="' + esc(opt) + '"' + checked +
+        ' onchange="data[\''+field+'\']=this.value;saveToStorage();render()"> ' +
+        '<span>' + esc(opt) + '</span>' +
+      '</label>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  function textInput(field, placeholder) {
+    return '<input type="text" class="pi-input" placeholder="' + esc(placeholder || '') + '" ' +
+      'value="' + esc(data[field] || '') + '" ' +
+      'oninput="data[\''+field+'\']=this.value" onblur="saveToStorage()">';
+  }
+
+  function textArea(field, placeholder) {
+    return '<textarea class="pi-input" rows="2" placeholder="' + esc(placeholder || '') + '" ' +
+      'oninput="data[\''+field+'\']=this.value" onblur="saveToStorage()">' + esc(data[field] || '') + '</textarea>';
+  }
+
+  var caixa = '<div class="pi-caixa-legal">' +
+    '<strong>Base normativa:</strong> Decreto Distrital n\u00ba 39.736/2019; Resolu\u00e7\u00e3o CGov n\u00ba 04/2024; Portarias CGDF n\u00ba 117/2021 e n\u00ba 301/2023; LC n\u00ba 840/2011.' +
+    '<br><br>S\u00e3o cinco perguntas r\u00e1pidas sobre o estado do Programa de Integridade da Administra\u00e7\u00e3o Regional. Esta etapa registra a fotografia atual \u2014 a <strong>avalia\u00e7\u00e3o de maturidade</strong> permanece atribui\u00e7\u00e3o da CGDF, aplicada pelo IMGG 100 pontos (Resolu\u00e7\u00e3o CGov n\u00ba 08/2025).' +
+  '</div>';
+
+  var html = caixa;
+
+  // 1. Programa implantado?
+  html += '<div class="pi-eixo">' +
+    '<label class="pi-label">1. Programa de Integridade implantado na RA?</label>' +
+    radio('pi_implantado', ['Sim', 'N\u00e3o', 'Em implanta\u00e7\u00e3o']) +
+  '</div>';
+
+  // 2. Plano de Integridade aprovado pelo CIG?
+  html += '<div class="pi-eixo">' +
+    '<label class="pi-label">2. H\u00e1 Plano de Integridade aprovado pelo CIG?</label>' +
+    radio('pi_plano_aprovado', ['Sim', 'N\u00e3o', 'Pendente']) +
+  '</div>';
+
+  // 3. Quando foi aprovado
+  html += '<div class="pi-eixo">' +
+    '<label class="pi-label">3. Quando foi aprovado? (ano ou data)</label>' +
+    textInput('pi_data_aprovacao', 'Ex: 2025 \u00b7 12/03/2026') +
+  '</div>';
+
+  // 4. Publicação
+  html += '<div class="pi-eixo">' +
+    '<label class="pi-label">4. Link de publica\u00e7\u00e3o ou n\u00ba do processo SEI</label>' +
+    textInput('pi_publicacao', 'Ex: https://www.ra.df.gov.br/integridade  ou  00000-00000000/2026-00') +
+  '</div>';
+
+  // 5. Observação
+  html += '<div class="pi-eixo">' +
+    '<label class="pi-label">5. Observa\u00e7\u00e3o (opcional)</label>' +
+    textArea('pi_observacao', 'Anote algo relevante que n\u00e3o coube nas perguntas anteriores. Opcional.') +
+  '</div>';
+
+  return html;
+}
+
 function renderAgenda(step) {
   if (!data.reunioes) data.reunioes = [];
   var contextoHTML = step.contexto ? '<div class="step-contexto">' + esc(step.contexto) + '</div>' : '';
@@ -5555,12 +5746,6 @@ function renderAgenda(step) {
       '<div>' +
         '<label>🔄 Frequência das reuniões ordinárias</label>' +
         '<select onchange="data.agenda_frequencia=this.value;saveToStorage()">' + freqHTML + '</select>' +
-      '</div>' +
-      '<div>' +
-        '<label>📝 Observações (local padrão, duração, etc.)</label>' +
-        '<input type="text" value="' + esc(data.agenda_observacoes || '') + '" ' +
-          'oninput="data.agenda_observacoes=this.value;saveToStorage()" ' +
-          'placeholder="Ex: sempre 1ª quinta do mês, Sala 1, 14h">' +
       '</div>' +
     '</div>';
 
@@ -6032,6 +6217,12 @@ function renderEntregas(step) {
           '<span class="entrega-toggle ' + (isOpen ? 'open' : '') + '">\u25BC</span>' +
         '</div>' +
       '</div>' +
+      '<div class="entrega-concluida-box">' +
+        '<input type="checkbox" id="ent-' + i + '-concluida" ' + (ent.concluida ? 'checked' : '') +
+          ' onchange="data.entregas[' + i + '].concluida=this.checked;saveToStorage();render()">' +
+        '<label for="ent-' + i + '-concluida"><strong>Entrega j\u00e1 conclu\u00edda?</strong></label>' +
+        (ent.concluida ? ' <span style="margin-left:auto;color:#059669;font-weight:700">\u2713 conclu\u00edda</span>' : '') +
+      '</div>' +
       '<div class="entrega-progress">' +
         '<div class="entrega-progress-bar"><div class="entrega-progress-fill" style="width:' + pct + '%;background:' + progressColor + '"></div></div>' +
         '<span>' + pct + '%</span>' +
@@ -6219,6 +6410,21 @@ function setPilarPrimario(pilarId) {
 function renderReview() {
   if (showSuccess) return renderSuccessScreen();
 
+  // [PI 2026-05-05] Status de execucao do plano + % executado
+  var totalEnt = (data.entregas || []).length;
+  var concluidas = (data.entregas || []).filter(function(e){ return e.concluida; }).length;
+  var pctExec = totalEnt > 0 ? Math.round((concluidas / totalEnt) * 100) : 0;
+  var statusBox = '<div class="status-exec-box">' +
+    '<label for="status-exec">Status da execu\u00e7\u00e3o do plano:</label>' +
+    '<select id="status-exec" onchange="data.status_execucao=this.value;saveToStorage();render()">' +
+      '<option value=""' + (data.status_execucao === '' ? ' selected' : '') + '>N\u00e3o iniciado</option>' +
+      '<option value="em_execucao"' + (data.status_execucao === 'em_execucao' ? ' selected' : '') + '>Em execu\u00e7\u00e3o</option>' +
+      '<option value="concluido"' + (data.status_execucao === 'concluido' ? ' selected' : '') + '>Conclu\u00eddo</option>' +
+      '<option value="suspenso"' + (data.status_execucao === 'suspenso' ? ' selected' : '') + '>Suspenso</option>' +
+    '</select>' +
+    (totalEnt > 0 ? '<span class="status-exec-pct">' + concluidas + '/' + totalEnt + ' entregas \u00b7 ' + pctExec + '%</span>' : '') +
+  '</div>';
+
   function getVal(item) {
     if (item.field) return data[item.field];
     if (item.type === 'partes') return [data.patrocinio, data.equipe, data.publico].filter(Boolean).join('\n');
@@ -6290,7 +6496,8 @@ function renderReview() {
     '</div>';
   }
 
-  return '<div class="review-header">' +
+  return statusBox +
+    '<div class="review-header">' +
       '<div class="icon">\uD83D\uDCCB</div>' +
       '<h2>Revis\u00e3o do Plano de A\u00e7\u00e3o</h2>' +
       '<p>Revise as informa\u00e7\u00f5es abaixo. Clique em qualquer se\u00e7\u00e3o para editar.</p>' +
@@ -6411,6 +6618,7 @@ function render() {
   else if (step.type === 'partes') contentHTML = renderPartes(step);
   else if (step.type === 'entregas') contentHTML = renderEntregas(step);
   else if (step.type === 'agenda') contentHTML = renderAgenda(step);
+  else if (step.type === 'integridade') contentHTML = renderIntegridadeEnxuto(step);
   else if (step.type === 'bussola') contentHTML = renderBussola(step);
   else if (step.type === 'group') contentHTML = renderGroup(step);
   else if (step.type === 'single') contentHTML = renderSingleStep(step);
@@ -6564,7 +6772,6 @@ function gerarPDFIndividual() {
         { label: "Objetivo", value: data.objetivo },
         { label: "Descricao", value: data.descricao },
         { label: "Produto Principal", value: data.produto },
-        { label: "Caracteristicas", value: data.caracteristicas },
         { label: "Justificativa", value: data.justificativa },
         { label: "Indicador", value: data.indicador },
         { label: "Patrocinio", value: data.patrocinio },
@@ -6840,8 +7047,8 @@ var BASE_CONSELHEIRA = [
     resposta: '🔁 <strong>Reenvio do plano</strong>: se sua devolutiva foi "Ajustar e Reenviar" (ou se você quer atualizar mesmo após aprovação):<br>1️⃣ Abra a Biblioteca de Planos e clique no plano<br>2️⃣ O sistema carrega os dados — você só edita os campos apontados na devolutiva<br>3️⃣ Clica em Enviar de novo<br><br>O sistema cria automaticamente a <strong>versão 2 (v2)</strong> e mantém a versão anterior no histórico. A SEGEST consegue comparar as duas versões e ver se você incorporou as sugestões. Não tem limite de versões.'
   },
   {
-    palavras: ['campos vazios', '4 campos', 'pratica descricao caracteristicas publico', 'esquece', 'comuns'],
-    resposta: '⚠️ <strong>Os 4 campos que ~100% dos planos esquecem</strong>: Prática de Governança, Descrição, Características, Público-alvo. Verifiquei nas devolutivas das outras RAs — quase todas receberam ressalva nesses mesmos 4 campos. Vale conferir antes de enviar:<br><br>• <strong>Prática</strong>: escolha na lista (sistema sugere o pilar automaticamente)<br>• <strong>Descrição</strong>: o que será feito na prática (diferente do objetivo)<br>• <strong>Características</strong>: atributos de qualidade do produto<br>• <strong>Público-alvo</strong>: quem se beneficia (diretos e indiretos)'
+    palavras: ['campos vazios', '3 campos', 'pratica descricao publico', 'esquece', 'comuns'],
+    resposta: '⚠️ <strong>Os 3 campos que ~100% dos planos esquecem</strong>: Prática de Governança, Descrição, Público-alvo. Verifiquei nas devolutivas das outras RAs — quase todas receberam ressalva nesses mesmos 3 campos. Vale conferir antes de enviar:<br><br>• <strong>Prática</strong>: escolha na lista (sistema sugere o pilar automaticamente)<br>• <strong>Descrição</strong>: o que será feito na prática (diferente do objetivo)<br>• <strong>Público-alvo</strong>: quem se beneficia (diretos e indiretos)'
   },
   {
     palavras: ['indicador generico', 'indicador genérico', 'indicador ruim', 'numerico quanto maior', 'percentual sozinho', 'indice'],
