@@ -56,6 +56,20 @@ body {
   flex-wrap: wrap;
   gap: 16px;
 }
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex: 1;
+}
+.header-logo {
+  height: 60px;
+  width: auto;
+  border-radius: 4px;
+  background: #fff;
+  padding: 4px 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
 .header h1 {
   font-size: 22px;
   font-weight: 800;
@@ -411,6 +425,8 @@ body {
 @media (max-width: 720px) {
   body { padding: 12px 8px; }
   .header { padding: 16px; flex-direction: column; align-items: flex-start; }
+  .header-logo { height: 44px; }
+  .header-brand { gap: 12px; }
   .section { padding: 16px; }
   .header h1 { font-size: 18px; }
   .pilar-row { grid-template-columns: 100px 1fr 50px; gap: 8px; }
@@ -475,7 +491,8 @@ function pegarToken() {
 function renderTokenForm(erro) {
   document.getElementById('app').innerHTML =
     '<div class="token-form">' +
-      '<h2>🏛️ Painel SEGEST</h2>' +
+      '<img src="logo-gdf-painel.png" alt="GDF" style="width:320px;max-width:80%;margin-bottom:16px">' +
+      '<h2>Painel SEGEST</h2>' +
       '<p>Plano de Ação CIG — 35 Administrações Regionais do DF</p>' +
       (erro ? '<div class="erro">' + erro + '</div>' : '') +
       '<input type="text" id="token-input" placeholder="Cole o token de acesso fornecido pela SEGEST" autocomplete="off">' +
@@ -580,9 +597,12 @@ function renderPainel(d) {
 
   // ===== HEADER =====
   html += '<div class="header">' +
-    '<div>' +
-      '<h1>🏛️ Painel SEGEST</h1>' +
-      '<div class="subtitle">Plano de Ação CIG — 35 Administrações Regionais do DF</div>' +
+    '<div class="header-brand">' +
+      '<img src="logo-gdf-painel.png" alt="GDF" class="header-logo">' +
+      '<div>' +
+        '<h1>Painel SEGEST</h1>' +
+        '<div class="subtitle">Plano de Ação CIG — 35 Administrações Regionais do DF</div>' +
+      '</div>' +
     '</div>' +
     '<div class="actions">' +
       '<button onclick="atualizar()">🔄 Atualizar</button>' +
