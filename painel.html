@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Painel SEGEST — Plano de Ação CIG</title>
+<meta name="description" content="Painel consolidado dos Planos de Ação dos Comitês Internos de Governança das 35 Administrações Regionais do DF — SEGEST/SEGOV-DF">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #f1f5f9;
+  --bg-card: #ffffff;
+  --border: #e2e8f0;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --gdf-blue: #1565C0;
+  --gdf-blue-dark: #0D47A1;
+  --gdf-blue-light: #E8F1FA;
+  --gdf-yellow: #FFD600;
+  --green: #059669;
+  --green-light: #d1fae5;
+  --amber: #f59e0b;
+  --amber-light: #fef3c7;
+  --red: #dc2626;
+  --red-light: #fee2e2;
+  --pilar-lideranca: #8b5cf6;
+  --pilar-estrategia: #3b82f6;
+  --pilar-controle: #f59e0b;
+  --pilar-integridade: #10b981;
+  --font: 'Source Sans 3', system-ui, -apple-system, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  padding: 24px 16px;
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.container { max-width: 1280px; margin: 0 auto; }
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, var(--gdf-blue) 0%, var(--gdf-blue-dark) 100%);
+  color: #fff;
+  padding: 24px 28px;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.header h1 {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.header .subtitle {
+  font-size: 13px;
+  opacity: 0.9;
+}
+.header .actions {
+  display: flex;
+  gap: 8px;
+}
+.header button {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+.header button:hover { background: rgba(255,255,255,0.25); }
+.gdf-bar {
+  display: flex;
+  height: 4px;
+}
+.gdf-bar > div { flex: 1; }
+.gdf-bar > div:nth-child(1) { background: #00984A; }
+.gdf-bar > div:nth-child(2) { background: var(--gdf-yellow); }
+.gdf-bar > div:nth-child(3) { background: #E63946; }
+.gdf-bar > div:nth-child(4) { background: var(--gdf-blue); }
+
+/* Updated info */
+.updated-info {
+  background: #fff;
+  padding: 10px 28px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Sections */
+.section {
+  background: #fff;
+  padding: 24px 28px;
+  border-bottom: 1px solid var(--border);
+}
+.section:last-child {
+  border-radius: 0 0 12px 12px;
+  border-bottom: none;
+}
+.section h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gdf-blue-dark);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* KPI Cards */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+.kpi-card {
+  background: var(--gdf-blue-light);
+  border-left: 4px solid var(--gdf-blue);
+  border-radius: 6px;
+  padding: 16px 18px;
+}
+.kpi-card .value {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--gdf-blue-dark);
+  line-height: 1.1;
+}
+.kpi-card .label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.kpi-card .helper {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Pilar bars */
+.pilar-row {
+  display: grid;
+  grid-template-columns: 140px 1fr 60px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.pilar-row .nome {
+  font-weight: 600;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pilar-row .barra {
+  height: 22px;
+  background: var(--bg-deep);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.pilar-row .barra > div {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+}
+.pilar-row .qtd {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-align: right;
+}
+
+/* Status execução */
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+}
+.status-card {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  background: #fff;
+}
+.status-card .qtd {
+  font-size: 22px;
+  font-weight: 800;
+}
+.status-card .label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-top: 2px;
+}
+.status-card.nao-iniciado { border-left: 4px solid var(--text-muted); }
+.status-card.em-execucao { border-left: 4px solid var(--amber); }
+.status-card.concluido { border-left: 4px solid var(--green); }
+.status-card.suspenso { border-left: 4px solid var(--red); }
+
+/* PI */
+.pi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+.pi-card {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 16px;
+  background: #f0fdf4;
+  border-left: 4px solid var(--green);
+}
+.pi-card .qtd {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--green);
+}
+.pi-card .label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* Tabela RAs */
+.tabela-saude {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.tabela-saude th {
+  background: var(--gdf-blue-light);
+  color: var(--gdf-blue-dark);
+  font-weight: 700;
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 2px solid var(--gdf-blue);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.tabela-saude td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.tabela-saude tbody tr:hover { background: #f8fafc; }
+.tabela-saude .pct-bar {
+  width: 80px;
+  height: 8px;
+  background: var(--bg-deep);
+  border-radius: 4px;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+.tabela-saude .pct-bar > div { height: 100%; }
+.pct-verde { background: var(--green); }
+.pct-amarelo { background: var(--amber); }
+.pct-vermelho { background: var(--red); }
+.pct-cinza { background: var(--text-muted); }
+
+/* Filtros */
+.filtros {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  background: var(--bg-deep);
+  border-radius: 6px;
+}
+.filtros label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.filtros select {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 13px;
+  background: #fff;
+}
+.filtros button {
+  background: var(--gdf-blue);
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Token form */
+.token-form {
+  background: #fff;
+  border-radius: 12px;
+  padding: 40px;
+  max-width: 480px;
+  margin: 80px auto;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+.token-form h2 {
+  color: var(--gdf-blue-dark);
+  margin-bottom: 8px;
+}
+.token-form p {
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+.token-form input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.token-form button {
+  width: 100%;
+  background: var(--gdf-blue);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.token-form .erro {
+  background: var(--red-light);
+  color: var(--red);
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+/* Loading e error */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.spinner {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--gdf-blue);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin-bottom: 12px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.erro-box {
+  background: var(--red-light);
+  color: var(--red);
+  padding: 16px 20px;
+  border-radius: 6px;
+  margin: 20px 0;
+  font-size: 13px;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-muted);
+  font-size: 11px;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  border-radius: 0 0 12px 12px;
+}
+
+/* Responsivo */
+@media (max-width: 720px) {
+  body { padding: 12px 8px; }
+  .header { padding: 16px; flex-direction: column; align-items: flex-start; }
+  .section { padding: 16px; }
+  .header h1 { font-size: 18px; }
+  .pilar-row { grid-template-columns: 100px 1fr 50px; gap: 8px; }
+  .tabela-saude { font-size: 12px; }
+  .tabela-saude th, .tabela-saude td { padding: 6px 8px; }
+}
+
+@media print {
+  body { background: #fff; padding: 0; }
+  .header { background: var(--gdf-blue) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .header .actions, .filtros { display: none; }
+  .section { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="app">
+
+<div class="loading">
+  <div class="spinner"></div>
+  <div>Carregando…</div>
+</div>
+
+</div>
+
+<script>
+/* ===================================================
+   Painel SEGEST — Plano de Ação CIG
+   Etapa 1: dados consolidados que já existem na planilha
+   =================================================== */
+
+var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzCMuX9Z8yXOr6fRCtTmpQaf7wOOqBd9k2Ggftg8FAbte2ElhQkw_W7ZmQIKY4F_MzF/exec';
+var CACHE_MS = 5 * 60 * 1000; // 5 minutos
+var CACHE_KEY = 'cig_painel_cache';
+var TOKEN_KEY = 'cig_painel_token';
+
+document.addEventListener('DOMContentLoaded', function() {
+  var token = pegarToken();
+  if (!token) {
+    renderTokenForm();
+    return;
+  }
+  carregarDados(token);
+});
+
+function pegarToken() {
+  // 1. URL ?token=X
+  var urlToken = new URLSearchParams(location.search).get('token');
+  if (urlToken) {
+    try { localStorage.setItem(TOKEN_KEY, urlToken); } catch(e) {}
+    return urlToken;
+  }
+  // 2. localStorage
+  try {
+    var t = localStorage.getItem(TOKEN_KEY);
+    if (t) return t;
+  } catch(e) {}
+  return null;
+}
+
+function renderTokenForm(erro) {
+  document.getElementById('app').innerHTML =
+    '<div class="token-form">' +
+      '<h2>🏛️ Painel SEGEST</h2>' +
+      '<p>Plano de Ação CIG — 35 Administrações Regionais do DF</p>' +
+      (erro ? '<div class="erro">' + erro + '</div>' : '') +
+      '<input type="text" id="token-input" placeholder="Cole o token de acesso fornecido pela SEGEST" autocomplete="off">' +
+      '<button onclick="entrarComToken()">Acessar painel</button>' +
+      '<p style="margin-top:20px;font-size:11px;color:#94a3b8">' +
+        'Acesso restrito. Token disponível para servidores da SEGEST/SEGOV.' +
+      '</p>' +
+    '</div>';
+  setTimeout(function() {
+    var inp = document.getElementById('token-input');
+    if (inp) inp.focus();
+    if (inp) inp.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') entrarComToken();
+    });
+  }, 100);
+}
+
+function entrarComToken() {
+  var token = (document.getElementById('token-input').value || '').trim();
+  if (!token) return;
+  try { localStorage.setItem(TOKEN_KEY, token); } catch(e) {}
+  carregarDados(token);
+}
+
+function sair() {
+  try { localStorage.removeItem(TOKEN_KEY); localStorage.removeItem(CACHE_KEY); } catch(e) {}
+  location.href = location.pathname;
+}
+
+function carregarDados(token, forcarRecarga) {
+  // Tentar cache primeiro
+  if (!forcarRecarga) {
+    try {
+      var cache = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
+      if (cache.token === token && cache.timestamp && (Date.now() - cache.timestamp) < CACHE_MS) {
+        renderPainel(cache.dados);
+        return;
+      }
+    } catch(e) {}
+  }
+
+  document.getElementById('app').innerHTML =
+    '<div class="loading"><div class="spinner"></div><div>Carregando dados do painel…</div></div>';
+
+  fetch(GOOGLE_SCRIPT_URL + '?action=painel_dados&token=' + encodeURIComponent(token))
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.status === 'error') {
+        if (String(d.mensagem || '').toLowerCase().indexOf('token') >= 0) {
+          try { localStorage.removeItem(TOKEN_KEY); } catch(e) {}
+          renderTokenForm('Token inválido ou expirado.');
+        } else {
+          mostrarErro(d.mensagem || 'Erro ao carregar dados');
+        }
+        return;
+      }
+      // Cachear
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ token: token, timestamp: Date.now(), dados: d }));
+      } catch(e) {}
+      renderPainel(d);
+    })
+    .catch(function(e) { mostrarErro('Falha de conexão: ' + e); });
+}
+
+function mostrarErro(msg) {
+  document.getElementById('app').innerHTML =
+    '<div class="erro-box"><strong>Erro:</strong> ' + esc(msg) + '</div>' +
+    '<button onclick="location.reload()" style="background:#1565C0;color:#fff;border:none;padding:10px 20px;border-radius:6px;cursor:pointer">Tentar novamente</button>';
+}
+
+function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+
+function fmtData(iso) {
+  if (!iso) return '—';
+  try {
+    var d = new Date(iso);
+    return d.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+  } catch(e) { return '—'; }
+}
+
+function fmtDataCurta(iso) {
+  if (!iso) return '—';
+  try {
+    var d = new Date(iso);
+    return d.toLocaleDateString('pt-BR');
+  } catch(e) { return '—'; }
+}
+
+/* ===================================================
+   RENDER PRINCIPAL
+   =================================================== */
+function renderPainel(d) {
+  if (d.vazio) {
+    document.getElementById('app').innerHTML =
+      '<div class="erro-box">Ainda não há planos de ação cadastrados na planilha.</div>';
+    return;
+  }
+
+  var k = d.kpis || {};
+  var html = '';
+
+  // ===== HEADER =====
+  html += '<div class="header">' +
+    '<div>' +
+      '<h1>🏛️ Painel SEGEST</h1>' +
+      '<div class="subtitle">Plano de Ação CIG — 35 Administrações Regionais do DF</div>' +
+    '</div>' +
+    '<div class="actions">' +
+      '<button onclick="atualizar()">🔄 Atualizar</button>' +
+      '<button onclick="window.print()">🖨️ Imprimir</button>' +
+      '<button onclick="sair()">🚪 Sair</button>' +
+    '</div>' +
+  '</div>';
+  html += '<div class="gdf-bar"><div></div><div></div><div></div><div></div></div>';
+  html += '<div class="updated-info">Atualizado em ' + fmtData(d.atualizadoEm) + ' (cache local renovado a cada 5 minutos)</div>';
+
+  // ===== SECTION: KPIs =====
+  html += '<div class="section">' +
+    '<h2>📊 Visão Geral</h2>' +
+    '<div class="kpi-grid">' +
+      '<div class="kpi-card"><div class="value">' + (k.totalRAsComPlano || 0) + '<span style="font-size:14px;color:#64748b;font-weight:400">/ ' + (k.totalRAsCadastro || 35) + '</span></div><div class="label">RAs com pelo menos 1 plano</div></div>' +
+      '<div class="kpi-card"><div class="value">' + (k.totalPlanos || 0) + '</div><div class="label">Planos únicos cadastrados</div><div class="helper">(considerada a versão mais recente)</div></div>' +
+      '<div class="kpi-card"><div class="value">' + (k.aprovados || 0) + '</div><div class="label">Aprovados</div></div>' +
+      '<div class="kpi-card"><div class="value">' + (k.ressalvas || 0) + '</div><div class="label">Aprovados com ressalvas</div></div>' +
+      '<div class="kpi-card"><div class="value">' + (k.devolvidos || 0) + '</div><div class="label">Em ajustes / devolvidos</div></div>' +
+      '<div class="kpi-card"><div class="value">' + (k.pctExecucaoMedia || 0) + '%</div><div class="label">% médio de entregas concluídas</div><div class="helper">(planos com entregas registradas)</div></div>' +
+    '</div>' +
+  '</div>';
+
+  // ===== SECTION: Pilares =====
+  var p = d.porPilar || {};
+  var totalPilar = (p.lideranca||0) + (p.estrategia||0) + (p.controle||0) + (p.integridade||0) + (p.outros||0);
+  function pilarBar(nome, qtd, cor, icone) {
+    var pct = totalPilar > 0 ? (qtd / totalPilar * 100) : 0;
+    return '<div class="pilar-row">' +
+      '<div class="nome">' + icone + ' ' + nome + '</div>' +
+      '<div class="barra"><div style="width:' + pct + '%;background:' + cor + '">' + (pct >= 8 ? Math.round(pct) + '%' : '') + '</div></div>' +
+      '<div class="qtd">' + qtd + ' plano' + (qtd === 1 ? '' : 's') + '</div>' +
+    '</div>';
+  }
+  html += '<div class="section">' +
+    '<h2>🎯 Cobertura dos 4 Pilares de Governança (Resolução CGov nº 04/2024)</h2>' +
+    pilarBar('Liderança',  p.lideranca || 0,   'var(--pilar-lideranca)',  '👤') +
+    pilarBar('Estratégia', p.estrategia || 0,  'var(--pilar-estrategia)', '🎯') +
+    pilarBar('Controle',   p.controle || 0,    'var(--pilar-controle)',   '📊') +
+    pilarBar('Integridade',p.integridade || 0, 'var(--pilar-integridade)','✅') +
+    (p.outros > 0 ? pilarBar('Sem pilar definido', p.outros, '#94a3b8', '◯') : '') +
+  '</div>';
+
+  // ===== SECTION: Status execução =====
+  var se = d.statusExecucao || {};
+  html += '<div class="section">' +
+    '<h2>📈 Status de Execução dos Planos</h2>' +
+    '<div class="status-grid">' +
+      '<div class="status-card nao-iniciado"><div class="qtd">' + (se['Não iniciado']||0) + '</div><div class="label">Não iniciado</div></div>' +
+      '<div class="status-card em-execucao"><div class="qtd">' + (se['Em execução']||0) + '</div><div class="label">Em execução</div></div>' +
+      '<div class="status-card concluido"><div class="qtd">' + (se['Concluído']||0) + '</div><div class="label">Concluído</div></div>' +
+      '<div class="status-card suspenso"><div class="qtd">' + (se['Suspenso']||0) + '</div><div class="label">Suspenso</div></div>' +
+    '</div>' +
+  '</div>';
+
+  // ===== SECTION: Programa de Integridade =====
+  var pi = d.programaIntegridade || {};
+  html += '<div class="section">' +
+    '<h2>✅ Programa de Integridade (fotografia atual das RAs)</h2>' +
+    '<p style="font-size:12px;color:#94a3b8;margin-bottom:14px">Refere-se aos campos do passo Programa de Integridade preenchidos pelos Planos de Ação. A avaliação de maturidade institucional permanece atribuição da CGDF (IMGG 100 pontos, Resolução CGov nº 08/2025).</p>' +
+    '<div class="pi-grid">' +
+      '<div class="pi-card"><div class="qtd">' + (pi.comProgramaImplantado || 0) + '<span style="font-size:14px;color:#64748b;font-weight:400">/ ' + (pi.denominador || 0) + '</span></div><div class="label">Planos com PI implantado na RA</div></div>' +
+      '<div class="pi-card"><div class="qtd">' + (pi.comPlanoAprovadoCIG || 0) + '<span style="font-size:14px;color:#64748b;font-weight:400">/ ' + (pi.denominador || 0) + '</span></div><div class="label">Planos com Plano de Integridade aprovado pelo CIG</div></div>' +
+      '<div class="pi-card"><div class="qtd">' + (pi.comPublicacao || 0) + '<span style="font-size:14px;color:#64748b;font-weight:400">/ ' + (pi.denominador || 0) + '</span></div><div class="label">Planos com publicação institucional registrada</div></div>' +
+    '</div>' +
+  '</div>';
+
+  // ===== SECTION: Tabela RAs =====
+  var saude = (d.saudeRA || []).slice();
+  html += '<div class="section">' +
+    '<h2>🏛️ Situação por Administração Regional</h2>' +
+    '<p style="font-size:12px;color:#94a3b8;margin-bottom:14px">Apresentação em ordem alfabética. As Regionais com planos mais recentemente atualizados aparecem com indicador visual; demais não constam.</p>' +
+    '<table class="tabela-saude">' +
+      '<thead><tr>' +
+        '<th>Regional</th>' +
+        '<th>Planos</th>' +
+        '<th>Status execução (último plano)</th>' +
+        '<th>Entregas concluídas</th>' +
+        '<th>Última atualização</th>' +
+      '</tr></thead>' +
+      '<tbody>' +
+      saude.map(function(r) {
+        var pct = r.pctMedio || 0;
+        var corClass = pct === 0 ? 'pct-cinza' : (pct < 33 ? 'pct-vermelho' : (pct < 66 ? 'pct-amarelo' : 'pct-verde'));
+        return '<tr>' +
+          '<td><strong>' + esc(r.ra) + '</strong></td>' +
+          '<td>' + r.nPlanos + '</td>' +
+          '<td>' + esc(r.ultimoStatus || '—') + '</td>' +
+          '<td><span class="pct-bar"><div class="' + corClass + '" style="width:' + pct + '%"></div></span>' + pct + '%</td>' +
+          '<td>' + fmtDataCurta(r.ultimaData) + '</td>' +
+        '</tr>';
+      }).join('') +
+      '</tbody>' +
+    '</table>' +
+  '</div>';
+
+  // ===== Footer =====
+  html += '<div class="footer">' +
+    'Painel SEGEST · Plano de Ação CIG · Etapa 1 (dados existentes — sem check-in trimestral)<br>' +
+    'Secretaria de Governo · Secretaria Executiva de Gestão Estratégica<br>' +
+    'Modelo de Governança Pública do DF — Resolução CGov nº 04/2024' +
+  '</div>';
+
+  document.getElementById('app').innerHTML = html;
+}
+
+function atualizar() {
+  var token = pegarToken();
+  if (token) carregarDados(token, true);
+}
+</script>
+
+</body>
+</html>
