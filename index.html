@@ -461,23 +461,25 @@
   /* Welcome */
   .welcome { text-align: center; padding: 40px 0; }
   .welcome-logo {
-    display: inline-flex; align-items: center; gap: 12px;
-    margin-bottom: 20px; padding: 10px 20px;
-    background: var(--gdf-blue-light); border: 1px solid #93C5FD;
-    border-radius: 12px;
+    display: inline-flex; align-items: center; gap: 22px;
+    margin-bottom: 28px; padding: 22px 32px;
+    background: #fff; border: 1px solid #cbd5e1;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(26, 58, 92, 0.08);
+    border-top: 4px solid var(--gdf-blue);
   }
   .welcome-logo-badge {
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
   }
   .welcome-logo-badge img {
-    height: 48px; width: auto; border-radius: 6px;
+    height: 80px; width: auto; border-radius: 8px;
   }
   .welcome-logo-text {
-    text-align: left; font-size: 13px; color: var(--gdf-blue);
-    font-weight: 600; line-height: 1.4;
+    text-align: left; font-size: 16px; color: var(--gdf-blue);
+    font-weight: 600; line-height: 1.45;
   }
-  .welcome-logo-text strong { display: block; font-size: 15px; font-weight: 800; }
+  .welcome-logo-text strong { display: block; font-size: 19px; font-weight: 800; margin-bottom: 2px; letter-spacing: -0.01em; }
   .welcome h2 { font-size: 28px; font-weight: 900; margin-bottom: 12px; letter-spacing: -0.02em; }
   .welcome p { font-size: 16px; color: var(--text-secondary); max-width: 520px; margin: 0 auto 8px; line-height: 1.7; }
   .welcome .sub { font-size: 14px; color: var(--text-muted); max-width: 480px; margin: 0 auto 24px; line-height: 1.6; }
@@ -713,36 +715,6 @@
   /* ==========================================================
      [REVOLUÇÃO] Estilos das novas features
      ========================================================== */
-
-  /* Banner de modo revolução */
-  .revolucao-banner {
-    background: linear-gradient(90deg, #7C3AED 0%, #1565C0 100%);
-    color: #fff; padding: 14px 20px;
-    border-radius: 0 0 16px 16px;
-    max-width: 780px; margin: 0 auto 20px;
-    box-shadow: 0 6px 20px rgba(124,58,237,0.35);
-  }
-  .revolucao-banner .rev-title {
-    font-size: 16px; font-weight: 800; text-align: center;
-    margin-bottom: 8px; letter-spacing: 0.3px;
-  }
-  .revolucao-banner .rev-title .tag {
-    background: #F59E0B; padding: 3px 10px; border-radius: 12px;
-    font-size: 11px; margin-right: 10px; letter-spacing: 0.5px;
-  }
-  .revolucao-banner .rev-badges {
-    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
-  }
-  .revolucao-banner .rev-badge {
-    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
-    padding: 6px 14px; border-radius: 14px; font-size: 12px; font-weight: 600;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .revolucao-banner .rev-badge .num {
-    background: #F59E0B; color: #fff; width: 20px; height: 20px;
-    border-radius: 50%; display: inline-flex; align-items: center;
-    justify-content: center; font-size: 11px; font-weight: 800;
-  }
 
   /* Toggle Modo História vs Formulário */
   .modo-toggle { display: flex; gap: 8px; justify-content: center; margin: 24px 0 16px; flex-wrap: wrap; }
@@ -1528,23 +1500,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
   </head>
   <body>
-
-<!-- [REVOLUÇÃO] Banner indicando versão demo -->
-<div class="revolucao-banner no-print">
-  <div class="rev-title">
-    <span class="tag">✨ REVOLUÇÃO</span>
-    Versão protótipo com 6 evoluções
-  </div>
-  <div class="rev-badges">
-    <span class="rev-badge"><span class="num">1</span>📰 Modo História</span>
-    <span class="rev-badge"><span class="num">2</span>🎓 IA Conselheira</span>
-    <span class="rev-badge"><span class="num">3</span>📱 QR Código Cidadão</span>
-    <span class="rev-badge"><span class="num">4</span>📚 Biblioteca de Planos</span>
-    <span class="rev-badge"><span class="num">5</span>📅 Agenda Viva do CIG</span>
-    <span class="rev-badge"><span class="num">6</span>🧭 Bússola Estratégica</span>
-  </div>
-</div>
-
 
 <div class="container" id="app"></div>
 <div class="autosave-indicator" id="autosave-indicator">Salvo automaticamente</div>
