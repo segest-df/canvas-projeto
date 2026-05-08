@@ -4705,6 +4705,9 @@ var currentStep = 0;
 var modoHistoriaAtivo = false; // [REVOLU\u00c7\u00c3O] declarado cedo para evitar ReferenceError
 var submitting = false;
 var showSuccess = false;
+// [BUG localStorage] Flag de intera\u00e7\u00e3o na sess\u00e3o atual \u2014 vira true ao primeiro input
+// Evita que rascunho carregado do localStorage seja enviado sem o usu\u00e1rio ter interagido
+var sessaoInteragiu = false;
 
 var data = {
   responsavel_nome: "", responsavel_email: "", cargo: "",
@@ -5159,6 +5162,46 @@ function removeEntrega(idx) {
   render();
 }
 
+/* [BUG localStorage] Reset interno SEM confirm \u2014 usado pelas variantes contextualizadas */
+function _resetarDadosLocal() {
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(STORAGE_STEP_KEY);
+  localStorage.removeItem(STORAGE_SENT_KEY);
+  data = {
+    responsavel_nome: "", responsavel_email: "", cargo: "",
+    ra: "", pratica: "", projeto: "", objetivo: "", descricao: "",
+    produto: "", justificativa: "",
+    indicador: "", patrocinio: "", equipe: "", publico: "",
+    premissas: "", barreiras: "", riscos: "",
+    entregas: [
+      { entrega: "", atividades: "", prazo: "", investimento: "Sem custo direto", responsavel: "", concluida: false }
+    ],
+    agenda_frequencia: "",
+    reunioes: [],
+    pei_objetivos_apoiados: [],
+    pi_implantado: "",
+    pi_plano_aprovado: "",
+    pi_data_aprovacao: "",
+    pi_publicacao: "",
+    pi_observacao: "",
+    status_execucao: ""
+  };
+  entregasExpandidas = {};
+  currentStep = 0;
+  showSuccess = false;
+  sessaoInteragiu = false;
+}
+
+/* [BUG localStorage] Iniciar novo plano DA WELCOME \u2014 confirm contextualizado para o cen\u00e1rio rascunho-antigo */
+function iniciarNovoPlanoWelcome() {
+  var msg = 'Voc\u00ea tem um rascunho salvo neste navegador (de uma sess\u00e3o anterior).\n\n' +
+            'Iniciar um novo plano vai DESCARTAR esse rascunho e come\u00e7ar do zero.\n\n' +
+            'Tem certeza que deseja continuar?';
+  if (!confirm(msg)) return;
+  _resetarDadosLocal();
+  render();
+}
+
 function clearAllData() {
   if (!confirm('Tem certeza que deseja limpar todos os dados? Esta a\u00e7\u00e3o n\u00e3o pode ser desfeita.')) return;
   localStorage.removeItem(STORAGE_KEY);
@@ -5272,6 +5315,28 @@ function submitToSEGOV() {
   saveCurrentInputs();
   saveToStorage();
 
+  // [BUG localStorage] Valida\u00e7\u00e3o anti-fantasma:
+  // Se o usu\u00e1rio N\u00c3O interagiu nesta sess\u00e3o mas data est\u00e1 preenchida,
+  // significa que veio tudo do localStorage (rascunho antigo).
+  // Bloqueia envio e oferece 3 op\u00e7\u00f5es claras.
+  if (!sessaoInteragiu && (data.responsavel_nome || data.projeto || data.ra)) {
+    var msg = '\u26a0 ATEN\u00c7\u00c3O\n\n' +
+              'Detectamos um rascunho deste navegador, mas voc\u00ea n\u00e3o editou nenhum campo nesta sess\u00e3o.\n\n' +
+              'Para evitar envio acidental de dados antigos, escolha:\n\n' +
+              '\u2022 OK = Quero revisar os dados antes de enviar (vai para o passo 1)\n' +
+              '\u2022 Cancelar = Quero descartar este rascunho e iniciar um novo plano';
+    if (confirm(msg)) {
+      // Usu\u00e1rio escolheu revisar \u2014 vai pro passo 1, marca intera\u00e7\u00e3o como verdadeira
+      sessaoInteragiu = true;
+      goTo(1);
+    } else {
+      // Usu\u00e1rio escolheu descartar \u2014 limpa tudo e volta pra welcome
+      _resetarDadosLocal();
+      render();
+    }
+    return;
+  }
+
   var empty = getRequiredEmpty();
   if (empty.length > 0) {
     alert('Por favor, preencha os campos obrigat\u00f3rios antes de enviar:\n\n- ' + empty.join('\n- '));
@@ -5329,6 +5394,7 @@ var inputDebounce = null;
 function attachInputListeners() {
   document.querySelectorAll('#app textarea, #app input[type="text"], #app input[type="email"], #app select').forEach(function(el) {
     el.addEventListener('input', function() {
+      sessaoInteragiu = true; // [BUG localStorage] usuário tocou em algo nesta sessão
       clearTimeout(inputDebounce);
       inputDebounce = setTimeout(function() {
         scheduleAutosave();
@@ -5337,6 +5403,7 @@ function attachInputListeners() {
     });
     if (el.tagName === 'SELECT') {
       el.addEventListener('change', function() {
+        sessaoInteragiu = true; // [BUG localStorage] mudança em select também conta como interação
         scheduleAutosave();
         // Atualizar Processo SEI quando RA mudar
         if (el.id === 'field-ra') {
@@ -5397,8 +5464,13 @@ function validarCampoEmTempoReal(el) {
 /* Welcome screen - with time estimate and GDF branding */
 function renderWelcome() {
   var hasSaved = localStorage.getItem(STORAGE_KEY);
-  var resumeBtn = hasSaved
-    ? '<button class="btn-ghost" onclick="goTo(1)">Continuar de onde parou</button>'
+  // [BUG localStorage] Quando há rascunho salvo, oferecer escolha clara entre Continuar e Iniciar novo
+  var botoesPrincipais = hasSaved
+    ? '<button class="btn-primary" onclick="goTo(1)">▶ Continuar de onde parou</button>' +
+      '<button class="btn-ghost" onclick="iniciarNovoPlanoWelcome()" style="border-color:#dc2626;color:#dc2626">✨ Iniciar novo plano (descartar rascunho)</button>'
+    : '<button class="btn-primary" onclick="next()">Começar o Plano de Ação</button>';
+  var rascunhoAviso = hasSaved
+    ? '<div style="background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;padding:10px 14px;margin:0 auto 14px;max-width:560px;font-size:13px;color:#92400e;text-align:center"><strong>⚠ Rascunho detectado:</strong> existe um plano salvo neste navegador. Escolha abaixo se quer retomá-lo ou começar do zero.</div>'
     : '';
 
   return '<div class="welcome">' +
@@ -5429,9 +5501,9 @@ function renderWelcome() {
       '<div class="welcome-ajuda-card"><strong>\uD83C\uDF93 Conselheira de Governan\u00e7a</strong>No canto <strong>inferior direito</strong>. \u00c9 uma <strong>IA treinada nas Resolu\u00e7\u00f5es do CGov/DF</strong> (03/2021, 04/2024, 08/2025, 15/2026). Fa\u00e7a perguntas sobre conceitos, indicadores, riscos, pilares, PEI.</div>' +
     '</div>' +
     '<div class="welcome-time" style="margin-top:16px">\u23F1\uFE0F Preenchimento em aproximadamente 15 minutos</div>' +
+    rascunhoAviso +
     '<div class="welcome-btns">' +
-      '<button class="btn-primary" onclick="next()">Come\u00e7ar o Plano de A\u00e7\u00e3o</button>' +
-      resumeBtn +
+      botoesPrincipais +
     '</div>' +
     // [REVOLU\u00c7\u00c3O] Toggle modo hist\u00f3ria
     '<div class="modo-toggle no-print">' +
