@@ -4708,6 +4708,10 @@ var showSuccess = false;
 // [BUG localStorage] Flag de intera\u00e7\u00e3o na sess\u00e3o atual \u2014 vira true ao primeiro input
 // Evita que rascunho carregado do localStorage seja enviado sem o usu\u00e1rio ter interagido
 var sessaoInteragiu = false;
+// [BUG localStorage \u2014 fix do furo] Step que estava salvo no localStorage; usado pelo
+// bot\u00e3o "Continuar de onde parou" para retomar exatamente onde o usu\u00e1rio parou.
+// Inicia 1 (Identifica\u00e7\u00e3o) como fallback se o salvo for 0/inv\u00e1lido.
+var stepRetomar = 1;
 
 var data = {
   responsavel_nome: "", responsavel_email: "", cargo: "",
@@ -4767,8 +4771,13 @@ function loadFromStorage() {
     var savedStep = localStorage.getItem(STORAGE_STEP_KEY);
     if (savedStep) {
       var step = parseInt(savedStep, 10);
-      if (!isNaN(step) && step >= 0 && step < STEPS.length) {
-        currentStep = step;
+      if (!isNaN(step) && step >= 1 && step < STEPS.length) {
+        // [BUG localStorage — fix do furo] Em vez de pular direto pro step salvo,
+        // guardamos a posição em stepRetomar e mantemos currentStep = 0 (welcome).
+        // Assim o usuário SEMPRE vê a tela de escolha (Continuar / Iniciar novo)
+        // e toma a decisão consciente. O botão "Continuar de onde parou" usa stepRetomar.
+        stepRetomar = step;
+        currentStep = 0;
       }
     }
   } catch (e) { /* ignore corrupt data */ }
@@ -5465,8 +5474,9 @@ function validarCampoEmTempoReal(el) {
 function renderWelcome() {
   var hasSaved = localStorage.getItem(STORAGE_KEY);
   // [BUG localStorage] Quando há rascunho salvo, oferecer escolha clara entre Continuar e Iniciar novo
+  // O "Continuar" usa stepRetomar para voltar exatamente ao passo onde o usuário parou.
   var botoesPrincipais = hasSaved
-    ? '<button class="btn-primary" onclick="goTo(1)">▶ Continuar de onde parou</button>' +
+    ? '<button class="btn-primary" onclick="sessaoInteragiu=true;goTo(stepRetomar)">▶ Continuar de onde parou</button>' +
       '<button class="btn-ghost" onclick="iniciarNovoPlanoWelcome()" style="border-color:#dc2626;color:#dc2626">✨ Iniciar novo plano (descartar rascunho)</button>'
     : '<button class="btn-primary" onclick="next()">Começar o Plano de Ação</button>';
   var rascunhoAviso = hasSaved
